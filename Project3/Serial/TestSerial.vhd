@@ -54,6 +54,7 @@ architecture Behavioral of TestSerial is
     signal st_read : ReadState := r_st0;
     signal st_write : WriteState := w_st0;
     
+    signal temp_led : STD_LOGIC_VECTOR(7 downto 0);
 begin
 	ram1en <= '1';
     
@@ -61,14 +62,20 @@ begin
     begin
         if (rst = '0') then
             st_top <= c_st0;
-            st_read <= r_st0;
             st_write <= w_st0;
             led <= "0000000";
             
-        else if rising_edge(clk) then
-            
+        elsif rising_edge(clk) then
+            case st_top is
+                when c_st0 => 
+                    st_top <= c_st1;
+                when c_st1 =>
+                    st_top <= c_st2;
+                when others =>
+                    st_top <= c_st0;
+            end case;
         end if;
-    end top_control;
+    end process;
     
     read_control: process(clk, rst)
     begin
@@ -76,7 +83,7 @@ begin
             rdn <= '1';
             ram1data <= "ZZZZZZZZ";
             st_read <= r_st0;
-        elsif rising_edge(clk)
+        elsif rising_edge(clk) then
             case st_read is
                 when r_st0 =>
                     st_read <= r_st1;
@@ -85,9 +92,25 @@ begin
                         rdn <= '0';
                         st_read <= r_st2;
                     end if;
+                when r_st2 =>
+                    temp_led <= ram1data;
+                    st_read <= r_st0; 
+                when others =>
+                    st_read <= r_st0;
             end case;
         end if;
-    end read_control;
+    end process;
+
+    write_control: process(clk, rst)
+    begin
+        if (rst = '0') then
+            st_write <= w_st0;
+        elsif rising_edge(clk) then
+
+        end if;
+    end process;
+
+    led <= temp_led;
 
 end Behavioral;
 
