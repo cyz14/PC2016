@@ -30,6 +30,7 @@
 *.par
 *.pcf
 *.ptwx
+*.tcl
 *.twr
 *.twx
 *.unroutes
@@ -54,9 +55,11 @@
 *_ngc_zx.edif
 *fileset.xml
 *_impact.xwbt
+impact.xsl
 impl_*.psg
 planAhead.jou
 fileset.xml
 runs.xml
 project.wpc
 webtalk_*.xml
+*.ipf
