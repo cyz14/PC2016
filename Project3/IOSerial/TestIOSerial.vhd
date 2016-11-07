@@ -55,26 +55,17 @@ architecture Behavioral of TestIOSerial is
 
     type TopState is (
         TStateStart,
-        TStateGetAddr,
+        TStateGetAddr,   
         TStateReadCom,
-        TStateWriteRam0,
-        TStateWriteRam1,
-        TStateReadRam0,
-        TStateReadRam1,
-        TStateWriteCom0,
-        TStateWriteCom1,
-        TStateWriteCom2,
-        TStateWriteCom3,
-        TStateWriteCom4,
-        TStateDone
-    );
+        TStateWriteRam0, TStateWriteRam1,
+        TStateReadRam0,  TStateReadRam1,
+        TStateWriteCom0, TStateWriteCom1,
+        TStateWriteCom2, TStateWriteCom3, 
+        TStateWriteCom4, TStateDone);
 
     type ComReadState is (
-        CStateRead0,
-        CStateRead1,
-        CStateRead2,
-        CStateRead3
-    );
+        CStateRead0, CStateRead1,
+        CStateRead2, CStateRead3);
     
     signal stateTop : TopState := TStateStart;
     signal stateComRead : ComReadState := CStateRead0;
@@ -97,48 +88,53 @@ begin
             temp1oe <= '1';
             temp1we <= '1';
             dyp0 <= (others => '0');
-            dyp1 <= (others => '0');
-            stateTop <= TStateStart;
             tempLed <= (others => '0');
+            tempData <= (others => '0');
+            readData <= (others => '0');
+            stateTop <= TStateStart;
         elsif rising_edge(clk) then
             case stateTop is
                 when TStateStart =>
                     stateTop <= TStateGetAddr;
                 when TStateGetAddr =>
                     tempAddr(15 downto 0) <= sw;
-                    tempLed <= sw;
+                    tempLed(15 downto 8) <= sw(7 downto 0);
                     stateTop <= TStateReadCom;
                     temp1en <= '1';
                     comReadStart <= '1';
                 when TStateReadCom =>
                     if comReadValid = '1' then
-                        tempLed(7 downto 0) <= readData(7 downto 0);
-                        tempData <= readData;
+                        tempData(7 downto 0) <= readData(7 downto 0);
                         comReadStart <= '0';
+                        temp1en <= '0'; -- disable com and enable ram io
                         stateTop <= TStateWriteRam0;
-                        temp1en <= '0';
                     end if;
+                
                 when TStateWriteRam0 =>
                     temp1we <= '1';
+                    temp1oe <= '1';
                     ram1data <= tempData;
                     ram1addr <= tempAddr;
+                    tempLed <= tempAddr(7 downto 0) & tempData(7 downto 0);
                     stateTop <= TStateWriteRam1;
                 when TStateWriteRam1 =>
                     temp1we <= '0';
                     tempLed <= tempAddr(7 downto 0) & tempData(7 downto 0);
                     stateTop <= TStateReadRam0;
+                
                 when TStateReadRam0 =>
-                    ram1data <= (others => 'Z');
                     temp1we <= '1';
                     temp1oe <= '0';
+                    ram1data <= (others => 'Z');
                     ram1addr <= tempAddr;
                     stateTop <= TStateReadRam1;
                 when TStateReadRam1 =>
                     tempData <= ram1data;
                     tempLed <= tempAddr(7 downto 0) & ram1data(7 downto 0);
                     stateTop <= TStateWriteCom0;
+                
                 when TStateWriteCom0 =>
-                    ram1data <= readData + 1;
+                    ram1data <= tempData + 1;
                     stateTop <= TStateWriteCom1;
                 when TStateWriteCom1 =>
                     tempWrn <= '0';
@@ -155,42 +151,45 @@ begin
                         stateTop <= TStateDone;
                     end if;
                 when TStateDone =>
-                    tempLed <= (others => '0');
+                    tempAddr <= (others => '0');
+                    tempData <= (others => '0');
                     stateTop <= TStateStart;
                 when others =>
+                    tempAddr <= (others => '0');
+                    tempData <= (others => '0');
                     stateTop <= TStateStart;
             end case;
         end if;
-        
+
         case stateTop is
             when TStateStart => 
-                dyp0 <= "0111111";
+                dyp0 <= "0111111"; dyp1 <= "0111111";
             when TStateGetAddr =>
-                dyp0 <= "0000110";
+                dyp0 <= "0000110"; dyp1 <= "0111111";
             when TStateReadCom =>
-                dyp0 <= "1011011";
+                dyp0 <= "1011011"; dyp1 <= "0111111";
             when TStateWriteRam0 =>
-                dyp0 <= "1001111";
+                dyp0 <= "1001111"; dyp1 <= "0111111";
             when TStateWriteRam1 =>
-                dyp0 <= "1100110";
+                dyp0 <= "1100110"; dyp1 <= "0000110";
             when TStateReadRam0 =>
-                dyp0 <= "1101101";
+                dyp0 <= "1101101"; dyp1 <= "0111111";
             when TStateReadRam1 =>
-                dyp0 <= "1111101";
+                dyp0 <= "1111101"; dyp1 <= "0000110";
             when TStateWriteCom0 =>
-                dyp0 <= "0000111";
+                dyp0 <= "0000111"; dyp1 <= "0111111";
             when TStateWriteCom1 =>
-                dyp0 <= "0000111";
+                dyp0 <= "0000111"; dyp1 <= "0000110";
             when TStateWriteCom2 =>
-                dyp0 <= "0000111";
+                dyp0 <= "0000111"; dyp1 <= "1011011";
             when TStateWriteCom3 =>
-                dyp0 <= "0000111";
+                dyp0 <= "0000111"; dyp1 <= "1001111";
             when TStateWriteCom4 =>
-                dyp0 <= "0000111";
+                dyp0 <= "0000111"; dyp1 <= "1100110";
             when TStateDone =>
-                dyp0 <= "1111111";
+                dyp0 <= "1111111"; dyp1 <= "0111111";
             when others =>
-                dyp0 <= "0111111";
+                dyp0 <= "0111111"; dyp1 <= "0111111";
         end case;
     end process;
     
