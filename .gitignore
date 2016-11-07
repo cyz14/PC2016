@@ -50,6 +50,7 @@
 *.bgn
 *.drc
 *.ut
+planAhead_run_*
 *_bitgen.xwbt
 *_webtalk.html
 *_ngc_zx.edif
