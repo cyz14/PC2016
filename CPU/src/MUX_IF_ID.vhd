@@ -1,0 +1,16 @@
+-- MUX_IF_ID.vhd
+
+ENTITY MUX_IF_ID IS PORT (
+    IN     STD_LOGIC;
+    IN     STD_LOGIC_VECTOR;
+    OUT    STD_LOGIC;
+    OUT    STD_LOGIC_VECTOR
+);
+END MUX_IF_ID;
+
+ARCHITECTURE Behaviour OF MUX_IF_ID IS
+
+BEGIN
+
+
+END Behaviour;
