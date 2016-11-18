@@ -1,46 +1,48 @@
 ## PCMux
 
-输入:
-    － PCAdd: PCAdd ＝ PC ＋ imm  # B类指令
-    － PCRx : PCRx  ＝ rx         # JR指令
-    － PCplus1: PCplus1 = PC + 1   # PC正常加一
-    － PCMuxSel: PC选择信号 TYPE SEL_PC IS (PCADD, PCRX, PCPLUS1);
-输出:
+### Input
+    - PCAdd: PCAdd ＝ PC ＋ imm  -- B类指令 
+    - PCRx : PCRx  ＝ rx         -- JR指令
+    - PCplus1: PCplus1 = PC + 1 -- PC正常加一
+    - PCMuxSel: PC选择信号 TYPE SEL_PC IS (PCADD, PCRX, PCPLUS1);
+### Output
     - NewPC: 
 
 ## PC
-输入:
-    NewPC: 新的PC值
-    Keep:  是否保持PC而不采用新的PC值
-输出:
-    PC: PC = NewPC
+### Input
+    - NewPC: 新的PC值
+    - Keep:  是否保持PC而不采用新的PC值
+### Output
+    - PC: PC = NewPC
+
+<div style="page-break-after: always;"></div>
 
 ## Adder
-输入:
-    － PC: PC
-    － 1
-输出:
-    PCplus1: PCplus1 ＝ PC ＋ 1
-
+### Input
+    - PC: PC
+    - 1
+### Output
+    - PCplus1: PCplus1 ＝ PC ＋ 1
 
 ## InsMemory -- Ram2
-输入:
-    PC: STD_LOGIC_VECTOR(15 downto 0);  -- Instruction Address
-    Ram2Data: STD_LOGIC_VECTOR(15 downto 0); -- Instruction from Ram2
+### Input
+    - PC: STD_LOGIC_VECTOR(15 downto 0);  -- Instruction Address
+    - Ram2Data: STD_LOGIC_VECTOR(15 downto 0); -- Instruction from Ram2
 
-输出:
-    Ram2Addr: STD_LOGIC_VECTOR(15 downto 0);
-    Ram2CE: Ram2 控制信号
-    Ram2OE: Ram2 控制信号
-    Ram2WE: Ram2 控制信号
-    Instruction: STD_LOGIC_VECTOR(15 downto 0);
+### Output
+    - Ram2Addr: STD_LOGIC_VECTOR(15 downto 0);
+    - Ram2CE: Ram2 控制信号
+    - Ram2OE: Ram2 控制信号
+    - Ram2WE: Ram2 控制信号
+    - Instruction: STD_LOGIC_VECTOR(15 downto 0);
+<div style="page-break-after: always;"></div>
 
 ## MUX_IF_ID
-输入:
+### Input
     - PCplus1: PC + 1 后的值
     - Instruction: IF段获取的指令
     - Keep: 是否停止一个周期
-输出:
+### Output
     - Instruction: STD_LOGIC_VECTOR(15 downto 0)
     - PCplus1
     - rx: Instruction(10 downto 8)
@@ -48,37 +50,33 @@
     - Imm(11): Instruction(10 downto 0);
     - rz: Instruction(4 downto 2)
 
+<div style="page-break-after: always;"></div>
+
 ## ControlUnit: Decoder
-输入:
+### Input
     - Instruction: 
     - Condition: 来源为data1, BEQZ, BNEZ, BTEQZ, BTNEZ用来比较的数, 根据比较结果来决定 PCMuxSel 的值
 
-输出:
-    * WB 阶段控制信号
-        - DstReg: WB阶段的目的寄存器
-        - RegWE: WB阶段的写使能
-    * MEM 阶段控制信号
-        - MemRead: 是否读数据, WB阶段的数据选择来源， ALUOut 还是 MemDout 的数据。若读，则为 MemDout, 否则为 ALUOut
-        - MemWE: 是否写内存
-    * EXE 阶段控制信号
-        - ALUop: ALU 的操作类型
-        - ASrc:  ALU 前面的 A 数据选择器选择信号
-        - BSrc:  ALU 前面的 B 数据选择器选择信号
-    * ID 阶段控制信号
-        - PCMuxSel: 
-        - ImmeSrc: 包括11位（B指令），8位，5位，4位，3位
-        - ZeroExtend: 立即数是否为0扩展
+### Output
+* WB 阶段控制信号
+    - DstReg: WB阶段的目的寄存器
+    - RegWE: WB阶段的写使能
+* MEM 阶段控制信号
+    - MemRead: 是否读数据, WB阶段的数据选择来源， ALUOut 还是 MemDout 的数据。若读，则为 MemDout, 否则为 ALUOut
+    - MemWE: 是否写内存
+* EXE 阶段控制信号
+    - ALUop: ALU 的操作类型
+    - ASrc:  ALU 前面的 A 数据选择器选择信号
+    - BSrc:  ALU 前面的 B 数据选择器选择信号
+* ID 阶段控制信号
+    - PCMuxSel: 
+    - ImmeSrc: 包括11位（B指令），8位，5位，4位，3位
+    - ZeroExtend: 立即数是否为0扩展
 
-## ImmExtend
-输入:
-    - ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位
-    - ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。 
-    - Imme(11): Instruction(10 downto 0);
-输出:
-    - Imme(16): 
+<div style="page-break-after: always;"></div>
 
 ## RegisterFile
-输入:
+### Input
     - PCplus1:向后传递PC，MFPC 指令需要 PC 的值
     - Read1Register: rx
     - Read2Register: ry
@@ -87,36 +85,38 @@
     - Data1Src: Data1的来源，TYPE DataSrc IS (None, Rx, Ry, PCplus1, SP, T, IH) 
     - Data2Src: Data2的来源, DataSrc  
     - RegWE: WB阶段的寄存器的写使能
-信号:
+### Signals
     - TYPE Register IS STD_LOGIC_VECTOR(15 downto 0);
     - R(0-7);
     - SP, T, IH;
-输出:
-    - Data1: 输出数据1
-    - Data2: 输出数据2
+### Output
+```
     JR 指令的PC需要选择 rx
     BEQZ, BNEZ 需要比较R[x]的值是否为0或非0，然后给出PCMuxSel信号
     BTEQZ, BTNEZ 需要比较T的值。
     用 Data1Src 控制信号来统一比较Data1的值。
+```
+    - Data1: Output数据1
+    - Data2: Output数据2
 
+<div style="page-break-after: always;"></div>
 
 ## MUX_ID_EXE
-输入:
+### Input
     - rx:       源寄存器 rx
     - ry:       源寄存器 ry
-    - data1:    RegisterFile输出的数据 1
-    - data2:    RegisterFile输出的数据 2
+    - data1:    RegisterFile 输出的数据 1
+    - data2:    RegisterFile 输出的数据 2
     - Immediate: STD_LOGIC_VECTOR(15 downto 0);
     - DstReg:   目的寄存器
     - RegWE:    寄存器写使能
-    - MemRead:  内存读, 只有 LW 和 LW_SP 两条指令时为 1， 用于 HazardDetectingUnit
+    - MemRead:  内存读, 只有 LW 和 LW_SP 两条指令时为 1,用于 HazardDetectingUnit
     - MemWE:    内存写使能
     - ALUop:    ALU 操作
     - ASrc:     ALU A 选择器的选择信号
     - BSrc:     ALU B 选择器的选择信号
     - Stall: 气泡，暂停信号
-
-输出:
+### Output
     - data1:
     - data2:
     - Immediate: 立即数
@@ -132,30 +132,44 @@
     - BSrc:     ALU B 选择器的选择信号
 
 
+## ImmExtend
+### Input
+    - ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位
+    - ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。 
+    - Imme(11): Instruction(10 downto 0);
+### Output
+    - Imme(16): 
+
+
+<div style="page-break-after: always;"></div>
+
 ## MUX_ALU_A 四选一数据选择器
-输入: 
+### Input 
     - data1
     - imm
     - ExE/MEM.ALUOut
     - MEM/WB.DstVal
     - ASrc
-    - ForwardingA: STD_LOGIC_VECTOR(1 downto 0) -- 是否旁路，如果需要旁路，选择 EXE/MEM 的还是 MEM/WB
-输出:
+    - ForwardingA: STD_LOGIC_VECTOR(1 downto 0)   -- 是否旁路，如果需要旁路，选择 EXE/MEM 的还是 MEM/WB
+
+### Output
     - opA
 
 ## MUX_ALU_B 四选一数据选择器
-输入: 
+### Input 
     - data2
     - imm
     - EXE/MEM.ALUOut
     - MEM/WB.DstVal
     - BSrc
-    - ForwardingB: STD_LOGIC_VECTOR(1 downto 0) -- 是否旁路，如果需要旁路，选择 EXE/MEM 的还是 MEM/WB
-输出:
+    - ForwardingB: STD_LOGIC_VECTOR(1 downto 0)   -- 是否旁路，如果需要旁路，选择 EXE/MEM 的还是 MEM/WB
+### Output
     - opB
 
+<div style="page-break-after: always;"></div>
+
 ## ALU
-输入:
+### Input
     - opA:  STD_LOGIC_VECTOR(15 downto 0)
     - opB:  STD_LOGIC_VECTOR(15 downto 0)
     - ALUop: TYPE IS (
@@ -171,12 +185,12 @@
         OP_SRL, -- F <= A >> B(logical)
         OP_SRA, -- F <= A >> B(arith)
         );
-输出:
+### Output
     - F: ALUOut
     - T: 标志位, 包括加减法溢出，结果为0等。需要多个标志位
 
 ## MUX_EXE_MEM
-输入:
+### Input
     - DstReg:
     - RegWE:
     - MemRead:
@@ -185,22 +199,23 @@
     - ALUOut:
     - T: 
     - Stall:
-输出:
+### Output
     - DstReg:  目标寄存器 R0 ~ R7, SP, T, IH
     - RegWE:
     - MemWE:
     - MemWriteData:
     - ALUOut: 
 
+<div style="page-break-after: always;"></div>
 
 ## DataMemory
-输入:
+### Input
     - Address:
     - MemRead:
     - MemWE:
     - WriteData:
 
-输出:
+### Output
     - Ram1CE:   OUT   STD_LOGIC;
     - Ram1OE:   OUT   STD_LOGIC;
     - Ram1WE:   OUT   STD_LOGIC;
@@ -210,19 +225,22 @@
     - DataOut:  从 Ram1Data 读出的数据
 
 ## MUX_MEM_WB
-输入:
+### Input
     - ALUOut:  ALU 的计算结果
     - MemData: Ram1 读出来的数据
     - MemRead: 用于选择 ALUOut 和 MemData 
     - DstReg:  目标寄存器 R0 ~ R7, SP, T, IH
     - RegWE:   是否写目标寄存器
-输出:
+
+### Output
     - DstReg:  WB 阶段的目标寄存器
     - RegWE:   是否写目标寄存器
     - DestVal: 选择出来的要写入寄存器的值
 
+<div style="page-break-after: always;"></div>
+
 ## HazardDetectingUnit
-输入:
+### Input
     """ 检测条件
         1. 上一条指令是 LW 或 LW_SP
         2. 且它的写入寄存器和当前指令的某一源寄存器相同
@@ -234,16 +252,19 @@
     - ID/EXE.DstReg:  STD_LOGIC_VECTOR(3 downto 0);
     - IF/ID.rx: STD_LOGIC_VECTOR(2 downto 0);
     - IF/ID.ry: STD_LOGIC_VECTOR(2 downto 0);
-输出:
-    -- 让当前指令的控制信号全部为0,即不进行任何写入操作
-    -- 让PC值保持不变 让IF/ID段寄存器保持不变
+### Output
+    """
+    让当前指令的控制信号全部为0,即不进行任何写入操作
+    让PC值保持不变 让IF/ID段寄存器保持不变
+    """
     - PC_Keep: PC 保持不变
     - IFID_Keep: MUX_IF_ID 保持不变
     - IDEX_Stall: STD_LOGIC, 暂停信号
      
+<div style="page-break-after: always;"></div>
 
 ## ForwardingUnit
-输入:
+### Input
     """ 
         EXE 段检测条件:
             EXE/MEM.RegWE AND EXE/MEM.DstReg != 0 AND
@@ -260,9 +281,11 @@
 
     - idexeRx:      STD_LOGIC_VECTOR(2 downto 0);
     - idexeRy:      STD_LOGIC_VECTOR(2 downto 0);
-输出:
+### Output
     - ForwardingA: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
     - ForwardingB: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
+
+<div style="page-break-after: always;"></div>
 
 ## 结构冲突
 地址划分
@@ -325,26 +348,27 @@
 ##### 检测条件:
 1. 上一条指令是 LW 或 LW_SP
 2. 且它的写入寄存器和当前指令的某一源寄存器相同
-
-ID/EX.MemRead AND
-(ID/EX.DstReg = IF/ID.rx OR ID/EX.DstReg = IF/ID.ry )
-
+```
+    ID/EX.MemRead AND
+    (ID/EX.DstReg = IF/ID.rx OR ID/EX.DstReg = IF/ID.ry )
+```
 ##### 数据旁路 Forwarding
 MEM/WB 寄存器到 EXE/MEM 寄存器后的 ALU 数据选择器
+```
 (MEM/WB.DstReg = ID/EXE.rx) OR (MEM/WB.DstReg = ID/EXE.ry)
 ForwardingA ForwardingB 
-
+```
 ##### 暂停流水线
 一旦发生此类冲突 暂停流水线一个时钟
 让当前指令的控制信号全部为0,即不进行任何写入操作
 让PC值保持不变 让IF/ID段寄存器保持不变
-将LW指令的结果通过旁路送到ALU输入端 
+将LW指令的结果通过旁路送到ALUInput端 
 Forwarding逻辑需要增加: 
 
 
 ## 控制冲突
-    PC add Imm 移到了 ID 段
-    目前没有准备做分支预测
+PC add Imm 移到了 ID 段
+目前没有准备做分支预测
 
 ## 异常处理
 需要实现 EPC 和 CAUSE
