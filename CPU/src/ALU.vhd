@@ -8,6 +8,7 @@ PORT (
     B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
     OP :  IN  STD_LOGIC_VECTOR(4  downto 0);
     F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
+    T  :  OUT STD_LOGIC;
     Zero: OUT STD_LOGIC  
 );
 END ALU;

@@ -1,6 +1,18 @@
 # CPU
 THCO MIPS 
 
+## ToDO 11-17
+ALU给出运算的所有结果标志位
+T ,Z , 
+
+设计完CPU：
+1. 检查数据通路，
+2. 解决冲突，数据，结构，控制冲突
+3. 仿真测试 MEM 阶段时间，确定CPU大致频率 
+
+PC 是否移位？否。SRAM的读写是根据地址读16bit。SRAM大小为 256*1024*16b。
+
+
 ## Basic Instructions	
 |Number|Instruction 
 |:-----|-----------
