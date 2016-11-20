@@ -68,10 +68,11 @@
     - ALUop: ALU 的操作类型
     - ASrc:  ALU 前面的 A 数据选择器选择信号
     - BSrc:  ALU 前面的 B 数据选择器选择信号
-* ID 阶段控制信号
-    - PCMuxSel: 
+* ID 阶段控制信号 
     - ImmeSrc: 包括11位（B指令），8位，5位，4位，3位
     - ZeroExtend: 立即数是否为0扩展
+* IF 阶段控制信号
+    - PCMuxSel:
 
 <div style="page-break-after: always;"></div>
 

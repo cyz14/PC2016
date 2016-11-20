@@ -15,8 +15,12 @@ END RegisterFile;
 
 ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL SP, IH, T, RA, PC              : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL SP, IH, T, RA                  : STD_LOGIC_VECTOR(15 downto 0);
+
+    TYPE DataSrc IS (DS_Rx, DS_Ry, DS_SP, DS_IH, DS_T, DS_RA);
 BEGIN
+    
+
     
 
 END Behaviour;
