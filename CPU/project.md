@@ -106,6 +106,22 @@
 - Data2Src: Data2的来源, DataSrc  
 - RegWE: WB阶段的寄存器的写使能
 
+> WriteRegister
+> 
+> R0, R1, ... , R7, SP, T, IH
+
+> Src:
+> 
+> | Code | 意义 |
+> | --- | ---: |
+> |000| None|
+> |001| Rx|
+> |010| Ry|
+> |011| PC|
+> |100| SP|
+> |101| T|
+> |110| IH|
+
 ### Signals
 
 - TYPE Register IS STD_LOGIC_VECTOR(15 downto 0);
@@ -159,6 +175,8 @@
 
 
 ## ImmExtend
+
+author : li
 
 ### Input
 

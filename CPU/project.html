@@ -115,6 +115,51 @@
 </li>
 <li>RegWE: WB阶段的寄存器的写使能</li>
 </ul>
+<blockquote>
+<p>WriteRegister</p>
+<p>R0, R1, ... , R7, SP, T, IH</p>
+</blockquote>
+<blockquote>
+<p>Src:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th align="right">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>000</td>
+<td align="right">None</td>
+</tr>
+<tr class="even">
+<td>001</td>
+<td align="right">Rx</td>
+</tr>
+<tr class="odd">
+<td>010</td>
+<td align="right">Ry</td>
+</tr>
+<tr class="even">
+<td>011</td>
+<td align="right">PC</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td align="right">SP</td>
+</tr>
+<tr class="even">
+<td>101</td>
+<td align="right">T</td>
+</tr>
+<tr class="odd">
+<td>110</td>
+<td align="right">IH</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <h3 id="signals">Signals</h3>
 <ul>
 <li>TYPE Register IS STD_LOGIC_VECTOR(15 downto 0);</li>
@@ -163,6 +208,7 @@
 <li>BSrc: ALU B 选择器的选择信号</li>
 </ul>
 <h2 id="immextend">ImmExtend</h2>
+<p>author : li</p>
 <h3 id="input-8">Input</h3>
 <ul>
 <li><p>ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位</p>
@@ -172,7 +218,7 @@
 011: 8 bit
 100: 11 bit</code></pre></li>
 <li>ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。</li>
-<li><p>Imme(11): Instruction(10 downto 0);</p></li>
+<li><p>inImme(11): Instruction(10 downto 0);</p></li>
 </ul>
 <h3 id="output-8">Output</h3>
 <ul>
