@@ -165,9 +165,14 @@
 <h2 id="immextend">ImmExtend</h2>
 <h3 id="input-8">Input</h3>
 <ul>
-<li>ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位</li>
+<li><p>ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位</p>
+<pre><code>000: 3 bit
+001: 4 bit
+010: 5 bit
+011: 8 bit
+100: 11 bit</code></pre></li>
 <li>ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。</li>
-<li>Imme(11): Instruction(10 downto 0);</li>
+<li><p>Imme(11): Instruction(10 downto 0);</p></li>
 </ul>
 <h3 id="output-8">Output</h3>
 <ul>

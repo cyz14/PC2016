@@ -67,3 +67,6 @@ webtalk_*.xml
 
 *.swp
 *~
+
+# modelsim lib
+CPU/src/work

@@ -163,8 +163,16 @@
 ### Input
 
 - ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位
+```
+000: 3 bit
+001: 4 bit
+010: 5 bit
+011: 8 bit
+100: 11 bit
+```
+
 - ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。 
-- Imme(11): Instruction(10 downto 0);
+- inImme(11): Instruction(10 downto 0);
 
 ### Output
 
