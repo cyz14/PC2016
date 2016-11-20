@@ -11,7 +11,7 @@ end PCAddImm;
 architecture Behavioral of PCAddImm is
 
 begin
-process
+process(PCin,Imm)
 begin
 	PCout <= PCin + Imm;
 end process;
