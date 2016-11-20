@@ -64,3 +64,6 @@ runs.xml
 project.wpc
 webtalk_*.xml
 *.ipf
+
+*.swp
+*~
