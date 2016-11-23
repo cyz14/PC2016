@@ -273,6 +273,7 @@ author : li
 
 - DstReg:  目标寄存器 R0 ~ R7, SP, T, IH
 - RegWE:
+- MemRead:
 - MemWE:
 - MemWriteData:
 - ALUOut: 
