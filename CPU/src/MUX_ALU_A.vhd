@@ -6,13 +6,13 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 ENTITY MUX_ALU_A IS PORT (
-    Data1:         STD_LOGIC_VECTOR(15 downto 0);
-    Immediate:     STD_LOGIC_VECTOR(15 downto 0);
-    ExeMemALUOut:  STD_LOGIC_VECTOR(15 downto 0);
-    MemWbDstVal:   STD_LOGIC_VECTOR(15 downto 0);
-    ASrc:          STD_LOGIC_VECTOR( 1 downto 0);
-    ForwardingA:   STD_LOGIC_VECTOR( 2 downto 0);
-    AOp:           STD_LOGIC_VECTOR(15 downto 0)
+    Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
+    Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
+    ExeMemALUOut:  IN  STD_LOGIC_VECTOR(15 downto 0);
+    MemWbDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
+    ASrc:          IN  STD_LOGIC_VECTOR( 1 downto 0);
+    ForwardingA:   IN  STD_LOGIC_VECTOR( 2 downto 0);
+    AOp:           OUT STD_LOGIC_VECTOR(15 downto 0)
 );
 END MUX_ALU_A;
 

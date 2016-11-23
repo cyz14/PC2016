@@ -30,6 +30,75 @@ ENTITY CPU IS PORT (
 END CPU;
 
 ARCHITECTURE Behaviour OF CPU IS
+
+    Component PCMUX is
+        port(
+            PCPlus1_data : in std_logic_vector(15 downto 0);
+            PCRx_data : in std_logic_vector(15 downto 0);
+            PCAdd_data : in std_logic_vector(15 downto 0);
+            PC_choose : in std_logic_vector(1 downto 0);
+            PCout: out std_logic_vector(15 downto 0)
+        );
+    end Component; 
+
+    Component PCReg is
+        Port (
+            clk : in std_logic;
+            rst : in std_logic;
+            PCSrc : in std_logic_vector(15 downto 0);
+            keep : in std_logic;
+            PC : out std_logic_vector(15 downto 0)
+        );
+    end Component;
+
+    Component PCAdd1 is
+        Port (
+            PCin : in  STD_LOGIC_VECTOR (15 downto 0);
+            PCout : out  STD_LOGIC_VECTOR (15 downto 0));
+    end Component;
+
+    Component MUX_IF_ID IS PORT (
+        InsType :  OUT    STD_LOGIC_VECTOR(4  downto 0);
+        rx      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
+        ry      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
+        rz      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
+        funct   :  OUT    STD_LOGIC_VECTOR(1  downto 0);
+        imme    :  OUT    STD_LOGIC_VECTOR(7  downto 0)
+    );
+    END Component;
+
+    Component ImmExtend is 
+        port 
+        (
+            ImmeSrc: in std_logic_vector(2 downto 0);
+            inImme: in std_logic_vector(10 downto 0);
+            ZeroExtend: in std_logic;
+            Imme: out std_logic_vector(15 downto 0)
+        );
+    end Component;
+
+    Component MUX_ALU_A IS PORT (
+        Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
+        Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        ExeMemALUOut:  IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemWbDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        ASrc:          IN  STD_LOGIC_VECTOR( 1 downto 0);
+        ForwardingA:   IN  STD_LOGIC_VECTOR( 2 downto 0);
+        AOp:           OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
+    END Component;
+
+    Component MUX_ALU_B IS PORT (
+        Data2:          IN  STD_LOGIC_VECTOR(15 downto 0);
+        Immediate:      IN  STD_LOGIC_VECTOR(15 downto 0);
+        ExeMemALUOut:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemWbDstVal:    IN  STD_LOGIC_VECTOR(15 downto 0);
+        BSrc:           IN  STD_LOGIC_VECTOR( 1 downto 0);
+        ForwardingB:    IN  STD_LOGIC_VECTOR( 2 downto 0);
+        BOp:            OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
+    END Component;
+
     Component ALU IS PORT (
         CLK:  IN  STD_LOGIC;
         RST:  IN  STD_LOGIC;
