@@ -30,7 +30,7 @@ ARCHITECTURE Behaviour OF ALU IS
         OP_POS, -- F <= A
         OP_SLL, -- F <= A <<  B
         OP_SRL, -- F <= A >>  B(logical)
-        OP_SRA, -- F <= A >>  B(arith)
+        OP_SRA  -- F <= A >>  B(arith)
         );
 
     CONSTANT ONE16  : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(1, 16);
@@ -73,14 +73,14 @@ BEGIN
                 T <= '0'; -- 
             WHEN OP_ADD  => 
                 F <= tempADD(15 downto 0);
-                T <= tempADD(16), -- 
+                T <= tempADD(16); -- 
             WHEN OP_SUB  => 
                 F <= tempSUB(15 downto 0);
-                T <= temp, -- F <= A  -  B
+                T <= temp; -- F <= A  -  B
             WHEN OP_AND  => 
                 F <= tempAND;
                 T <= '0'; -- F <= A  &  B
-            WHEN OP_OR   => ;
+            WHEN OP_OR   =>
                 F <= tempOR;
                 T <= '0'; -- F <= A  |  B
             WHEN OP_XOR  => 

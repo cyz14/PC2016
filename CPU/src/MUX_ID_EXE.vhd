@@ -3,7 +3,7 @@
 ENTITY MUX_ID_EXE IS PORT (
     Clk:        IN     STD_LOGIC;
     Rst:        IN     STD_LOGIC;
-    Stall:      IN     STD_LOGIC; -- 鏄惁鏆傚仠涓�涓懆鏈燂紝鏉ヨ嚜HazardDetectingUnit
+    Stall:      IN     STD_LOGIC; -- 是否暂停一个周期，来自HazardDetectingUnit
     DstReg:     IN     STD_LOGIC_VECTOR( 2 downto 0);
     RegWE:      IN     STD_LOGIC;
     MemRead:    IN     STD_LOGIC;
@@ -59,7 +59,7 @@ BEGIN
             outRy     <= ZERO3;
         ELSIF (rising_edge(Clk)) THEN
             IF Stall = '1' THEN
-                ; -- do nothing, wait for a period until Stall is 0
+                 -- do nothing, wait for a period until Stall is 0
             ELSE
                 outDstReg <= DstReg;
                 outRegWE  <= RegWE;

@@ -1,23 +1,28 @@
 -- ControlUnit.vhd
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 ENTITY Control IS PORT (
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
     
     Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
     Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-    ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 位
-    ZeroExt     :  OUT STD_LOGIC;                     -- 是否为 ZeroExt 
+    ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
+    ZeroExt     :  OUT STD_LOGIC;                     -- �Ƿ�ZeroExt 
 
-    ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0); -- ALU 的操作类型
-    ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU 前面的 A 数据选择器选择信号
-    BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU 前面的 B 数据选择器选择信号
+    ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0); -- ALU �Ĳ�����
+    ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU ǰ�� A ����ѡ����ѡ���ź�
+    BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU ǰ�� B ����ѡ����ѡ���ź�
 
-    MemRead     :  OUT STD_LOGIC; -- 是否读数据, WB阶段的数据选择来源， ALUOut 还是 MemDout 的数据。若读，则为 MemDout, 否则为 ALUOut
-    MemWE       :  OUT STD_LOGIC; -- 是否写内存
+    MemRead     :  OUT STD_LOGIC; -- �Ƿ���� WB�׶ε�����ѡ����Դ ALUOut ���� MemDout �����ݡ���������Ϊ MemDout, ���� ALUOut
+    MemWE       :  OUT STD_LOGIC; -- �Ƿ�д�� 
 
-    DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- WB阶段的目的寄存器
-    RegWE       :  OUT STD_LOGIC; -- WB阶段的写使能
+    DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- WB�׶ε�Ŀ�ļĴ���
+    RegWE       :  OUT STD_LOGIC; -- WB�׶ε�дʹ��
 
     PCMuxSel    :  OUT STD_LOGIC_VECTOR( 2 downto 0)
 );
@@ -51,7 +56,7 @@ ARCHITECTURE Behaviour OF Control IS
         OP_POS, -- F <= A
         OP_SLL, -- F <= A <<  B
         OP_SRL, -- F <= A >>  B(logical)
-        OP_SRA, -- F <= A >>  B(arith)
+        OP_SRA -- F <= A >>  B(arith)
         );
 
     SIGNAL tempInsType :  STD_LOGIC_VECTOR(4 downto 0);
@@ -90,7 +95,7 @@ BEGIN
                         MemWE    <= '0';
                         DstReg   <= tempRz;
                         RegWE    <= '1';
-                        PCMuxSel <= ;
+                        PCMuxSel <= "00";
                     WHEN FUNCT_SUB =>
                         Data1Src <= DS_RX;
                         Data2Src <= DS_RY;
@@ -103,7 +108,7 @@ BEGIN
                         MemWE    <= '0';
                         DstReg   <= tempRz;
                         RegWE    <= '1';
-                        PCMuxSel <= ;
+                        --PCMuxSel <= ;
                 END CASE;
             WHEN TYPE_AND_OR_CMP_MFPC_SLLV_SRLV =>
                 CASE temp_4_0 IS 
@@ -119,7 +124,7 @@ BEGIN
                         MemwWE   <= '0';
                         RegWE    <= '1';
                         DstReg   <= tempRx;
-                        PCMuxSel <= ;
+                        --PCMuxSel <= ;
                     WHEN FUNCT_OR   =>
                         Data1Src <= DS_RX;
                         Data2Src <= DS_RY;
@@ -132,7 +137,7 @@ BEGIN
                         MemwWE   <= '0';
                         RegWE    <= '1';
                         DstReg   <= tempRx;
-                        PCMuxSel <= ;
+                        --PCMuxSel <= ";
                     WHEN FUNCT_CMP  =>
                     WHEN FUNCT_MFPC =>
                     WHEN FUNCT_SLLV =>

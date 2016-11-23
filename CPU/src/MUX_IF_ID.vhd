@@ -1,9 +1,7 @@
 -- MUX_IF_ID.vhd
 
 ENTITY MUX_IF_ID IS PORT (
-    IN     STD_LOGIC;
-    IN     STD_LOGIC_VECTOR;
-    InsType :  OUT    STD_LOGIC_VECTOR(4  downto 0)
+    InsType :  OUT    STD_LOGIC_VECTOR(4  downto 0);
     rx      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
     ry      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
     rz      :  OUT    STD_LOGIC_VECTOR(2  downto 0);

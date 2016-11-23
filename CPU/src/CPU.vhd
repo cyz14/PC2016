@@ -1,5 +1,10 @@
 -- CPU.vhd
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 ENTITY CPU IS PORT (
     CLK     :    IN    STD_LOGIC;
     CLK_50  :    IN    STD_LOGIC;
