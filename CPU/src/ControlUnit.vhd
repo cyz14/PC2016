@@ -5,30 +5,30 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-ENTITY Control IS PORT (
+ENTITY ControlUnit IS PORT (
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
     
     Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
     Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
     ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
-    ZeroExt     :  OUT STD_LOGIC;                     -- 是否ZeroExt 
+    ZeroExt     :  OUT STD_LOGIC;                     
 
-    ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0); -- ALU 的操作类
-    ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU 前面 A 数据选择器选择信号
-    BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0); -- ALU 前面 B 数据选择器选择信号
+    ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
+    ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+    BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
-    MemRead     :  OUT STD_LOGIC; -- 是否读数 WB阶段的数据选择来源 ALUOut 还是 MemDout 的数据。若读，则为 MemDout, 否则 ALUOut
-    MemWE       :  OUT STD_LOGIC; -- 是否写内 
+    MemRead     :  OUT STD_LOGIC;
+    MemWE       :  OUT STD_LOGIC; 
 
-    DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- WB阶段的目的寄存器
-    RegWE       :  OUT STD_LOGIC; -- WB阶段的写使能
+    DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+    RegWE       :  OUT STD_LOGIC;
 
     PCMuxSel    :  OUT STD_LOGIC_VECTOR( 2 downto 0)
 );
 END ENTITY;
 
-ARCHITECTURE Behaviour OF Control IS
+ARCHITECTURE Behaviour OF ControlUnit IS
 
     CONSTANT TYPE_ADD_SUB :  STD_LOGIC_VECTOR(4 downto 0) := "11100";
     CONSTANT FUNCT_ADD    :  STD_LOGIC_VECTOR(1 downto 0) := "01";

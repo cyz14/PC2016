@@ -57,6 +57,17 @@ ARCHITECTURE Behaviour OF CPU IS
             PCout : out  STD_LOGIC_VECTOR (15 downto 0));
     end Component;
 
+    Component IM_RAM2 IS PORT (
+        pc : in std_logic_vector(15 downto 0);
+        ram_2_data : inout std_logic_vector(15 downto 0);
+        ram_2_addr : out std_logic_vector(15 downto 0);
+        Instruction : out std_logic_vector(15 downto 0);
+        rdn: out STD_LOGIC; --锁住串口
+        wrn: out STD_LOGIC; --锁住串口
+        ram_2_oe,ram_2_we,ram_2_en: out std_logic
+    );
+    End Component;
+
     Component MUX_IF_ID IS PORT (
         InsType :  OUT    STD_LOGIC_VECTOR(4  downto 0);
         rx      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
@@ -64,6 +75,29 @@ ARCHITECTURE Behaviour OF CPU IS
         rz      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
         funct   :  OUT    STD_LOGIC_VECTOR(1  downto 0);
         imme    :  OUT    STD_LOGIC_VECTOR(7  downto 0)
+    );
+    END Component;
+
+    Component ControlUnit IS PORT (
+        Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
+        Condition   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
+        
+        Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); 
+        ZeroExt     :  OUT STD_LOGIC;      
+
+        ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
+        ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+        BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+
+        MemRead     :  OUT STD_LOGIC;
+        MemWE       :  OUT STD_LOGIC; 
+
+        DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        RegWE       :  OUT STD_LOGIC;
+
+        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 2 downto 0)
     );
     END Component;
 
@@ -75,6 +109,12 @@ ARCHITECTURE Behaviour OF CPU IS
             ZeroExtend: in std_logic;
             Imme: out std_logic_vector(15 downto 0)
         );
+    end Component;
+
+    Component PCAddImm is Port (
+        PCin : in  STD_LOGIC_VECTOR (15 downto 0);
+        Imm : in  STD_LOGIC_VECTOR (15 downto 0);
+        PCout : out  STD_LOGIC_VECTOR (15 downto 0));
     end Component;
 
     Component MUX_ALU_A IS PORT (
