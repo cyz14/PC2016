@@ -34,9 +34,9 @@ entity DM_RAM1 is port (
     RST:            IN   STD_LOGIC;
     
     MemWE:          IN   STD_LOGIC;
-    MemWriteData:   IN   STD_LOGIC_VECTOR(15 downto 0); -- 若MemWE，则为数据
+    MemWriteData:   IN   STD_LOGIC_VECTOR(15 downto 0);
     MemRead:        IN   STD_LOGIC;
-    ALUOut:         IN   STD_LOGIC_VECTOR(15 downto 0); -- 若MemWE，则为地址
+    ALUOut:         IN   STD_LOGIC_VECTOR(15 downto 0);
     DstVal:         OUT  STD_LOGIC_VECTOR(15 downto 0);
     
     Ram1OE:         OUT   STD_LOGIC;

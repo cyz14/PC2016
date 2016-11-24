@@ -23,7 +23,7 @@ begin
             -- 3bit: SLL and SRA instructions, 00110 + rx + ry + imm(3) + 00/01
             when "000" => -- 3 bit
                 Imme(2 downto 0) <= inImme(4 downto 2);
-                ext := Signf and inImme(2);
+                ext := Signf and inImme(4);
                 Imme(15 downto 3) <= (others => ext);
             
             -- 4bit: ADDIU3, 01000 + rx + ry + 0 + imm(4)

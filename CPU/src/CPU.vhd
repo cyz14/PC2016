@@ -75,20 +75,20 @@ ARCHITECTURE Behaviour OF CPU IS
         );
     end Component;
 
-    Component PCAdd1 is
-        Port (
-            PCin : in  STD_LOGIC_VECTOR (15 downto 0);
-            PCout : out  STD_LOGIC_VECTOR (15 downto 0));
-    end Component;
+    Component PCAdd1 is Port (
+        PCin  : in   STD_LOGIC_VECTOR (15 downto 0);
+        PCout : out  STD_LOGIC_VECTOR (15 downto 0)
+    );
+    End Component;
 
     Component IM_RAM2 IS PORT (
-        pc : in std_logic_vector(15 downto 0);
-        ram_2_data : inout std_logic_vector(15 downto 0);
-        ram_2_addr : out std_logic_vector(15 downto 0);
-        Instruction : out std_logic_vector(15 downto 0);
-        rdn: out STD_LOGIC; --锁住串口
-        wrn: out STD_LOGIC; --锁住串口
-        ram_2_oe,ram_2_we,ram_2_en: out std_logic
+        pc          : in    std_logic_vector(15 downto 0);
+        ram_2_data  : inout std_logic_vector(15 downto 0);
+        ram_2_addr  : out   std_logic_vector(15 downto 0);
+        Instruction : out   std_logic_vector(15 downto 0);
+        ram_2_oe    : out   std_logic;
+        ram_2_we    : out   std_logic;
+        ram_2_en    : out   std_logic
     );
     End Component;
 
@@ -125,19 +125,17 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     END Component;
 
-    Component ImmExtend is 
-        port 
-        (
-            ImmeSrc: in std_logic_vector(2 downto 0);
-            inImme: in std_logic_vector(10 downto 0);
-            ZeroExtend: in std_logic;
-            Imme: out std_logic_vector(15 downto 0)
-        );
+    Component ImmExtend is port(
+        ImmeSrc     : in  std_logic_vector(2 downto 0);
+        inImme      : in  std_logic_vector(10 downto 0);
+        ZeroExtend  : in  std_logic;
+        Imme        : out std_logic_vector(15 downto 0)
+    );
     end Component;
 
     Component PCAddImm is Port (
-        PCin : in  STD_LOGIC_VECTOR (15 downto 0);
-        Imm : in  STD_LOGIC_VECTOR (15 downto 0);
+        PCin  : in   STD_LOGIC_VECTOR (15 downto 0);
+        Imm   : in   STD_LOGIC_VECTOR (15 downto 0);
         PCout : out  STD_LOGIC_VECTOR (15 downto 0));
     end Component;
 
@@ -215,6 +213,7 @@ ARCHITECTURE Behaviour OF CPU IS
     CONSTANT background_g:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
     CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
 
+    SIGNAL tempKeep     : STD_LOGIC;
     SIGNAL tempPC       : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL tempPCadd1   : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL tempPCRx     : STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -222,6 +221,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL tempPCMuxSel : STD_LOGIC_VECTOR( 1 DOWNTO 0);
     SIGNAL tempNewPC    : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL tempInst     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+    signal IF_ID_PCadd1 : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    
 --    SIGNAL temp         : STD_LOGIC_VECTOR(15 DOWNTO 0);
 --    SIGNAL temp         : STD_LOGIC;
 

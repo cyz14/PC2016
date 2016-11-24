@@ -21,7 +21,7 @@ begin
 		begin
 			ram_2_en <= '0';
 			ram_2_data <= "ZZZZZZZZZZZZZZZZ";
-			if(pc <= x"7FFF" and pc >= x"4000")then
+			if(pc <= x"7FFF") then -- 没必要检查PC的值
 				ram_2_oe <= '0';
 				ram_2_we <= '1';
 				ram_2_addr <= pc;

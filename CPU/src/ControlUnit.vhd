@@ -5,6 +5,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+use work.common.ALL;
+
 ENTITY ControlUnit IS PORT (
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
@@ -76,21 +78,6 @@ ARCHITECTURE Behaviour OF ControlUnit IS
     TYPE DataSrc IS (DS_NONE, DS_RX, DS_RY, DS_PCplus1, DS_SP, DS_IH, DS_T);
     TYPE ALUSRc  IS (AS_NONE, AS_DATA1, AS_DATA2, AS_IMME);
     TYPE PCMuxSrc IS (PS_PLUS1, PS_ADDI, PS_RX, PS_NONE);
-    
-    Type ALUOP IS (
-        OP_NONE,-- No operation 
-        OP_ADD, -- F <= A  +  B
-        OP_SUB, -- F <= A  -  B
-        OP_AND, -- F <= A  &  B
-        OP_OR,  -- F <= A  |  B
-        OP_XOR, -- F <= A xor B
-        OP_CMP, -- F <= A !=  B, not equal
-        OP_LT,  -- F <= A  <  B
-        OP_POS, -- F <= A
-        OP_SLL, -- F <= A <<  B
-        OP_SRL, -- F <= A >>  B(logical)
-        OP_SRA -- F <= A >>  B(arith)
-        );
 
     SIGNAL tempInsType :  STD_LOGIC_VECTOR(4 downto 0);
     SIGNAL tempRx      :  STD_LOGIC_VECTOR(2 downto 0);
