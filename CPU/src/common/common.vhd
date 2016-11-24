@@ -18,10 +18,20 @@ package common is
 --    <type_name>        : std_logic;
 -- end record;
 --
-type WriteRegDst is (
-    Dst_R0, Dst_R1, Dst_R2, Dst_R3, Dst_R4, Dst_R5, Dst_R6, Dst_R7,
-    Dst_SP, Dst_T, Dst_IH
-);
+
+
+CONSTANT Dst_R0   : std_logic_vector (3 downto 0) := "0000";
+CONSTANT Dst_R1   : std_logic_vector (3 downto 0) := "0001";
+constant Dst_R2   : std_logic_vector (3 downto 0) := "0010";
+constant Dst_R3   : std_logic_vector (3 downto 0) := "0011";
+constant Dst_R4   : std_logic_vector (3 downto 0) := "0100";
+constant Dst_R5   : std_logic_vector (3 downto 0) := "0101";
+constant Dst_R6   : std_logic_vector (3 downto 0) := "0110";
+constant Dst_R7   : std_logic_vector (3 downto 0) := "0111";
+constant Dst_NONE : std_logic_vector (3 downto 0) := "1000";
+constant Dst_SP   : std_logic_vector (3 downto 0) := "1001";
+constant Dst_T    : std_logic_vector (3 downto 0) := "1010";
+constant Dst_IH   : std_logic_vector (3 downto 0) := "1011";
 
 CONSTANT OP_NONE : std_logic_vector (3 downto 0) := "0000";
 CONSTANT OP_ADD  : std_logic_vector (3 downto 0) := "0001";
@@ -38,19 +48,19 @@ constant OP_SRA  : std_logic_vector (3 downto 0) := "1011";
 
 
 
-CONSTANT IMM_NONE : std_logic_vector (2 downto 0) := "000";
-CONSTANT IMM_THREE : std_logic_vector (2 downto 0) := "001";
-CONSTANT IMM_FOUR : std_logic_vector (2 downto 0) := "010";
-CONSTANT IMM_FIVE : std_logic_vector (2 downto 0) := "011";
-CONSTANT IMM_EIGHT : std_logic_vector (2 downto 0):= "100";
+CONSTANT IMM_NONE   : std_logic_vector (2 downto 0) := "000";
+CONSTANT IMM_THREE  : std_logic_vector (2 downto 0) := "001";
+CONSTANT IMM_FOUR   : std_logic_vector (2 downto 0) := "010";
+CONSTANT IMM_FIVE   : std_logic_vector (2 downto 0) := "011";
+CONSTANT IMM_EIGHT  : std_logic_vector (2 downto 0) := "100";
 CONSTANT IMM_ELEVEN : std_logic_vector (2 downto 0) := "101";
 
 
 
-CONSTANT PC_None : std_logic_vector(1 downto 0) := "00";
-CONSTANT PC_Add1 : std_logic_vector(1 downto 0) := "01";
-CONSTANT PC_Rx   : std_logic_vector(1 downto 0) := "10";
-CONSTANT PC_AddImm: std_logic_vector(1 downto 0):= "11";
+CONSTANT PC_None   : std_logic_vector(1 downto 0) := "00";
+CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "01";
+CONSTANT PC_Rx     : std_logic_vector(1 downto 0) := "10";
+CONSTANT PC_AddImm : std_logic_vector(1 downto 0) := "11";
 
 
 -- Declare constants
