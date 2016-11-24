@@ -4,6 +4,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity PCMUX is
 	port(
+        clk : in std_logic;
+        rst : in std_logic;
 		PCPlus1_data : in std_logic_vector(15 downto 0);
 		PCRx_data : in std_logic_vector(15 downto 0);
 		PCAdd_data : in std_logic_vector(15 downto 0);
@@ -12,6 +14,7 @@ entity PCMUX is
 	);
 end PCMUX;
 architecture behaviour of PCMUX is
+
 begin
 	process(PC_choose)
 		begin

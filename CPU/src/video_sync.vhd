@@ -5,15 +5,15 @@ USE IEEE.STD_LOGIC_ARITH.all;
 USE IEEE.STD_LOGIC_UNSIGNED.all;
 
 ENTITY video_sync IS PORT (
-	clock:									IN STD_LOGIC;	-- should be 25M Hz
+	clock:                              IN STD_LOGIC;	-- should be 25M Hz
 	video_on, Horiz_Sync, Vert_Sync:	OUT STD_LOGIC;
 	H_count_out, V_count_out:			OUT STD_LOGIC_VECTOR(9 downto 0)
 	);
 END video_sync;
 
 ARCHITECTURE sync OF video_sync IS
-	SIGNAL H_count, V_count:				STD_LOGIC_VECTOR(9 downto 0);
-	SIGNAL video_on_H, video_on_V: 		STD_LOGIC;
+	SIGNAL H_count, V_count:            STD_LOGIC_VECTOR(9 downto 0);
+	SIGNAL video_on_H, video_on_V: 	    STD_LOGIC;
 
 	constant H_max : STD_LOGIC_VECTOR(9 downto 0) := CONV_STD_LOGIC_VECTOR(799,10); 
 	constant V_max : STD_LOGIC_VECTOR(9 downto 0) := CONV_STD_LOGIC_VECTOR(524,10); 

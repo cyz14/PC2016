@@ -5,11 +5,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+USE WORK.COMMON.ALL;
+
 ENTITY CPU IS PORT (
-    CLK     :    IN    STD_LOGIC;
-    CLK_50  :    IN    STD_LOGIC;
+    CLK     :    IN    STD_LOGIC; -- 
+    CLK_11  :    IN    STD_LOGIC; -- 11M
+    CLK_50  :    IN    STD_LOGIC; -- 50M
     RST     :    IN    STD_LOGIC;
+    
     INT     :    IN    STD_LOGIC;
+    
     Ram1_en:     OUT   STD_LOGIC;
     Ram1_oe:     OUT   STD_LOGIC;
     Ram1_we:     OUT   STD_LOGIC;
@@ -20,12 +25,31 @@ ENTITY CPU IS PORT (
     Ram2_we:     OUT   STD_LOGIC;
     RAM2_Addr:   OUT   STD_LOGIC_VECTOR(17 downto 0);
     Ram2_Data:   INOUT STD_LOGIC_VECTOR(15 downto 0);
+    
+    rdn:         OUT   STD_LOGIC;
+    wrn:         OUT   STD_LOGIC;
+    data_ready:  IN    STD_LOGIC;
+    tbre:        IN    STD_LOGIC;
+    tsre:        IN    STD_LOGIC;
+    
     VGA_R:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
     VGA_G:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
     VGA_B:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
     Hs:          OUT   STD_LOGIC;
     Vs:          OUT   STD_LOGIC;
-    DebugInfo:   OUT   STD_LOGIC_VECTOR(15 downto 0)
+    
+    --FLASH
+    flash_byte : out STD_LOGIC := '1'; --操作模式,采用字模式
+    flash_vpen : out STD_LOGIC := '1'; --写保护，置为1
+    flash_ce   : out STD_LOGIC := '0'; --使能信号,该模块只负责flash的读，故ce置为0即可
+    flash_oe   : out STD_LOGIC := '1'; --读使能
+    flash_we   : out STD_LOGIC := '1'; --写使能
+    flash_rp   : out STD_LOGIC := '1'; --工作模式，1为工作
+    flash_addr : out STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000"; --flash内存地址
+    flash_data : inout STD_LOGIC_VECTOR( 15 downto 0 ); --flash输出信号
+    
+    -- used to display debug info
+    LED:         OUT   STD_LOGIC_VECTOR(15 downto 0)
 );
 END CPU;
 
@@ -140,40 +164,46 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component ALU IS PORT (
-        CLK:  IN  STD_LOGIC;
-        RST:  IN  STD_LOGIC;
         A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
         B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
         OP :  IN  STD_LOGIC_VECTOR(4  downto 0);
         F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
-        Zero: OUT STD_LOGIC);
+        T  :  OUT STD_LOGIC
+        );
     END Component;
 
     Component RegisterFile IS PORT (
-        CLK      :  IN  STD_LOGIC;
-        ReadAddrA:  IN  STD_LOGIC_VECTOR(2  downto 0);
-        ReadAddrB:  IN  STD_LOGIC_VECTOR(2  downto 0);
-        WriteAddr:  IN  STD_LOGIC_VECTOR(2  downto 0);
-        WriteData:  IN  STD_LOGIC_VECTOR(15 downto 0);
-        ReadDataA:  OUT STD_LOGIC_VECTOR(15 downto 0);
-        ReadDataB:  OUT STD_LOGIC_VECTOR(15 downto 0);
-        WriteEn:    OUT STD_LOGIC_VECTOR(15 downto 0));
+        PCplus1:        IN  std_logic_vector(15 downto 0);
+        Read1Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
+        Read2Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
+        WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
+        WriteData:      IN  STD_LOGIC_VECTOR(15 downto 0);
+        Data1Src:       in std_logic_vector(2 downto 0);
+        Data2Src:       in std_logic_vector(2 downto 0);
+        RegWE:          in std_logic;
+        Data1:          out std_logic_vector(15 downto 0);
+        Data2:          out std_logic_vector(15 downto 0)
+        );
     END Component;
 
-    Component InstructionMemory IS PORT (
-        CLK      :  IN     STD_LOGIC;
-        CE       :  OUT    STD_LOGIC;
-        WE       :  OUT    STD_LOGIC;
-        OE       :  OUT    STD_LOGIC;
-        ReadAddr :  IN     STD_LOGIC_VECTOR(17 downto 0);
-        ReadData :  INOUT  STD_LOGIC_VECTOR(15 downto 0));
-    END Component;
-
+    Component Clock is port (
+        rst:    in  std_logic;
+        clk:    in  std_logic;
+        clk11:  in  std_logic;
+        clk50:  in  std_logic;
+        sel:    in  std_logic_vector(1 downto 0);
+        clkout: out std_logic
+    );
+    end Component;
+    
     Component video_sync IS PORT (
-        clock:                              IN STD_LOGIC;	-- should be 25M Hz
+        clock:                              IN  STD_LOGIC;	-- should be 25M Hz
         video_on, Horiz_Sync, Vert_Sync:    OUT STD_LOGIC;
-        H_count_out, V_count_out:			OUT STD_LOGIC_VECTOR(9 downto 0));
+        H_count_out, V_count_out:			OUT STD_LOGIC_VECTOR(9 downto 0)
+        );
     END Component;
+
+    SIGNAL clk_sel  :                       STD_LOGIC;
 
     SIGNAL clock_25 :                       STD_LOGIC;
     SIGNAL video_on:                        STD_LOGIC;
@@ -185,6 +215,15 @@ ARCHITECTURE Behaviour OF CPU IS
     CONSTANT background_g:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
     CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
 
+    SIGNAL tempPC       : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL tempPCadd1   : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL tempPCRx     : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL tempPCaddImm : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL tempPCMuxSel : STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    SIGNAL tempNewPC    : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL tempInst     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+--    SIGNAL temp         : STD_LOGIC_VECTOR(15 DOWNTO 0);
+--    SIGNAL temp         : STD_LOGIC;
 
 BEGIN
 
@@ -204,6 +243,38 @@ BEGIN
     );
     Hs <= t_hsync;
     Vs <= t_vsync;
+    
+    u_clock: Clock PORT MAP (
+        rst => RST,
+        clk => CLK,
+        clk11 => CLK_11,
+        clk50 => CLK_50,
+        sel   => "00",
+        clkout => clk_sel
+    );
+    
+    u_PCMUX: PCMUX PORT MAP (
+        PCPlus1_data => ZERO16,
+        PCRx_data  => ZERO16,
+        PCAdd_data => tempPCadd1,
+        PC_choose  => tempPCMuxSel,
+        PCout      => tempNewPC
+    );
+    
+    u_PC: PCReg PORT MAP (
+        clk => clk_sel,
+        rst => RST,
+        PCSrc => tempNewPC,
+        keep => '0',
+        PC  => tempPC
+    );
+    
+    u_PCAdd1: PCADD1 PORT MAP (
+        PCin => tempPC,
+        PCout => tempPCAdd1
+    );
+    
+    
 
     DrawScreen: PROCESS(clock_25)
     BEGIN

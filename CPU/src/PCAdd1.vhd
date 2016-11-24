@@ -10,11 +10,7 @@ end PCAdd1;
 
 architecture Behavioral of PCAdd1 is
 begin
-process
-begin
-	
-		PCout <= PCin + 1;
-	
-end process;
+
+    PCout <= PCin + 1;
 
 end Behavioral;

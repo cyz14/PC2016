@@ -3,6 +3,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
+use work.common.all;
+
 ENTITY RegisterFile IS
 PORT (
     PCplus1:    in std_logic_vector(15 downto 0);
@@ -21,6 +23,8 @@ END RegisterFile;
 ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL SP, IH, T, PC              : STD_LOGIC_VECTOR(15 downto 0);
+
+    SIGNAL DstReg : WriteRegSrc := "0000";
 
     procedure selectIn8Arguments(signal sel: in std_logic_vector(2 downto 0);
         signal r0, r1, r2, r3, r4, r5, r6, r7: in std_logic_vector(15 downto 0);

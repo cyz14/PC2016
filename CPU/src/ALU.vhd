@@ -6,6 +6,8 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+use work.common.ALL;
+
 ENTITY ALU IS
 PORT (
     A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -17,21 +19,6 @@ PORT (
 END ALU;
 
 ARCHITECTURE Behaviour OF ALU IS
-
-    Type ALUOP IS (
-        OP_NONE,-- No operation 
-        OP_ADD, -- F <= A  +  B
-        OP_SUB, -- F <= A  -  B
-        OP_AND, -- F <= A  &  B
-        OP_OR,  -- F <= A  |  B
-        OP_XOR, -- F <= A xor B
-        OP_CMP, -- F <= A !=  B, not equal
-        OP_LT,  -- F <= A  <  B
-        OP_POS, -- F <= A
-        OP_SLL, -- F <= A <<  B
-        OP_SRL, -- F <= A >>  B(logical)
-        OP_SRA  -- F <= A >>  B(arith)
-        );
 
     CONSTANT ONE16  : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(1, 16);
     CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(0, 16);
