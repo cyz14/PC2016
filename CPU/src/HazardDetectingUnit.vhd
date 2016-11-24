@@ -7,8 +7,10 @@ entity HazardDetectingUnit is
     rst,clk: in std_logic;
     MemRead: in std_logic;
     DstReg: in std_logic_vector(3 downto 0);
-    rx: in std_logic_vector(3 downto 0);
-    ry: in std_logic_vector(3 downto 0);
+    ASrc4: in std_logic_vector(3 downto 0);
+    BSrc4: in std_logic_vector(3 downto 0);
+    ALUOut: in std_logic_vector(15 downto 0);
+    MemWE: in std_logic;
 
     PC_Keep: out std_logic;
     IFID_Keep: out std_logic;
@@ -20,10 +22,12 @@ architecture bha of HazardDetectingUnit is
     signal s1_DstReg: std_logic_vector(3 downto 0);
     signal s1_MemRead: std_logic;
 begin
-    stall_gen: process (s1_MemRead, s1_DstReg, rx, ry)
+    stall_gen: process (s1_MemRead, s1_DstReg, ASrc4, BSrc4)
         variable stall: std_logic;
     begin
-        if s1_MemRead = '0' and (s1_DstReg = rx or s1_DstReg = ry) then
+        if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))
+        or (s1_DstReg = "1001" and (ASrc4 = "1001" or BSrc4 = "1001"))
+        or (MemWE = '0' and ALUOut(15) = '0') then
             PC_Keep <= '0';
             IFID_Keep <= '0';
             IDEX_Stall <= '0';
