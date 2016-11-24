@@ -275,10 +275,10 @@ author : li
 
 ### Input
 
-- DstReg:
-- RegWE:
+- DstReg: 目标寄存器 R0 ~ R7, SP, T, IH
+- RegWE: 寄存器写使能
 - MemRead:
-- MemWE:
+- MemWE: 内存写使能
 - MemWriteData:
 - ALUOut:
 - T: 
@@ -287,10 +287,10 @@ author : li
 ### Output
 
 - DstReg:  目标寄存器 R0 ~ R7, SP, T, IH
-- RegWE:
+- RegWE: 寄存器写使能
 - MemRead:
-- MemWE:
-- MemWriteData:
+- MemWE: 内存写使能
+- MemWriteData: 要被写入内存的数据
 - ALUOut: 
 
 
@@ -353,7 +353,7 @@ author : li
 
 > 检测条件
 - ALUOut: -- 写入指令的地址
-- MemWrite: 写使能
+- MemWE: 写使能
 
 ### Output
 
