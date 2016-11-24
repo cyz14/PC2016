@@ -39,7 +39,7 @@ ENTITY CPU IS PORT (
     Vs:          OUT   STD_LOGIC;
     
     --FLASH
-    flash_byte : out STD_LOGIC := '1'; --操作模式,采用字模式
+    flash_byte : out STD_LOGIC := '1'; --操作模式,采用字模式，地址为 22 downto 1
     flash_vpen : out STD_LOGIC := '1'; --写保护，置为1
     flash_ce   : out STD_LOGIC := '0'; --使能信号,该模块只负责flash的读，故ce置为0即可
     flash_oe   : out STD_LOGIC := '1'; --读使能
