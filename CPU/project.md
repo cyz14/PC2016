@@ -1,5 +1,10 @@
 <link href="./github.css" rel="stylesheet" />
 
+## 统一定义
+
+- 统一检测时钟上升沿开始运算。
+- 使能信号为0时表示真值。包括MemRead，OE，WE，EN等。
+
 ## PCMux
 
 ### Input
@@ -87,11 +92,17 @@
     - ALUop: ALU 的操作类型
     - ASrc:  ALU 前面的 A 数据选择器选择信号
     - BSrc:  ALU 前面的 B 数据选择器选择信号
-* ID 阶段控制信号 
+    - ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+    - BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+* ID 阶段控制信号
     - ImmeSrc: 包括11位（B指令），8位，5位，4位，3位
     - ZeroExtend: 立即数是否为0扩展
+    - Data1Src: 数据1的来源
+    - Data2Src: 数据2的来源
+    - Read1Register: 数据1
+    - Read2Register: 数据2
 * IF 阶段控制信号
-    - PCMuxSel:
+    - PCMuxSel: 
 
 
 ## RegisterFile
@@ -109,7 +120,7 @@
 
 > WriteRegister
 > 
-> R0, R1, ... , R7, SP, T, IH
+> R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
 
 > Src:
 > 
@@ -156,7 +167,9 @@
 - ALUop:    ALU 操作
 - ASrc:     ALU A 选择器的选择信号
 - BSrc:     ALU B 选择器的选择信号
-- Stall: 气泡，暂停信号
+- ASrc4:    ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- BSrc4:    ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- Stall:    气泡，暂停信号
 
 ### Output
 
@@ -189,6 +202,7 @@ author : li
 011: 8 bit
 100: 11 bit
 ```
+  其中3bit的时候为imm(4 downto 2), 符号位是imm(4)。
 
 - ZeroExtend: 是否为0扩展，ZeroExtend为0时采用符号扩展。只有LI指令为ZeroExtend。 
 - inImme(11): Instruction(10 downto 0);
@@ -327,10 +341,15 @@ author : li
 > ID/EX.MemRead AND
 > (ID/EX.DstReg = IF/ID.rx OR ID/EX.DstReg = IF/ID.ry )
 
-- ID/EXE.MemRead: `STD_LOGIC;` -- 只有 LW 和 LW_SP 指令时为 1
+- ID/EXE.MemRead: `STD_LOGIC;` -- 只有 LW 和 LW_SP 指令时为真）
 - ID/EXE.DstReg:  `STD_LOGIC_VECTOR(3 downto 0);`
-- IF/ID.rx: `STD_LOGIC_VECTOR(2 downto 0);`
-- IF/ID.ry: `STD_LOGIC_VECTOR(2 downto 0);`
+- ASrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- BSrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+
+
+> 检测条件 2
+> 1. 上一条指令的目的寄存器是T
+> 2. 当前指令的源寄存器是T（BTEQZ, BTNEZ指令）
 
 ### Output
 
@@ -360,8 +379,8 @@ author : li
 - memwbRegWE:   `STD_LOGIC;`
 - memwbDstReg:  `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 MEM 段数据冲突
 
-- idexeRx:      `STD_LOGIC_VECTOR(2 downto 0);`
-- idexeRy:      `STD_LOGIC_VECTOR(2 downto 0);`
+- ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
 
 ### Output
 

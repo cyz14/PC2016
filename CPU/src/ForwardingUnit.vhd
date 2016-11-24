@@ -33,7 +33,7 @@ begin
 			temp_FORWARDB <= "10";
 		END IF;
 		
-		if (MEM_WB_REGWRITE = '1' AND (MEM_WB_RD = ID_EX_RX)) THEN      --取写会的那个寄存器数据
+		if (MEM_WB_REGWRITE = '1' AND (MEM_WB_RD = ID_EX_RX)) THEN      --取写回的那个寄存器数据
 			temp_FORWARDA <= "11";
 		end if;		
 		if (MEM_WB_REGWRITE = '1' AND (MEM_WB_RD = ID_EX_RY)) THEN

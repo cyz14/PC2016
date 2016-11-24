@@ -184,6 +184,23 @@ ARCHITECTURE Behaviour OF CPU IS
         );
     END Component;
 
+    Component ForwardingUnit is port(
+		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信�
+		EXE_MEM_RD      : in std_logic_vector (2 DOWNTO 0) ;  --exe_mem阶段目的寄存器编�
+		MEM_WB_REGWRITE : in std_logic ;  --mem_wb阶段寄存器的写信�
+		MEM_WB_RD       : in std_logic_vector (2 downto 0);  --mem_wb阶段寄存器的目的寄存器编�
+		ID_EX_RX        : in std_logic_vector (2 downto 0);  --rx寄存器编�
+		ID_EX_RY        : in std_logic_vector (2 downto 0);  --ry寄存器编�
+		FORWARDA        : out std_logic_vector(1 downto 0);  --muxa信号选择
+		FORWARDB        : out std_logic_vector(1 downto 0);   --muxb信号选择
+		IM_A            : in std_logic;
+		IM_B            : in std_logic;
+	    temp_FORWARDA : INOUT STD_LOGIC_VECTOR (1 downto 0);
+        temp_FORWARDB : INOUT std_logic_vector (1 downto 0)
+		
+	);
+    end Component;
+
     Component Clock is port (
         rst:    in  std_logic;
         clk:    in  std_logic;
