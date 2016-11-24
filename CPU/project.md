@@ -351,6 +351,10 @@ author : li
 > 1. 上一条指令的目的寄存器是T
 > 2. 当前指令的源寄存器是T（BTEQZ, BTNEZ指令）
 
+> 检测条件
+- ALUOut: -- 写入指令的地址
+- MemWrite: 写使能
+
 ### Output
 
 
