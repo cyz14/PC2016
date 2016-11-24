@@ -109,12 +109,12 @@ BEGIN
                     WHEN FUNCT_ADD =>
                         Data1Src <= DS_RX;
                         Data2Src <= DS_RY;
-                        ImmeSrc  <= "000";
+                        ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
                         BSrc     <= AS_DATA2;
                         ALUop    <= OP_ADD;
-                        MemRead  <= '0';
+                        MemRead  <= '1';
                         MemWE    <= '0';
                         DstReg   <= tempRz;
                         RegWE    <= '1';

@@ -38,8 +38,14 @@ Type ALUOP IS (
     OP_SRA  -- F <= A >>  B(arith)
     );
 
-
-
+Type ImmSrc is (
+	IMM_NONE ,
+	IMM_THREE,
+	IMM_FOUR,
+	IMM_FIVE,
+	IMM_EIGHT,
+	IMM_ELEVEN
+);
 -- Declare constants
 --
 -- constant <constant_name>		: time := <time_unit> ns;
