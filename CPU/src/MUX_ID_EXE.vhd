@@ -3,32 +3,41 @@
 ENTITY MUX_ID_EXE IS PORT (
     Clk:        IN     STD_LOGIC;
     Rst:        IN     STD_LOGIC;
-    Stall:      IN     STD_LOGIC; -- 是否暂停一个周期，来自HazardDetectingUnit
-    DstReg:     IN     STD_LOGIC_VECTOR( 2 downto 0);
-    RegWE:      IN     STD_LOGIC;
-    MemRead:    IN     STD_LOGIC;
-    MemWE:      IN     STD_LOGIC;
-    ALUOp:      IN     STD_LOGIC_VECTOR( 3 downto 0);
-    ASrc:       IN     STD_LOGIC_VECTOR( 1 downto 0);
-    BSrc:       IN     STD_LOGIC_VECTOR( 1 downto 0);
+    
     Data1:      IN     STD_LOGIC_VECTOR(15 downto 0);
     Data2:      IN     STD_LOGIC_VECTOR(15 downto 0);
     Immediate:  IN     STD_LOGIC_VECTOR(15 downto 0);
-    Rx:         IN     STD_LOGIC_VECTOR( 2 downto 0);
-    Ry:         IN     STD_LOGIC_VECTOR( 2 downto 0);
 
-    outDstReg:     OUT    STD_LOGIC_VECTOR( 2 downto 0);
-    outRegWE:      OUT    STD_LOGIC;
-    outMemRead:    OUT    STD_LOGIC;
-    outMemWE:      OUT    STD_LOGIC;
-    outALUOp:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
-    outASrc:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
-    outBSrc:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
+    DstReg:     IN     STD_LOGIC_VECTOR( 2 downto 0);
+    RegWE:      IN     STD_LOGIC;
+
+    MemRead:    IN     STD_LOGIC;
+    MemWE:      IN     STD_LOGIC;
+
+    ALUOp:      IN     STD_LOGIC_VECTOR( 3 downto 0);
+    ASrc:       IN     STD_LOGIC_VECTOR( 1 downto 0);
+    BSrc:       IN     STD_LOGIC_VECTOR( 1 downto 0);
+
+    ASrc4:      IN     STD_LOGIC_VECTOR( 3 downto 0);
+    BSrc4:      IN     STD_LOGIC_VECTOR( 3 downto 0);
+
+    Stall:      IN     STD_LOGIC; -- whether stop for a stage from HazardDetectingUnit
+
     outData1:      OUT    STD_LOGIC_VECTOR(15 downto 0);
     outData2:      OUT    STD_LOGIC_VECTOR(15 downto 0);
     outImmediate:  OUT    STD_LOGIC_VECTOR(15 downto 0);
-    outRx:         OUT    STD_LOGIC_VECTOR( 2 downto 0);
-    outRy:         OUT    STD_LOGIC_VECTOR( 2 downto 0)
+    outDstReg:     OUT    STD_LOGIC_VECTOR( 2 downto 0);
+    outRegWE:      OUT    STD_LOGIC;
+
+    outMemRead:    OUT    STD_LOGIC;
+    outMemWE:      OUT    STD_LOGIC;
+
+    outALUOp:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+    outASrc:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
+    outBSrc:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
+    outASrc4:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+    outBSrc4:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+    MemWriteData:  OUT    STD_LOGIC_VECTOR(15 downto 0)
 );
 END MUX_ID_EXE;
 

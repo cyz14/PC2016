@@ -154,9 +154,6 @@
 ## MUX_ID_EXE
 
 ### Input
-
-- rx:       源寄存器 rx
-- ry:       源寄存器 ry
 - data1:    RegisterFile 输出的数据 1
 - data2:    RegisterFile 输出的数据 2
 - Immediate: STD_LOGIC_VECTOR(15 downto 0);
@@ -173,19 +170,19 @@
 
 ### Output
 
-- data1:
-- data2:
-- Immediate: 立即数
-- MemWriteData: 要写入内存的寄存器中的值, 用于 SW, SW_SP 指令
-- rx: 源寄存器1，给 ForwardingUnit 的
-- ry: 源寄存器2，给 ForwardingUnit 的
-- DstReg:   目标寄存器: R0 ~ R7, SP, T, IH
-- RegWE:    寄存器写使能
-- MemRead:  内存读
-- MemWE:    内存写使能
-- ALUop:    ALU 操作
-- ASrc:     ALU A 选择器的选择信号
-- BSrc:     ALU B 选择器的选择信号
+- outData1:
+- outData2:
+- outImmediate: 立即数
+- outDstReg:   目标寄存器: R0 ~ R7, SP, T, IH
+- outRegWE:    寄存器写使能
+- outMemRead:  内存是否读
+- outMemWE:    内存写使能
+- outALUop:    ALU 操作
+- outASrc:     ALU A 选择器的选择信号
+- outBSrc:     ALU B 选择器的选择信号
+- outASrc4:    给ForwardingUnit
+- outBSrc4:    给ForwardingUnit
+- MemWriteData: 要写入内存的寄存器中的值, 用于 SW, SW_SP 指令，直接传给 MUX_EXE_MEM
 
 
 ## ImmExtend
@@ -195,12 +192,14 @@ author : li
 ### Input
 
 - ImmeSrc: 立即数位数及来源， 包括11位（B指令），8位，5位，4位，3位
+下面的常数定义在了 用户Package work.common 中。使用时需要加一句 `use work.common.all;` 
 ```
-000: 3 bit
-001: 4 bit
-010: 5 bit
-011: 8 bit
-100: 11 bit
+000: None
+001: 3 bit
+010: 4 bit
+011: 5 bit
+100: 8 bit
+101: 11 bit
 ```
   其中3bit的时候为imm(4 downto 2), 符号位是imm(4)。
 
@@ -291,27 +290,37 @@ author : li
 - MemRead:
 - MemWE: 内存写使能
 - MemWriteData: 要被写入内存的数据
-- ALUOut: 
+- ALUOut: ALU 的计算结果, 如果用在MEM段则为地址，否则为WB段的写回寄存器的结果
 
 
-## DataMemory
+## DM_RAM1 : DataMemory
 
 ### Input
-
-- Address:
-- MemRead:
-- MemWE:
-- WriteData:
+- CLK: 时钟信号
+- RST: reset
+- ALUOut: 内存需要读写的地址。需要判断是否是数据区，若是指令内存区则留给Ram2操作，若是串口保留地址则操作串口，若是VGA保留地址则操作VGA_RAM
+- MemRead: 是否读内存
+- MemWE:   内存写使能
+- DstVal: 待写入数据
 
 ### Output
 
-- Ram1CE:   OUT   STD_LOGIC;
 - Ram1OE:   OUT   STD_LOGIC;
 - Ram1WE:   OUT   STD_LOGIC;
+- Ram1EN:   OUT   STD_LOGIC;
 - Ram1Addr: OUT   STD_LOGIC_VECTOR(17 downto 0); -- 需要检测是否为串口地址 0xBF00, 0xBF01等
 - Ram1Data: INOUT STD_LOGIC_VECTOR(15 downto 0);
-- VGA r,g,b: VGA接口的缓存区
-- DataOut:  从 Ram1Data 读出的数据
+- rdn:            OUT  STD_LOGIC;
+- wrn:            OUT  STD_LOGIC;
+- data_ready:     IN   STD_LOGIC;
+- tbre:           IN   STD_LOGIC;
+- tsre:           IN   STD_LOGIC;
+- vga_wrn:        OUT  STD_LOGIC;
+- vga_data:       OUT  STD_LOGIC_VECTOR(15 downto 0);
+- VGA r,g,b:      VGA接口的缓存区
+- LedSel:         IN   STD_LOGIC_VECTOR(15 downto 0);
+- LedOut:         OUT  STD_LOGIC_VECTOR(15 downto 0);
+- NumOut:         OUT  STD_LOGIC_VECTOR(7 downto 0)
 
 ## MUX_MEM_WB
 
@@ -364,7 +373,7 @@ author : li
 - `PC_Keep`: PC 保持不变
 - `IFID_Keep`: `MUX_IF_ID` 保持不变
 - `IDEX_Stall`: `STD_LOGIC`, 暂停信号
-     
+
 
 ## ForwardingUnit
 

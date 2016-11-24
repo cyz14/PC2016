@@ -59,7 +59,7 @@ entity DM_RAM1 is port (
     Exception:      OUT  STD_LOGIC;
     ExceptPC:       OUT  STD_LOGIC_VECTOR(15 downto 0);
     
-    LedSel :        IN   STD_LOGIC_VECTOR(15 downto 0);
+    LedSel:         IN   STD_LOGIC_VECTOR(15 downto 0);
     LedOut:         OUT  STD_LOGIC_VECTOR(15 downto 0);
     NumOut:         OUT  STD_LOGIC_VECTOR(7 downto 0)
 );
