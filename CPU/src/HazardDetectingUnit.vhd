@@ -23,7 +23,8 @@ begin
     stall_gen: process (s1_MemRead, s1_DstReg, rx, ry)
         variable stall: std_logic;
     begin
-        if s1_MemRead = '0' and (s1_DstReg = rx or s1_DstReg = ry) then
+        if (s1_MemRead = '0' and (s1_DstReg = rx or s1_DstReg = ry))
+        or (s1_DstReg = "1001" and (rx = "1001" or ry = "1001")) then
             PC_Keep <= '0';
             IFID_Keep <= '0';
             IDEX_Stall <= '0';
