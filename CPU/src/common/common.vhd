@@ -19,7 +19,18 @@ package common is
 -- end record;
 --
 
+constant DS_NONE : std_logic_vector(2 downto 0) := "000";
+constant DS_RX   : std_logic_vector(2 downto 0) := "001";
+constant DS_RY   : std_logic_vector(2 downto 0) := "010";
+constant DS_PCplus1 : std_logic_vector(2 downto 0) := "011";
+constant DS_SP   : std_logic_vector(2 downto 0) := "100";
+constant DS_IH   : std_logic_vector(2 downto 0) := "101";
+constant DS_T    : std_logic_vector(2 downto 0) := "110";
 
+constant AS_NONE : std_logic_vector(1 downto 0) := "00";
+constant AS_DATA1: std_logic_vector(1 downto 0) := "01";
+constant AS_DATA2: std_logic_vector(1 downto 0) := "10";
+constant AS_IMME : std_logic_vector(1 downto 0) := "11";
 CONSTANT Dst_R0 : std_logic_vector (3 downto 0) := "0000";
 CONSTANT Dst_R1  : std_logic_vector (3 downto 0) := "0001";
 constant Dst_R2  : std_logic_vector (3 downto 0) := "0010";
