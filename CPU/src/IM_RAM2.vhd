@@ -9,8 +9,8 @@ entity IM_RAM2 is
 	ram_2_data : inout std_logic_vector(15 downto 0);
 	ram_2_addr : out std_logic_vector(15 downto 0);
 	Instruction : out std_logic_vector(15 downto 0);
-	rdn: out STD_LOGIC; --閿佷綇涓插彛
-	wrn: out STD_LOGIC; --閿佷綇涓插彛
+	rdn: out STD_LOGIC; --锁住串口
+	wrn: out STD_LOGIC; --锁住串口
 	ram_2_oe,ram_2_we,ram_2_en: out std_logic
 	);
 end IM_RAM2;

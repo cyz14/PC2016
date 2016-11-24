@@ -64,3 +64,9 @@ runs.xml
 project.wpc
 webtalk_*.xml
 *.ipf
+
+*.swp
+*~
+
+# modelsim lib
+CPU/src/work
