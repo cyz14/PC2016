@@ -2,6 +2,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
+use work.common.ALL;
+
 entity ImmExtend is 
     port 
     (
@@ -21,30 +23,30 @@ begin
         Signf := not ZeroExtend;
         case ImmeSrc is
             -- 3bit: SLL and SRA instructions, 00110 + rx + ry + imm(3) + 00/01
-            when "000" => -- 3 bit
+            when IMM_THREE => -- 3 bit
                 Imme(2 downto 0) <= inImme(4 downto 2);
                 ext := Signf and inImme(4);
                 Imme(15 downto 3) <= (others => ext);
             
             -- 4bit: ADDIU3, 01000 + rx + ry + 0 + imm(4)
-            when "001" => -- 4 bit
+            when IMM_FOUR => -- 4 bit
                 Imme(3 downto 0) <= inImme(3 downto 0);
                 ext := Signf and inImme(3);
                 Imme(15 downto 4) <= (others => ext);
             
             -- 5bit: LW, 10011+rx+ry+imm(5)
-            when "010" => -- 5 bit
+            when IMM_FIVE => -- 5 bit
                 Imme(4 downto 0) <= inImme(4 downto 0);
                 ext := Signf and inImme(4);
                 Imme(15 downto 5) <= (others => ext);
             
-            when "011" => -- 8 bit
+            when IMM_EIGHT => -- 8 bit
                 Imme(7 downto 0) <= inImme(7 downto 0);
                 ext := Signf and inImme(7);
                 Imme(15 downto 8) <= (others => ext);
             
             -- 11bit: B, 00010+imm(11)
-            when "100" => -- 11 bit
+            when IMM_ELEVEN => -- 11 bit
                 Imme(10 downto 0) <= inImme(10 downto 0);
                 ext := Signf and inImme(10);
                 Imme(15 downto 11) <= (others => ext);

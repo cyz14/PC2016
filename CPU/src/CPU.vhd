@@ -57,18 +57,17 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component PCMUX is
         port(
-            PCPlus1_data : in std_logic_vector(15 downto 0);
-            PCRx_data : in std_logic_vector(15 downto 0);
-            PCAdd_data : in std_logic_vector(15 downto 0);
-            PC_choose : in std_logic_vector(1 downto 0);
-            PCout: out std_logic_vector(15 downto 0)
+        clk, rst : in std_logic;
+        PCAdd1_data : in std_logic_vector(15 downto 0);
+        PCRx_data : in std_logic_vector(15 downto 0);
+        PCAddImm_data : in std_logic_vector(15 downto 0);
+        PC_choose : in std_logic_vector(1 downto 0);
+        PCout: out std_logic_vector(15 downto 0)
         );
     end Component; 
 
     Component PCReg is
         Port (
-            clk : in std_logic;
-            rst : in std_logic;
             PCSrc : in std_logic_vector(15 downto 0);
             keep : in std_logic;
             PC : out std_logic_vector(15 downto 0)
@@ -184,6 +183,22 @@ ARCHITECTURE Behaviour OF CPU IS
         );
     END Component;
 
+    component HazardDetectingUnit is 
+        port (
+        rst,clk: in std_logic;
+        MemRead: in std_logic;
+        DstReg: in std_logic_vector(3 downto 0);
+        ASrc4: in std_logic_vector(3 downto 0);
+        BSrc4: in std_logic_vector(3 downto 0);
+        ALUOut: in std_logic_vector(15 downto 0);
+        MemWE: in std_logic;
+
+        PC_Keep: out std_logic;
+        IFID_Keep: out std_logic;
+        IDEX_Stall: out std_logic
+    );
+    end component;
+
     Component ForwardingUnit is port(
 		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信�
 		EXE_MEM_RD      : in std_logic_vector (2 DOWNTO 0) ;  --exe_mem阶段目的寄存器编�
@@ -230,19 +245,15 @@ ARCHITECTURE Behaviour OF CPU IS
     CONSTANT background_g:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
     CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
 
-    SIGNAL tempKeep     : STD_LOGIC;
-    SIGNAL tempPC       : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL tempPCadd1   : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL tempPCRx     : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL tempPCaddImm : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL tempPCMuxSel : STD_LOGIC_VECTOR( 1 DOWNTO 0);
-    SIGNAL tempNewPC    : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL tempInst     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
-    signal IF_ID_PCadd1 : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PCKeep       : STD_LOGIC;
+    SIGNAL PC           : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PCPlus1_data : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PCRx_data    : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PCAdd_data   : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL PC_choose    : STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    SIGNAL NewPC        : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL Instruct     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
     
---    SIGNAL temp         : STD_LOGIC_VECTOR(15 DOWNTO 0);
---    SIGNAL temp         : STD_LOGIC;
-
 BEGIN
 
     PROCESS --  50M to 25M
@@ -272,24 +283,24 @@ BEGIN
     );
     
     u_PCMUX: PCMUX PORT MAP (
-        PCPlus1_data => ZERO16,
-        PCRx_data  => ZERO16,
-        PCAdd_data => tempPCadd1,
-        PC_choose  => tempPCMuxSel,
-        PCout      => tempNewPC
+        clk => CLK,
+        rst => RST,
+        PCAdd1_data => PCPlus1_data,
+        PCRx_data  => PCRx_data,
+        PCAddImm_data => PCAdd_data,
+        PC_choose  => PC_choose,
+        PCout      => NewPC
     );
     
     u_PC: PCReg PORT MAP (
-        clk => clk_sel,
-        rst => RST,
-        PCSrc => tempNewPC,
-        keep => '0',
-        PC  => tempPC
+        PCSrc => NewPC,
+        keep => PCKeep,
+        PC  => PC
     );
     
-    u_PCAdd1: PCADD1 PORT MAP (
-        PCin => tempPC,
-        PCout => tempPCAdd1
+    u_PCAdd1: PCAdd1 PORT MAP (
+        PCin => PC,
+        PCout => PCPlus1_data
     );
     
     
