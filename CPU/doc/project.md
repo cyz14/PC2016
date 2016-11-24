@@ -182,7 +182,7 @@
 - outBSrc:     ALU B 选择器的选择信号
 - outASrc4:    给ForwardingUnit
 - outBSrc4:    给ForwardingUnit
-- MemWriteData: 要写入内存的寄存器中的值, 用于 SW, SW_SP 指令，直接传给 MUX_EXE_MEM
+- MemWriteData: 要写入内存的寄存器中的值, 用于 SW, SW\_SP 指令，如果MemWE,则为Data2，直接传给 MUX_EXE_MEM
 
 
 ## ImmExtend
