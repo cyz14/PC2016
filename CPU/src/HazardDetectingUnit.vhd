@@ -9,6 +9,8 @@ entity HazardDetectingUnit is
     DstReg: in std_logic_vector(3 downto 0);
     ASrc4: in std_logic_vector(3 downto 0);
     BSrc4: in std_logic_vector(3 downto 0);
+    ALUOut: in std_logic_vector(15 downto 0);
+    MemWE: in std_logic;
 
     PC_Keep: out std_logic;
     IFID_Keep: out std_logic;
@@ -24,7 +26,8 @@ begin
         variable stall: std_logic;
     begin
         if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))
-        or (s1_DstReg = "1001" and (ASrc4 = "1001" or BSrc4 = "1001")) then
+        or (s1_DstReg = "1001" and (ASrc4 = "1001" or BSrc4 = "1001"))
+        or (MemWE = '0' and ALUOut(15) = '0') then
             PC_Keep <= '0';
             IFID_Keep <= '0';
             IDEX_Stall <= '0';
