@@ -2,6 +2,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
+use work.common.ALL;
+
 entity ImmExtend is 
     port 
     (

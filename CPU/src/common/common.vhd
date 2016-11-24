@@ -23,29 +23,36 @@ type WriteRegDst is (
     Dst_SP, Dst_T, Dst_IH
 );
 
-Type ALUOP IS (
-    OP_NONE,-- No operation 
-    OP_ADD, -- F <= A  +  B
-    OP_SUB, -- F <= A  -  B
-    OP_AND, -- F <= A  &  B
-    OP_OR,  -- F <= A  |  B
-    OP_XOR, -- F <= A xor B
-    OP_CMP, -- F <= A !=  B, not equal
-    OP_LT,  -- F <= A  <  B
-    OP_POS, -- F <= A
-    OP_SLL, -- F <= A <<  B
-    OP_SRL, -- F <= A >>  B(logical)
-    OP_SRA  -- F <= A >>  B(arith)
-    );
+CONSTANT OP_NONE : std_logic_vector (3 downto 0) := "0000";
+CONSTANT OP_ADD  : std_logic_vector (3 downto 0) := "0001";
+constant OP_SUB  : std_logic_vector (3 downto 0) := "0010";
+constant OP_AND  : std_logic_vector (3 downto 0) := "0011";
+constant OP_OR   : std_logic_vector (3 downto 0) := "0100";
+constant OP_XOR  : std_logic_vector (3 downto 0) := "0101";
+constant OP_CMP  : std_logic_vector (3 downto 0) := "0110";
+constant OP_LT   : std_logic_vector (3 downto 0) := "0111";
+constant OP_POS  : std_logic_vector (3 downto 0) := "1000";
+constant OP_SLL  : std_logic_vector (3 downto 0) := "1001";
+constant OP_SRL  : std_logic_vector (3 downto 0) := "1010";
+constant OP_SRA  : std_logic_vector (3 downto 0) := "1011";
 
-Type ImmSrc is (
-	IMM_NONE ,
-	IMM_THREE,
-	IMM_FOUR,
-	IMM_FIVE,
-	IMM_EIGHT,
-	IMM_ELEVEN
-);
+
+
+CONSTANT IMM_NONE : std_logic_vector (2 downto 0) := "000";
+CONSTANT IMM_THREE : std_logic_vector (2 downto 0) := "001";
+CONSTANT IMM_FOUR : std_logic_vector (2 downto 0) := "010";
+CONSTANT IMM_FIVE : std_logic_vector (2 downto 0) := "011";
+CONSTANT IMM_EIGHT : std_logic_vector (2 downto 0):= "100";
+CONSTANT IMM_ELEVEN : std_logic_vector (2 downto 0) := "101";
+
+
+
+CONSTANT PC_None : std_logic_vector(1 downto 0) := "00";
+CONSTANT PC_Add1 : std_logic_vector(1 downto 0) := "01";
+CONSTANT PC_Rx   : std_logic_vector(1 downto 0) := "10";
+CONSTANT PC_AddImm: std_logic_vector(1 downto 0):= "11";
+
+
 -- Declare constants
 --
 -- constant <constant_name>		: time := <time_unit> ns;

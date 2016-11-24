@@ -77,7 +77,6 @@ ARCHITECTURE Behaviour OF ControlUnit IS
     
     TYPE DataSrc IS (DS_NONE, DS_RX, DS_RY, DS_PCplus1, DS_SP, DS_IH, DS_T);
     TYPE ALUSRc  IS (AS_NONE, AS_DATA1, AS_DATA2, AS_IMME);
-    TYPE PCMuxSrc IS (PS_PLUS1, PS_ADDI, PS_RX, PS_NONE);
 
     SIGNAL tempInsType :  STD_LOGIC_VECTOR(4 downto 0);
     SIGNAL tempRx      :  STD_LOGIC_VECTOR(2 downto 0);
@@ -118,11 +117,11 @@ BEGIN
                         MemWE    <= '0';
                         DstReg   <= tempRz;
                         RegWE    <= '1';
-                        PCMuxSel <= "00";
+                        PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SUB =>
                         Data1Src <= DS_RX;
                         Data2Src <= DS_RY;
-                        ImmeSrc  <= "000";
+                        ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
                         BSrc     <= AS_DATA2;

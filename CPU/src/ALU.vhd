@@ -12,7 +12,7 @@ ENTITY ALU IS
 PORT (
     A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
     B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-    OP :  IN  STD_LOGIC_VECTOR(4  downto 0);
+    OP :  IN  STD_LOGIC_VECTOR(3  downto 0);
     F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
     T  :  OUT STD_LOGIC
 );
@@ -23,7 +23,7 @@ ARCHITECTURE Behaviour OF ALU IS
     CONSTANT ONE16  : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(1, 16);
     CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(0, 16);
 
-    SIGNAL tempNUL: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
+    SIGNAL tempNUL: STD_LOGIC_VECTOR(15 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 16);
     SIGNAL tempADD: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
     SIGNAL tempSUB: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
     SIGNAL tempAND: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
@@ -63,7 +63,7 @@ BEGIN
                 T <= tempADD(16); -- 
             WHEN OP_SUB  => 
                 F <= tempSUB(15 downto 0);
-                T <= temp; -- F <= A  -  B
+                T <= '0'; -- F <= A  -  B
             WHEN OP_AND  => 
                 F <= tempAND;
                 T <= '0'; -- F <= A  &  B

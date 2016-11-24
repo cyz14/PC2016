@@ -57,12 +57,12 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component PCMUX is
         port(
-            clk, rst : in std_logic;
-            PCPlus1_data : in std_logic_vector(15 downto 0);
-            PCRx_data : in std_logic_vector(15 downto 0);
-            PCAdd_data : in std_logic_vector(15 downto 0);
-            PC_choose : in std_logic_vector(1 downto 0);
-            PCout: out std_logic_vector(15 downto 0)
+        clk, rst : in std_logic;
+        PCAdd1_data : in std_logic_vector(15 downto 0);
+        PCRx_data : in std_logic_vector(15 downto 0);
+        PCAddImm_data : in std_logic_vector(15 downto 0);
+        PC_choose : in std_logic_vector(1 downto 0);
+        PCout: out std_logic_vector(15 downto 0)
         );
     end Component; 
 
@@ -285,9 +285,9 @@ BEGIN
     u_PCMUX: PCMUX PORT MAP (
         clk => CLK,
         rst => RST,
-        PCPlus1_data => PCPlus1_data,
+        PCAdd1_data => PCPlus1_data,
         PCRx_data  => PCRx_data,
-        PCAdd_data => PCAdd_data,
+        PCAddImm_data => PCAdd_data,
         PC_choose  => PC_choose,
         PCout      => NewPC
     );
