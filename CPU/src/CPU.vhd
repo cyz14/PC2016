@@ -100,14 +100,16 @@ ARCHITECTURE Behaviour OF CPU IS
     End Component;
 
     Component MUX_IF_ID IS PORT (
-        clk     :  IN  STD_LOGIC;
-        rst     :  IN  STD_LOGIC;
-        if_Keep :  IN  STD_LOGIC;
-        if_PC   :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        if_Inst :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        id_PC   :  OUT STD_LOGIC_VECTOR(15 downto 0);
-        id_Inst :  OUT STD_LOGIC_VECTOR( 4 downto 0);
-        id_Imme :  OUT STD_LOGIC_VECTOR(10 downto 0)
+        clk          :  IN  STD_LOGIC;
+        rst          :  IN  STD_LOGIC;
+        if_Keep      :  IN  STD_LOGIC;
+        if_PCPlus1   :  IN  STD_LOGIC_VECTOR(15 downto 0);
+        if_Inst      :  IN  STD_LOGIC_VECTOR(15 downto 0);
+        id_PCPlus1   :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        id_Inst      :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        id_Rx        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        id_Ry        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        id_Imme      :  OUT STD_LOGIC_VECTOR(10 downto 0)
     );
     END Component;
 
@@ -120,7 +122,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
         ZeroExt     :  OUT STD_LOGIC;                     
 
-        ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
+        ALUOp       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
         BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
@@ -280,14 +282,49 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL t_hsync, t_vsync: STD_LOGIC;
     SIGNAL H_count, V_count: STD_LOGIC_VECTOR(9 downto 0);
 
-    SIGNAL PCKeep       : STD_LOGIC;
-    SIGNAL PC           : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL PCPlus1_data : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL PCRx_data    : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL PCAdd_data   : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL PC_choose    : STD_LOGIC_VECTOR( 1 DOWNTO 0);
-    SIGNAL NewPC        : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL Instruct     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+    SIGNAL if_PCKeep       : STD_LOGIC;
+    SIGNAL if_NewPC        : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL if_PCToIM       : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL if_PCPlus1      : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL if_PCRx         : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    -- SIGNAL if_PCAddImm     : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL if_PCMuxSel     : STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    SIGNAL if_Instruct     : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+
+    SIGNAL id_Inst          : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_PCPlus1       : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_PCAddImm      : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_DstReg        : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL id_Rx            : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL id_Ry            : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL id_RegWE         : STD_LOGIC;
+    SIGNAL id_MemRead       : STD_LOGIC;
+    SIGNAL id_MemWE         : STD_LOGIC;
+    SIGNAL id_ALUOp         : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL id_ASrc          : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL id_BSrc          : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL id_MemWriteData  : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_Data1         : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_Data2         : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_Imme          : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_ASrc4         : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL id_BSrc4         : STD_LOGIC_VECTOR( 3 downto 0);
+
+    SIGNAL mem_DstReg      : STD_LOGIC_VECTOR(3 downto 0);
+    SIGNAL mem_RegWE       : STD_LOGIC;
+    SIGNAL mem_MemWE       : STD_LOGIC;
+    SIGNAL mem_MemRead     : STD_LOGIC;
+    SIGNAL mem_ALUOut      : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_MemWriteData: STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_ReadData    : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_vgaR        : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL mem_vgaG        : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL mem_vgaB        : STD_LOGIC_VECTOR( 2 downto 0);
+
+    SIGNAL wb_DstReg       : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL wb_RegWE        : STD_LOGIC;
+    SIGNAL wb_DstVal       : STD_LOGIC_VECTOR(15 downto 0);    
+
     
 BEGIN
 
@@ -320,25 +357,73 @@ BEGIN
     u_PCMUX: PCMUX PORT MAP (
         clk => CLK,
         rst => RST,
-        PCAdd1_data => PCPlus1_data,
-        PCRx_data  => PCRx_data,
-        PCAddImm_data => PCAdd_data,
-        PC_choose  => PC_choose,
-        PCOUT      => NewPC
+        PCAdd1_data   => if_PCPlus1,
+        PCRx_data     => if_PCRx,
+        PCAddImm_data => id_PCAddImm,
+        PC_choose     => if_PCMuxSel,
+        PCOUT         => if_NewPC
     );
     
     u_PC: PCReg PORT MAP (
-        PCSrc => NewPC,
-        keep => PCKeep,
-        PC  => PC
+        PCSrc => if_NewPC,
+        keep  => if_PCKeep,
+        PC    => if_PCToIM
     );
     
     u_PCAdd1: PCAdd1 PORT MAP (
-        PCin => PC,
-        PCOUT => PCPlus1_data
+        PCin  => if_PCToIM,
+        PCOUT => if_PCPlus1
     );
     
+    u_Ram2: IM_RAM2 PORT MAP (
+        clk          => clk_sel,
+        rst          => RST,
+        PC_i         => if_PCToIM,
+        Ram2_Data    => Ram2_Data,
+        MemWE        => 
+        ALUOut       =>
+        MemWriteData =>
+        Ram2_Addr    => Ram2_Addr,
+        Instruction  => if_Inst,
+        Ram2_OE      => Ram2_OE,
+        Ram2_WE      => Ram2_WE,
+        Ram2_EN      => Ram2_EN,
+        LedSel       : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        LedOut       : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        NumOut       : OUT   STD_LOGIC_VECTOR( 7 downto 0)
+    );
     
+    u_IF_ID: MUX_IF_ID PORT MAP (
+        clk        => clk_sel,
+        rst        => RST,
+        if_Keep    => if_PCKeep,
+        if_PCPlus1 => if_NewPC,
+        if_Inst    => if_Inst,
+        id_PCPlus1 => id_PCPlus1,
+        id_Inst    => id_Inst,
+        id_Rx      => id_Rx,
+        id_Ry      => id_Ry,
+        id_Imme    => id_Imme
+    );
+
+    u_AddImme: PCAddImm PORT MAP (
+        PCin  => id_PCPlus1,
+        Imm   => id_Imme,
+        PCout => id_PCAddImm
+    );
+
+    u_RegFile: RegisterFile Port MAP (
+        PCplus1         => id_PCPlus1,
+        Read1Register   => id_
+        Read2Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
+        WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
+        WriteData:      IN  STD_LOGIC_VECTOR(15 downto 0);
+        Data1Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
+        Data2Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
+        RegWE:          IN  STD_LOGIC;
+        Data1:          OUT STD_LOGIC_VECTOR(15 downto 0);
+        Data2:          OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
 
     DrawScreen: PROCESS(clock_25)
     BEGIN
