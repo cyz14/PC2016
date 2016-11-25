@@ -5,6 +5,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+use WORK.COMMON.ALL;
+
 ENTITY MUX_ALU_A IS PORT (
     Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
     Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -17,7 +19,7 @@ ENTITY MUX_ALU_A IS PORT (
 END MUX_ALU_A;
 
 ARCHITECTURE Behaviour OF MUX_ALU_A IS
-    CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(0, 16);
+    
 BEGIN
     
     Process(ASrc, ForwardingA)
@@ -25,10 +27,10 @@ BEGIN
         CASE ForwardingA IS
             WHEN "00" =>
                 CASE ASrc IS
-                    WHEN "00" => AOp <= ZERO16;
-                    WHEN "01" => AOp <= Data1;
-                    WHEN "10" => AOp <= Immediate;
-                    WHEN others => AOp <= ZERO16;
+                    WHEN AS_NONE  => AOp <= ZERO16;
+                    WHEN AS_DATA1 => AOp <= Data1;
+                    WHEN AS_IMME  => AOp <= Immediate;
+                    WHEN others   => AOp <= ZERO16;
                 END CASE;
             WHEN "01" =>
                 AOp <= ExeMemALUOut;

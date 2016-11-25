@@ -20,6 +20,9 @@ signal temp_FORWARDA : STD_LOGIC_VECTOR (1 downto 0);
 signal temp_FORWARDB : STD_LOGIC_VECTOR (1 downto 0);
         
 begin
+	FORWARDA <= temp_FORWARDA;
+	FORWARDB <= temp_FORWARDB;
+
 	process(EXE_MEM_REGWRITE,EXE_MEM_RD,MEM_WB_REGWRITE,MEM_WB_RD,ASrc4,BSrc4)
 	begin
 		temp_FORWARDA <= "00";   --正常赋值
@@ -30,7 +33,7 @@ begin
 			elsif (EXE_MEM_RD = BSrc4)  then
 				temp_FORWARDB <= "01";
 			end if;
-		END IF;
+		end if;
 		
 		if (MEM_WB_REGWRITE = '1' ) THEN      --取写回的那个寄存器数
 			if(MEM_WB_RD = ASrc4) then
@@ -39,10 +42,7 @@ begin
 				temp_FORWARDB <= "10";
 			end if;
 		end if;
-		
-		FORWARDA <= temp_FORWARDA;
-		FORWARDB <= temp_FORWARDB;
-		
+
 	end process;
 	
 end behaviour;

@@ -25,10 +25,10 @@ BEGIN
         CASE ForwardingB IS
             WHEN "00" =>
                 CASE BSrc IS
-                    WHEN "00" => BOp <= ZERO16;
-                    WHEN "01" => BOp <= Data2;
-                    WHEN "10" => BOp <= Immediate;
-                    WHEN others => BOp <= ZERO16;
+                    WHEN AS_NONE  => BOp <= ZERO16;
+                    WHEN AS_DATA2 => BOp <= Data2;
+                    WHEN AS_IMME  => BOp <= Immediate;
+                    WHEN others   => BOp <= ZERO16;
                 END CASE;
             WHEN "01" =>
                 BOp <= ExeMemALUOut;

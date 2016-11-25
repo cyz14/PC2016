@@ -113,22 +113,25 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component ControlUnit IS PORT (
         Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
-        Condition   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
+        Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
         
         Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
         Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-        ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); 
-        ZeroExt     :  OUT STD_LOGIC;      
+        ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
+        ZeroExt     :  OUT STD_LOGIC;                     
 
         ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
         BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
         MemRead     :  OUT STD_LOGIC;
-        MemWE       :  OUT STD_LOGIC; 
+        MemWE       :  OUT STD_LOGIC;    
 
-        DstReg      :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        DstReg      :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         RegWE       :  OUT STD_LOGIC;
+        
+        ASrc4       :  out std_logic_vector (3 downto 0);
+        BSrc4       :  out std_logic_vector (3 downto 0);
 
         PCMuxSel    :  OUT STD_LOGIC_VECTOR( 2 downto 0)
     );
@@ -154,7 +157,7 @@ ARCHITECTURE Behaviour OF CPU IS
         Data1:        IN     STD_LOGIC_VECTOR(15 downto 0);
         Data2:        IN     STD_LOGIC_VECTOR(15 downto 0);
         Immediate:    IN     STD_LOGIC_VECTOR(15 downto 0);
-        DstReg:       IN     STD_LOGIC_VECTOR( 2 downto 0);
+        DstReg:       IN     STD_LOGIC_VECTOR( 3 downto 0);
         RegWE:        IN     STD_LOGIC;
         MemRead:      IN     STD_LOGIC;
         MemWE:        IN     STD_LOGIC;
@@ -167,7 +170,7 @@ ARCHITECTURE Behaviour OF CPU IS
         Data1_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
         Data2_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
         Immediate_o:  OUT    STD_LOGIC_VECTOR(15 downto 0);
-        DstReg_o:     OUT    STD_LOGIC_VECTOR( 2 downto 0);
+        DstReg_o:     OUT    STD_LOGIC_VECTOR( 3 downto 0);
         RegWE_o:      OUT    STD_LOGIC;
         MemRead_o:    OUT    STD_LOGIC;
         MemWE_o:      OUT    STD_LOGIC;

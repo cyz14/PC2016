@@ -25,8 +25,12 @@ package common is
 -- constant <constant_name>		: time := <time_unit> ns;
 -- constant <constant_name>		: integer := <value;
 --
-CONSTANT ZERO3  : STD_LOGIC_VECTOR( 2 downto 0) := "000";
-CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
+
+CONSTANT ZERO1 : STD_LOGIC := '0';
+CONSTANT ZERO2 : STD_LOGIC_VECTOR(1 downto 0) := "00";
+CONSTANT ZERO3 : STD_LOGIC_VECTOR(2 downto 0) := "000";
+CONSTANT ZERO4 : STD_LOGIC_VECTOR(3 downto 0) := "0000";
+CONSTANT ZERO16: STD_LOGIC_VECTOR(15 downto 0) := CONV_STD_LOGIC_VECTOR(0, 16);
 
 CONSTANT MEM_WRITE_ENABLE  : STD_LOGIC := '0';
 CONSTANT MEM_WRITE_DISABLE : STD_LOGIC := '1';
