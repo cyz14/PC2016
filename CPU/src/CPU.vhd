@@ -39,14 +39,14 @@ ENTITY CPU IS PORT (
     Vs:          OUT   STD_LOGIC;
     
     --FLASH
-    flash_byte : out STD_LOGIC := '1'; --²Ù×÷Ä£Ê½,²ÉÓÃ×ÖÄ£Ê½£¬µØÖ·Îª 22 downto 1
-    flash_vpen : out STD_LOGIC := '1'; --Ð´±£»¤£¬ÖÃÎª1
-    flash_ce   : out STD_LOGIC := '0'; --Ê¹ÄÜÐÅºÅ,¸ÃÄ£¿éÖ»¸ºÔðflashµÄ¶Á£¬¹ÊceÖÃÎª0¼´¿É
-    flash_oe   : out STD_LOGIC := '1'; --¶ÁÊ¹ÄÜ
-    flash_we   : out STD_LOGIC := '1'; --Ð´Ê¹ÄÜ
-    flash_rp   : out STD_LOGIC := '1'; --¹¤×÷Ä£Ê½£¬1Îª¹¤×÷
-    flash_addr : out STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000"; --flashÄÚ´æµØÖ·
-    flash_data : inout STD_LOGIC_VECTOR( 15 downto 0 ); --flashÊä³öÐÅºÅ
+    flash_byte : OUT STD_LOGIC := '1'; --æ“ä½œæ¨¡å¼,é‡‡ç”¨å­—æ¨¡å¼ï¼Œåœ°å€ä¸º 22 downto 1
+    flash_vpen : OUT STD_LOGIC := '1'; --å†™ä¿æŠ¤ï¼Œç½®ä¸º1
+    flash_ce   : OUT STD_LOGIC := '0'; --ä½¿èƒ½ä¿¡å·,è¯¥æ¨¡å—åªè´Ÿè´£flashçš„è¯»ï¼Œæ•…ceç½®ä¸º0å³å¯
+    flash_oe   : OUT STD_LOGIC := '1'; --è¯»ä½¿èƒ½
+    flash_we   : OUT STD_LOGIC := '1'; --å†™ä½¿èƒ½
+    flash_rp   : OUT STD_LOGIC := '1'; --å·¥ä½œæ¨¡å¼ï¼Œ1ä¸ºå·¥ä½œ
+    flash_addr : OUT STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000"; --flashå†…å­˜åœ°å€
+    flash_data : INOUT STD_LOGIC_VECTOR( 15 downto 0 ); --flashè¾“å‡ºä¿¡å·
     
     -- used to display debug info
     LED:         OUT   STD_LOGIC_VECTOR(15 downto 0)
@@ -57,45 +57,45 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component PCMUX is
         port(
-        clk, rst : in std_logic;
-        PCAdd1_data : in std_logic_vector(15 downto 0);
-        PCRx_data : in std_logic_vector(15 downto 0);
-        PCAddImm_data : in std_logic_vector(15 downto 0);
-        PC_choose : in std_logic_vector(1 downto 0);
-        PCout: out std_logic_vector(15 downto 0)
+        clk, rst : IN STD_LOGIC;
+        PCAdd1_data : IN STD_LOGIC_VECTOR(15 downto 0);
+        PCRx_data : IN STD_LOGIC_VECTOR(15 downto 0);
+        PCAddImm_data : IN STD_LOGIC_VECTOR(15 downto 0);
+        PC_choose : IN STD_LOGIC_VECTOR(1 downto 0);
+        PCout: OUT STD_LOGIC_VECTOR(15 downto 0)
         );
     end Component; 
 
     Component PCReg is
         Port (
-            PCSrc : in std_logic_vector(15 downto 0);
-            keep : in std_logic;
-            PC : out std_logic_vector(15 downto 0)
+            PCSrc : IN STD_LOGIC_VECTOR(15 downto 0);
+            keep : IN STD_LOGIC;
+            PC : OUT STD_LOGIC_VECTOR(15 downto 0)
         );
     end Component;
 
     Component PCAdd1 is Port (
-        PCin  : in   STD_LOGIC_VECTOR (15 downto 0);
-        PCout : out  STD_LOGIC_VECTOR (15 downto 0)
+        PCin  : IN   STD_LOGIC_VECTOR (15 downto 0);
+        PCOUT : OUT  STD_LOGIC_VECTOR (15 downto 0)
     );
     End Component;
 
     Component IM_RAM2 IS PORT (
-        clk         : in    std_logic;
-        rst         : in    std_logic;
-        PC_i        : in    std_logic_vector(15 downto 0);
-        Ram2_Data   : inout std_logic_vector(15 downto 0);
-        MemWE       : in    std_logic;
-        ALUOut      : in    std_logic_vector(15 downto 0); -- Mem Write Address
-        MemWriteData: in    std_logic_vector(15 downto 0); -- Mem Write Data
-        Ram2_Addr   : out   std_logic_vector(17 downto 0);
-        Instruction : out   std_logic_vector(15 downto 0);
-        Ram2_OE     : out   std_logic;
-        Ram2_WE     : out   std_logic;
-        Ram2_EN     : out   std_logic;
-        LedSel      : out   std_logic_vector(15 downto 0);
-        LedOut      : out   std_logic_vector(15 downto 0);
-        NumOut      : out   std_logic_vector( 7 downto 0)
+        clk         : IN    STD_LOGIC;
+        rst         : IN    STD_LOGIC;
+        PC_i        : IN    STD_LOGIC_VECTOR(15 downto 0);
+        Ram2_Data   : INOUT STD_LOGIC_VECTOR(15 downto 0);
+        MemWE       : IN    STD_LOGIC;
+        ALUOut      : IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Address
+        MemWriteData: IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Data
+        Ram2_Addr   : OUT   STD_LOGIC_VECTOR(17 downto 0);
+        Instruction : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        Ram2_OE     : OUT   STD_LOGIC;
+        Ram2_WE     : OUT   STD_LOGIC;
+        Ram2_EN     : OUT   STD_LOGIC;
+        LedSel      : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        LedOut      : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        NumOut      : OUT   STD_LOGIC_VECTOR( 7 downto 0)
         );
     End Component;
 
@@ -130,25 +130,25 @@ ARCHITECTURE Behaviour OF CPU IS
         DstReg      :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         RegWE       :  OUT STD_LOGIC;
         
-        ASrc4       :  out std_logic_vector (3 downto 0);
-        BSrc4       :  out std_logic_vector (3 downto 0);
+        ASrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
+        BSrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
 
         PCMuxSel    :  OUT STD_LOGIC_VECTOR( 2 downto 0)
     );
     END Component;
 
     Component ImmExtend is port(
-        ImmeSrc     : in  std_logic_vector(2 downto 0);
-        inImme      : in  std_logic_vector(10 downto 0);
-        ZeroExtend  : in  std_logic;
-        Imme        : out std_logic_vector(15 downto 0)
+        ImmeSrc     : IN  STD_LOGIC_VECTOR(2 downto 0);
+        inImme      : IN  STD_LOGIC_VECTOR(10 downto 0);
+        ZeroExtend  : IN  STD_LOGIC;
+        Imme        : OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     end Component;
 
     Component PCAddImm is Port (
-        PCin  : in   STD_LOGIC_VECTOR (15 downto 0);
-        Imm   : in   STD_LOGIC_VECTOR (15 downto 0);
-        PCout : out  STD_LOGIC_VECTOR (15 downto 0));
+        PCin  : IN   STD_LOGIC_VECTOR (15 downto 0);
+        Imm   : IN   STD_LOGIC_VECTOR (15 downto 0);
+        PCout : OUT  STD_LOGIC_VECTOR (15 downto 0));
     end Component;
     
     Component MUX_ID_EXE IS PORT (
@@ -215,54 +215,54 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component RegisterFile IS PORT (
-        PCplus1:        IN  std_logic_vector(15 downto 0);
+        PCplus1:        IN  STD_LOGIC_VECTOR(15 downto 0);
         Read1Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
         Read2Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
         WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
         WriteData:      IN  STD_LOGIC_VECTOR(15 downto 0);
-        Data1Src:       in std_logic_vector(2 downto 0);
-        Data2Src:       in std_logic_vector(2 downto 0);
-        RegWE:          in std_logic;
-        Data1:          out std_logic_vector(15 downto 0);
-        Data2:          out std_logic_vector(15 downto 0)
+        Data1Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
+        Data2Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
+        RegWE:          IN  STD_LOGIC;
+        Data1:          OUT STD_LOGIC_VECTOR(15 downto 0);
+        Data2:          OUT STD_LOGIC_VECTOR(15 downto 0)
         );
     END Component;
 
     component HazardDetectingUnit is 
         port (
-        rst,clk: in std_logic;
-        MemRead: in std_logic;
-        DstReg: in std_logic_vector(3 downto 0);
-        ASrc4: in std_logic_vector(3 downto 0);
-        BSrc4: in std_logic_vector(3 downto 0);
-        ALUOut: in std_logic_vector(15 downto 0);
-        MemWE: in std_logic;
+        rst,clk: IN STD_LOGIC;
+        MemRead: IN STD_LOGIC;
+        DstReg: IN STD_LOGIC_VECTOR(3 downto 0);
+        ASrc4: IN STD_LOGIC_VECTOR(3 downto 0);
+        BSrc4: IN STD_LOGIC_VECTOR(3 downto 0);
+        ALUOut: IN STD_LOGIC_VECTOR(15 downto 0);
+        MemWE: IN STD_LOGIC;
 
-        PC_Keep: out std_logic;
-        IFID_Keep: out std_logic;
-        IDEX_Stall: out std_logic
+        PC_Keep: OUT STD_LOGIC;
+        IFID_Keep: OUT STD_LOGIC;
+        IDEX_Stall: OUT STD_LOGIC
     );
     end component;
 
     Component ForwardingUnit is port(
-		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem½×¶Î¼Ä´æÆ÷µÄÐ´ÐÅ¼°
-        EXE_MEM_RD       : in std_logic_vector (3 DOWNTO 0) ;  --exe_mem½×¶ÎÄ¿µÄ¼Ä´æÆ÷±à¼°
-        MEM_WB_REGWRITE  : in std_logic ;  --mem_wb½×¶Î¼Ä´æÆ÷µÄÐ´ÐÅ¼°
-        MEM_WB_RD        : in std_logic_vector (3 downto 0);  --mem_wb½×¶Î¼Ä´æÆ÷µÄÄ¿µÄ¼Ä´æÆ÷±à¼°
-        ASrc4            : in std_logic_vector (3 downto 0);  -- ALU ²Ù×÷ÊýAµÄÔ´¼Ä´æÆ÷
-        BSrc4            : in std_logic_vector (3 downto 0);  -- ALU ²Ù×÷ÊýBµÄÔ´¼Ä´æÆ÷
-        FORWARDA         : out std_logic_vector(1 downto 0);  --muxaÐÅºÅÑ¡Ôñ
-		FORWARDB         : out std_logic_vector(1 downto 0)   --muxbÐÅºÅÑ¡Ôñ
+		EXE_MEM_REGWRITE : IN STD_LOGIC ;  --exe_memé˜¶æ®µå¯„å­˜å™¨çš„å†™ä¿¡å·
+        EXE_MEM_RD       : IN STD_LOGIC_VECTOR (3 DOWNTO 0) ;  --exe_memé˜¶æ®µç›®çš„å¯„å­˜å™¨
+        MEM_WB_REGWRITE  : IN STD_LOGIC ;  --mem_wbé˜¶æ®µå¯„å­˜å™¨çš„å†™ä¿¡å·
+        MEM_WB_RD        : IN STD_LOGIC_VECTOR (3 downto 0);  --mem_wbé˜¶æ®µå¯„å­˜å™¨çš„ç›®çš„å¯„å­˜å™¨
+        ASrc4            : IN STD_LOGIC_VECTOR (3 downto 0);  -- ALU æ“ä½œæ•°Açš„æºå¯„å­˜å™¨
+        BSrc4            : IN STD_LOGIC_VECTOR (3 downto 0);  -- ALU æ“ä½œæ•°Bçš„æºå¯„å­˜å™¨
+        FORWARDA         : OUT STD_LOGIC_VECTOR(1 downto 0);  --muxaä¿¡å·é€‰æ‹©
+		FORWARDB         : OUT STD_LOGIC_VECTOR(1 downto 0)   --muxbä¿¡å·é€‰æ‹©
 	);
     end Component;
 
     Component Clock is port (
-        rst:    in  std_logic;
-        clk:    in  std_logic;
-        clk11:  in  std_logic;
-        clk50:  in  std_logic;
-        sel:    in  std_logic_vector(1 downto 0);
-        clkout: out std_logic
+        rst:    IN  STD_LOGIC;
+        clk:    IN  STD_LOGIC;
+        clk11:  IN  STD_LOGIC;
+        clk50:  IN  STD_LOGIC;
+        sel:    IN  STD_LOGIC_VECTOR(1 downto 0);
+        clkout: OUT STD_LOGIC
     );
     end Component;
     
@@ -302,8 +302,8 @@ BEGIN
         horiz_sync => t_hsync,
         vert_sync => t_vsync,
         video_on => video_on,
-        H_count_out => H_count,
-        V_count_out => V_count
+        H_count_OUT => H_count,
+        V_count_OUT => V_count
     );
     Hs <= t_hsync;
     Vs <= t_vsync;
@@ -314,7 +314,7 @@ BEGIN
         clk11 => CLK_11,
         clk50 => CLK_50,
         sel   => "00",
-        clkout => clk_sel
+        clkOUT => clk_sel
     );
     
     u_PCMUX: PCMUX PORT MAP (
@@ -324,7 +324,7 @@ BEGIN
         PCRx_data  => PCRx_data,
         PCAddImm_data => PCAdd_data,
         PC_choose  => PC_choose,
-        PCout      => NewPC
+        PCOUT      => NewPC
     );
     
     u_PC: PCReg PORT MAP (
@@ -335,7 +335,7 @@ BEGIN
     
     u_PCAdd1: PCAdd1 PORT MAP (
         PCin => PC,
-        PCout => PCPlus1_data
+        PCOUT => PCPlus1_data
     );
     
     
