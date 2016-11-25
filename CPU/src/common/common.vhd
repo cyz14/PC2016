@@ -19,6 +19,29 @@ package common is
 -- end record;
 --
 
+
+
+-- Declare constants
+--
+-- constant <constant_name>		: time := <time_unit> ns;
+-- constant <constant_name>		: integer := <value;
+--
+
+CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
+
+CONSTANT MEM_WRITE_ENABLE  : STD_LOGIC := '0';
+CONSTANT MEM_WRITE_DISABLE : STD_LOGIC := '1';
+CONSTANT MEM_READ_ENABLE   : STD_LOGIC := '0'; 
+CONSTANT MEM_READ_DISABLE  : STD_LOGIC := '1';
+CONSTANT INST_VALID        : STD_LOGIC := '0';
+CONSTANT INST_INVALID      : STD_LOGIC := '1';
+CONSTANT CHIP_ENABLE       : STD_LOGIC := '0';
+CONSTANT CHIP_DISABLE      : STD_LOGIC := '1';
+
+CONSTANT KEEP_ENABLE       : STD_LOGIC := '0';
+CONSTANT KEEP_DISABLE      : STD_LOGIC := '1';
+
+
 -- RegisterFile DataSrc
 constant DS_NONE    : std_logic_vector(2 downto 0) := "000";
 constant DS_RX      : std_logic_vector(2 downto 0) := "001";
@@ -60,8 +83,7 @@ constant OP_SLL  : std_logic_vector (3 downto 0) := "1001";
 constant OP_SRL  : std_logic_vector (3 downto 0) := "1010";
 constant OP_SRA  : std_logic_vector (3 downto 0) := "1011";
 
-
-
+-- Immediate Source
 CONSTANT IMM_NONE   : std_logic_vector (2 downto 0) := "000";
 CONSTANT IMM_THREE  : std_logic_vector (2 downto 0) := "001";
 CONSTANT IMM_FOUR   : std_logic_vector (2 downto 0) := "010";
@@ -69,21 +91,11 @@ CONSTANT IMM_FIVE   : std_logic_vector (2 downto 0) := "011";
 CONSTANT IMM_EIGHT  : std_logic_vector (2 downto 0) := "100";
 CONSTANT IMM_ELEVEN : std_logic_vector (2 downto 0) := "101";
 
-
-
+-- PCMux Signal
 CONSTANT PC_None   : std_logic_vector(1 downto 0) := "00";
 CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "01";
 CONSTANT PC_Rx     : std_logic_vector(1 downto 0) := "10";
 CONSTANT PC_AddImm : std_logic_vector(1 downto 0) := "11";
-
-
--- Declare constants
---
--- constant <constant_name>		: time := <time_unit> ns;
--- constant <constant_name>		: integer := <value;
---
-
-CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
 
 
 -- Declare functions and procedure

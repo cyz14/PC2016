@@ -59,19 +59,17 @@
 
 ### Input
 
-- PCplus1: PC + 1 后的值
-- Instruction: IF段获取的指令
-- Keep: 是否停止一个周期
+- clk
+- rst
+- if_PC  : PC + 1 后的值
+- if_Inst: IF段获取的指令
+- if_Keep: 是否停止一个周期
 
 ### Output
 
-- Instruction: STD_LOGIC_VECTOR(15 downto 0)
-- PCplus1
-- rx: Instruction(10 downto 8)
-- ry: Instruction(7 downto 5)
-- Imm(11): Instruction(10 downto 0);
-- rz: Instruction(4 downto 2)
-
+- id_Inst: STD_LOGIC_VECTOR(15 downto 0)
+- id_PC 
+- id_Imm : if_Inst(10 downto 0);
 
 ## ControlUnit: Decoder
 
