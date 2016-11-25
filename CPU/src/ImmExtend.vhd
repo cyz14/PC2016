@@ -25,8 +25,8 @@ begin
             -- 3bit: SLL and SRA instructions, 00110 + rx + ry + imm(3) + 00/01
             when IMM_THREE => -- 3 bit
                 Imme(2 downto 0) <= inImme(4 downto 2);
-                ext := Signf and inImme(4);
-                Imme(15 downto 3) <= (others => ext);
+                Imme(3) <= not(inImme(0) or inImme(1) or inImme(2));
+                Imme(15 downto 4) <= (others => '0');
             
             -- 4bit: ADDIU3, 01000 + rx + ry + 0 + imm(4)
             when IMM_FOUR => -- 4 bit
