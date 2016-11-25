@@ -3,23 +3,22 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity ForwardingUnit is     -- 
 	port(
-		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信及
-        EXE_MEM_RD       : in std_logic_vector (3 DOWNTO 0) ;  --exe_mem阶段目的寄存器编及
-        MEM_WB_REGWRITE  : in std_logic ;  --mem_wb阶段寄存器的写信及
-        MEM_WB_RD        : in std_logic_vector (3 downto 0);  --mem_wb阶段寄存器的目的寄存器编及
+		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信号
+        EXE_MEM_RD       : in std_logic_vector (3 DOWNTO 0) ;  --exe_mem阶段目的寄存器
+        MEM_WB_REGWRITE  : in std_logic ;  --mem_wb 阶段寄存器的写信号
+        MEM_WB_RD        : in std_logic_vector (3 downto 0);  --mem_wb阶段寄存器的目的寄存器编号
         ASrc4            : in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存器
         BSrc4            : in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存器
         FORWARDA         : out std_logic_vector(1 downto 0);  --muxa信号选择
-		FORWARDB         : out std_logic_vector(1 downto 0);  --muxb信号选择
-
-	    temp_FORWARDA : INOUT STD_LOGIC_VECTOR (1 downto 0);
-        temp_FORWARDB : INOUT std_logic_vector (1 downto 0)
-		
+		FORWARDB         : out std_logic_vector(1 downto 0)   --muxb信号选择
 	);
 end ForwardingUnit;
 
 architecture behaviour of ForwardingUnit is
 
+signal temp_FORWARDA : STD_LOGIC_VECTOR (1 downto 0);
+signal temp_FORWARDB : STD_LOGIC_VECTOR (1 downto 0);
+        
 begin
 	process(EXE_MEM_REGWRITE,EXE_MEM_RD,MEM_WB_REGWRITE,MEM_WB_RD,ASrc4,BSrc4)
 	begin

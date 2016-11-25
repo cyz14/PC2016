@@ -81,23 +81,33 @@ ARCHITECTURE Behaviour OF CPU IS
     End Component;
 
     Component IM_RAM2 IS PORT (
-        pc          : in    std_logic_vector(15 downto 0);
-        ram_2_data  : inout std_logic_vector(15 downto 0);
-        ram_2_addr  : out   std_logic_vector(15 downto 0);
+        clk         : in    std_logic;
+        rst         : in    std_logic;
+        PC_i        : in    std_logic_vector(15 downto 0);
+        Ram2_Data   : inout std_logic_vector(15 downto 0);
+        MemWE       : in    std_logic;
+        ALUOut      : in    std_logic_vector(15 downto 0); -- Mem Write Address
+        MemWriteData: in    std_logic_vector(15 downto 0); -- Mem Write Data
+        Ram2_Addr   : out   std_logic_vector(17 downto 0);
         Instruction : out   std_logic_vector(15 downto 0);
-        ram_2_oe    : out   std_logic;
-        ram_2_we    : out   std_logic;
-        ram_2_en    : out   std_logic
-    );
+        Ram2_OE     : out   std_logic;
+        Ram2_WE     : out   std_logic;
+        Ram2_EN     : out   std_logic;
+        LedSel      : out   std_logic_vector(15 downto 0);
+        LedOut      : out   std_logic_vector(15 downto 0);
+        NumOut      : out   std_logic_vector( 7 downto 0)
+        );
     End Component;
 
     Component MUX_IF_ID IS PORT (
-        InsType :  OUT    STD_LOGIC_VECTOR(4  downto 0);
-        rx      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
-        ry      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
-        rz      :  OUT    STD_LOGIC_VECTOR(2  downto 0);
-        funct   :  OUT    STD_LOGIC_VECTOR(1  downto 0);
-        imme    :  OUT    STD_LOGIC_VECTOR(7  downto 0)
+        clk     :  IN  STD_LOGIC;
+        rst     :  IN  STD_LOGIC;
+        if_Keep :  IN  STD_LOGIC;
+        if_PC   :  IN  STD_LOGIC_VECTOR(15 downto 0);
+        if_Inst :  IN  STD_LOGIC_VECTOR(15 downto 0);
+        id_PC   :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        id_Inst :  OUT STD_LOGIC_VECTOR( 4 downto 0);
+        id_Imme :  OUT STD_LOGIC_VECTOR(10 downto 0)
     );
     END Component;
 
@@ -137,6 +147,38 @@ ARCHITECTURE Behaviour OF CPU IS
         Imm   : in   STD_LOGIC_VECTOR (15 downto 0);
         PCout : out  STD_LOGIC_VECTOR (15 downto 0));
     end Component;
+    
+    Component MUX_ID_EXE IS PORT (
+        clk:          IN     STD_LOGIC;
+        rst:          IN     STD_LOGIC;
+        Data1:        IN     STD_LOGIC_VECTOR(15 downto 0);
+        Data2:        IN     STD_LOGIC_VECTOR(15 downto 0);
+        Immediate:    IN     STD_LOGIC_VECTOR(15 downto 0);
+        DstReg:       IN     STD_LOGIC_VECTOR( 2 downto 0);
+        RegWE:        IN     STD_LOGIC;
+        MemRead:      IN     STD_LOGIC;
+        MemWE:        IN     STD_LOGIC;
+        ALUOp:        IN     STD_LOGIC_VECTOR( 3 downto 0);
+        ASrc:         IN     STD_LOGIC_VECTOR( 1 downto 0);
+        BSrc:         IN     STD_LOGIC_VECTOR( 1 downto 0);
+        ASrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
+        BSrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
+        Stall:        IN     STD_LOGIC; -- whether stop for a stage from HazardDetectingUnit
+        Data1_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
+        Data2_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
+        Immediate_o:  OUT    STD_LOGIC_VECTOR(15 downto 0);
+        DstReg_o:     OUT    STD_LOGIC_VECTOR( 2 downto 0);
+        RegWE_o:      OUT    STD_LOGIC;
+        MemRead_o:    OUT    STD_LOGIC;
+        MemWE_o:      OUT    STD_LOGIC;
+        ALUOp_o:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+        ASrc_o:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
+        BSrc_o:       OUT    STD_LOGIC_VECTOR( 1 downto 0);
+        ASrc4_o:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+        BSrc4_o:      OUT    STD_LOGIC_VECTOR( 3 downto 0);
+        MemWriteData: OUT    STD_LOGIC_VECTOR(15 downto 0)
+    );
+    END Component;
 
     Component MUX_ALU_A IS PORT (
         Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -200,19 +242,14 @@ ARCHITECTURE Behaviour OF CPU IS
     end component;
 
     Component ForwardingUnit is port(
-		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem闃舵瀵勫瓨鍣ㄧ殑鍐欎俊鍙
-		EXE_MEM_RD      : in std_logic_vector (2 DOWNTO 0) ;  --exe_mem闃舵鐩殑瀵勫瓨鍣ㄧ紪鍙
-		MEM_WB_REGWRITE : in std_logic ;  --mem_wb闃舵瀵勫瓨鍣ㄧ殑鍐欎俊鍙
-		MEM_WB_RD       : in std_logic_vector (2 downto 0);  --mem_wb闃舵瀵勫瓨鍣ㄧ殑鐩殑瀵勫瓨鍣ㄧ紪鍙
-		ID_EX_RX        : in std_logic_vector (2 downto 0);  --rx瀵勫瓨鍣ㄧ紪鍙
-		ID_EX_RY        : in std_logic_vector (2 downto 0);  --ry瀵勫瓨鍣ㄧ紪鍙
-		FORWARDA        : out std_logic_vector(1 downto 0);  --muxa淇″彿閫夋嫨
-		FORWARDB        : out std_logic_vector(1 downto 0);   --muxb淇″彿閫夋嫨
-		IM_A            : in std_logic;
-		IM_B            : in std_logic;
-	    temp_FORWARDA : INOUT STD_LOGIC_VECTOR (1 downto 0);
-        temp_FORWARDB : INOUT std_logic_vector (1 downto 0)
-		
+		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信及
+        EXE_MEM_RD       : in std_logic_vector (3 DOWNTO 0) ;  --exe_mem阶段目的寄存器编及
+        MEM_WB_REGWRITE  : in std_logic ;  --mem_wb阶段寄存器的写信及
+        MEM_WB_RD        : in std_logic_vector (3 downto 0);  --mem_wb阶段寄存器的目的寄存器编及
+        ASrc4            : in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存器
+        BSrc4            : in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存器
+        FORWARDA         : out std_logic_vector(1 downto 0);  --muxa信号选择
+		FORWARDB         : out std_logic_vector(1 downto 0)   --muxb信号选择
 	);
     end Component;
 
@@ -233,17 +270,12 @@ ARCHITECTURE Behaviour OF CPU IS
         );
     END Component;
 
-    SIGNAL clk_sel  :                       STD_LOGIC;
+    SIGNAL clk_sel  :        STD_LOGIC;
 
-    SIGNAL clock_25 :                       STD_LOGIC;
-    SIGNAL video_on:                        STD_LOGIC;
-    SIGNAL t_hsync, t_vsync:                STD_LOGIC;
-    SIGNAL H_count, V_count:                STD_LOGIC_VECTOR(9 downto 0);
-    
-    CONSTANT zero3:         STD_LOGIC_VECTOR(2 downto 0) := "000";
-    CONSTANT background_r:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
-    CONSTANT background_g:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
-    CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := zero3;
+    SIGNAL clock_25 :        STD_LOGIC;
+    SIGNAL video_on:         STD_LOGIC;
+    SIGNAL t_hsync, t_vsync: STD_LOGIC;
+    SIGNAL H_count, V_count: STD_LOGIC_VECTOR(9 downto 0);
 
     SIGNAL PCKeep       : STD_LOGIC;
     SIGNAL PC           : STD_LOGIC_VECTOR(15 DOWNTO 0);

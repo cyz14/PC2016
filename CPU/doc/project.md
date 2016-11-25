@@ -5,6 +5,15 @@
 - 统一检测时钟上升沿开始运算。
 - 使能信号为0时表示真值。包括MemRead，OE，WE，EN等。
 
+## Clock 
+该模块用于对时钟分频以及选择时钟频率
+目前可选的时钟有：
+
+- CLK: 单次时钟
+- CLK11: 11 MHz
+- CLK17: 17 MHz
+- CLK25: 25 MHz
+
 ## PCMux
 
 ### Input
@@ -384,19 +393,19 @@ author : li
 >   - MEM/WB.RegWE AND MEM/WB.DstReg != 0 AND
 >   - (MEM/WB.DstReg = ID/EXE.rx OR MEM/WB.DstReg = ID/EXE.ry)
 
-- exememRegWE:  `STD_LOGIC;`
-- exememDstReg: `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 EXE 段数据冲突
+- EXE_MEM_REGWRITE:  `STD_LOGIC;`
+- EXE_MEM_RD: `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 EXE 段数据冲突
 
-- memwbRegWE:   `STD_LOGIC;`
-- memwbDstReg:  `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 MEM 段数据冲突
+- MEM_WB_REGWRITE:   `STD_LOGIC;`
+- MEM_WB_RD:  `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 MEM 段数据冲突
 
 - ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
 - BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
 
 ### Output
 
-- ForwardingA: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
-- ForwardingB: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
+- ForwardA: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
+- ForwardB: 可选的值有 ( NotForwarding, EXEForwarding, MEMForwarding )
 
 
 ## 结构冲突

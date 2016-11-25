@@ -20,13 +20,12 @@ package common is
 --
 
 
-
 -- Declare constants
 --
 -- constant <constant_name>		: time := <time_unit> ns;
 -- constant <constant_name>		: integer := <value;
 --
-
+CONSTANT ZERO3  : STD_LOGIC_VECTOR( 2 downto 0) := "000";
 CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 DOWNTO 0) := "0000000000000000";
 
 CONSTANT MEM_WRITE_ENABLE  : STD_LOGIC := '0';
@@ -38,9 +37,58 @@ CONSTANT INST_INVALID      : STD_LOGIC := '1';
 CONSTANT CHIP_ENABLE       : STD_LOGIC := '0';
 CONSTANT CHIP_DISABLE      : STD_LOGIC := '1';
 
+CONSTANT RAM_ENABLE        : STD_LOGIC := '0';
+CONSTANT RAM_DISABLE       : STD_LOGIC := '1';
+CONSTANT RAM_READ_ENABLE   : STD_LOGIC := '0';
+CONSTANT RAM_READ_DISABLE  : STD_LOGIC := '1';
+CONSTANT RAM_WRITE_ENABLE  : STD_LOGIC := '0';
+CONSTANT RAM_WRITE_DISABLE : STD_LOGIC := '1';
+
 CONSTANT KEEP_ENABLE       : STD_LOGIC := '0';
 CONSTANT KEEP_DISABLE      : STD_LOGIC := '1';
 
+
+CONSTANT TYPE_ADD_SUB :  STD_LOGIC_VECTOR(4 downto 0) := "11100";
+CONSTANT TYPE_AND_OR_CMP_MFPC_SLLV_SRLV: STD_LOGIC_VECTOR(4 downto 0) := "11101";
+CONSTANT TYPE_MFIH_MTIH : STD_LOGIC_VECTOR(4 downto 0):= "11110";
+CONSTANT TYPE_MTSP_ADDSP_BTEQZ_BTNEZ :  STD_LOGIC_VECTOR(4 downto 0) := "01100"; -- 01100
+CONSTANT TYPE_SLL_SRA :  STD_LOGIC_VECTOR(4 downto 0) := "00110";
+CONSTANT TYPE_MOVE    :  STD_LOGIC_VECTOR(4 downto 0) := "01111";
+CONSTANT TYPE_ADDIU   :  STD_LOGIC_VECTOR(4 downto 0) := "01001";
+CONSTANT TYPE_ADDIU3  :  STD_LOGIC_VECTOR(4 downto 0) := "01000";
+CONSTANT TYPE_LI      :  STD_LOGIC_VECTOR(4 downto 0) := "01101";
+CONSTANT TYPE_SLTI    :  STD_LOGIC_VECTOR(4 downto 0) := "01010";
+CONSTANT TYPE_LW      :  STD_LOGIC_VECTOR(4 downto 0) := "10011";
+CONSTANT TYPE_LW_SP   :  STD_LOGIC_VECTOR(4 downto 0) := "10010";
+CONSTANT TYPE_SW      :  STD_LOGIC_VECTOR(4 downto 0) := "11011";
+CONSTANT TYPE_SW_SP   :  STD_LOGIC_VECTOR(4 downto 0) := "11010";
+CONSTANT TYPE_B       :  STD_LOGIC_VECTOR(4 downto 0) := "00010";
+CONSTANT TYPE_BEQZ    :  STD_LOGIC_VECTOR(4 downto 0) := "00100";
+CONSTANT TYPE_BNEZ    :  STD_LOGIC_VECTOR(4 downto 0) := "00101";
+CONSTANT TYPE_JR      :  STD_LOGIC_VECTOR(4 downto 0) := "11101";
+CONSTANT TYPE_NOP     :  STD_LOGIC_VECTOR(4 downto 0) := "00001";
+-- CONSTANT InstNop   :  STD_LOGIC_VECTOR(15 downto 0):= "0000100000000000";
+
+CONSTANT FUNCT_ADD    :  STD_LOGIC_VECTOR(1 downto 0) := "01";
+CONSTANT FUNCT_SUB    :  STD_LOGIC_VECTOR(1 downto 0) := "11";
+
+CONSTANT FUNCT_AND    :  STD_LOGIC_VECTOR(4 downto 0) := "01100";
+CONSTANT FUNCT_OR     :  STD_LOGIC_VECTOR(4 downto 0) := "01101";
+CONSTANT FUNCT_CMP    :  STD_LOGIC_VECTOR(4 downto 0) := "01010";
+CONSTANT FUNCT_MFPC   :  STD_LOGIC_VECTOR(4 downto 0) := "00000";
+CONSTANT FUNCT_SLLV   :  STD_LOGIC_VECTOR(4 downto 0) := "00100";
+CONSTANT FUNCT_SRLV   :  STD_LOGIC_VECTOR(4 downto 0) := "00110";
+
+CONSTANT FUNCT_MFIH   :  STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+CONSTANT FUNCT_MTIH   :  STD_LOGIC_VECTOR(7 downto 0) := "00000001";
+
+CONSTANT FUNCT_MTSP   :  STD_LOGIC_VECTOR(2 downto 0) := "100";
+CONSTANT FUNCT_ADDSP  :  STD_LOGIC_VECTOR(2 downto 0) := "011";
+CONSTANT FUNCT_BTEQZ  :  STD_LOGIC_VECTOR(2 downto 0) := "000";
+CONSTANT FUNCT_BTNEZ  :  STD_LOGIC_VECTOR(2 downto 0) := "001";
+
+CONSTANT FUNCT_SLL    :  STD_LOGIC_VECTOR(1 downto 0) := "00";
+CONSTANT FUNCT_SRA    :  STD_LOGIC_VECTOR(1 downto 0) := "11";
 
 -- RegisterFile DataSrc
 constant DS_NONE    : std_logic_vector(2 downto 0) := "000";
@@ -70,6 +118,7 @@ constant Dst_SP   : std_logic_vector (3 downto 0) := "1001";
 constant Dst_T    : std_logic_vector (3 downto 0) := "1010";
 constant Dst_IH   : std_logic_vector (3 downto 0) := "1011";
 
+-- ALU op code
 CONSTANT OP_NONE : std_logic_vector (3 downto 0) := "0000";
 CONSTANT OP_ADD  : std_logic_vector (3 downto 0) := "0001";
 constant OP_SUB  : std_logic_vector (3 downto 0) := "0010";
@@ -77,7 +126,7 @@ constant OP_AND  : std_logic_vector (3 downto 0) := "0011";
 constant OP_OR   : std_logic_vector (3 downto 0) := "0100";
 constant OP_XOR  : std_logic_vector (3 downto 0) := "0101";
 constant OP_CMP  : std_logic_vector (3 downto 0) := "0110";
-constant OP_LT   : std_logic_vector (3 downto 0) := "0111";
+constant OP_LT   : std_logic_vector (3 downto 0) := "0111"; -- LessThan op in SLTI
 constant OP_POS  : std_logic_vector (3 downto 0) := "1000";
 constant OP_SLL  : std_logic_vector (3 downto 0) := "1001";
 constant OP_SRL  : std_logic_vector (3 downto 0) := "1010";
@@ -97,6 +146,10 @@ CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "01";
 CONSTANT PC_Rx     : std_logic_vector(1 downto 0) := "10";
 CONSTANT PC_AddImm : std_logic_vector(1 downto 0) := "11";
 
+-- VGA background color
+CONSTANT background_r:  STD_LOGIC_VECTOR(2 downto 0) := ZERO3;
+CONSTANT background_g:  STD_LOGIC_VECTOR(2 downto 0) := ZERO3;
+CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := ZERO3;
 
 -- Declare functions and procedure
 --
