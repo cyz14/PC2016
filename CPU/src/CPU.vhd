@@ -53,7 +53,7 @@ ENTITY CPU IS PORT (
     
     -- used to display debug info
     SW         : IN    STD_LOGIC_VECTOR(15 downto 0);
---    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
+    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
     Number1    : OUT   STD_LOGIC_VECTOR( 6 downto 0);
     Number0    : OUT   STD_LOGIC_VECTOR( 6 downto 0)
 );
@@ -124,9 +124,7 @@ ARCHITECTURE Behaviour OF CPU IS
         CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
         Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
         Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        
-        Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-        Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+
         ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
         ZeroExt     :  OUT STD_LOGIC;                     
 
@@ -225,16 +223,15 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component RegisterFile IS PORT (
-        PCplus1:        IN  STD_LOGIC_VECTOR(15 downto 0);
-        Read1Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
-        Read2Register:  IN  STD_LOGIC_VECTOR(2  downto 0);
+        rst : in std_logic;
+        PCplus1:    in std_logic_vector(15 downto 0);
         WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
-        WriteData:      IN  STD_LOGIC_VECTOR(15 downto 0);
-        Data1Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
-        Data2Src:       IN  STD_LOGIC_VECTOR(2 downto 0);
-        RegWE:          IN  STD_LOGIC;
-        Data1:          OUT STD_LOGIC_VECTOR(15 downto 0);
-        Data2:          OUT STD_LOGIC_VECTOR(15 downto 0)
+        WriteData:  IN  STD_LOGIC_VECTOR(15 downto 0);
+        ASrc4:      in std_logic_vector(3 downto 0);
+        BSrc4:      in std_logic_vector(3 downto 0);
+        RegWE:      in std_logic;
+        Data1:  out std_logic_vector(15 downto 0);
+        Data2:  out std_logic_vector(15 downto 0)
         );
     END Component;
 
@@ -385,8 +382,6 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ext_Imme         : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL ctrl_CurPC       : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL ctrl_Data1Src    : STD_LOGIC_VECTOR( 2 downto 0);
-    SIGNAL ctrl_Data2Src    : STD_LOGIC_VECTOR( 2 downto 0);
     SIGNAL ctrl_ImmeSrc     : STD_LOGIC_VECTOR( 2 downto 0);
     SIGNAL ctrl_ZeroExt     : STD_LOGIC;
     SIGNAL ctrl_ALUOp       : STD_LOGIC_VECTOR( 3 downto 0);
@@ -557,8 +552,6 @@ BEGIN
         CurPC       => ctrl_CurPC,
         Instruction => id_Inst,
         Condition   => rf_Data1,
-        Data1Src    => ctrl_Data1Src,
-        Data2Src    => ctrl_Data2Src,
         ImmeSrc     => ctrl_ImmeSrc,
         ZeroExt     => ctrl_ZeroExt,
         ALUOp       => ctrl_ALUOp,
@@ -580,13 +573,12 @@ BEGIN
     );
 
     u_RegFile: RegisterFile Port MAP (
+        rst             => RST,
         PCplus1         => id_PCPlus1,
-        Read1Register   => id_Rx,
-        Read2Register   => id_Ry,
         WriteRegister   => wb_DstReg,
         WriteData       => wb_DstVal,
-        Data1Src        => ctrl_Data1Src,
-        Data2Src        => ctrl_Data2Src,
+        ASrc4           => ctrl_ASrc4,
+        BSrc4           => ctrl_BSrc4,
         RegWE           => ctrl_RegWE,
         Data1           => rf_Data1,
         Data2           => rf_Data2
