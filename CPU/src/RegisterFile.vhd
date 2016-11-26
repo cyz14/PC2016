@@ -23,13 +23,13 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL SP, IH, T              : STD_LOGIC_VECTOR(15 downto 0);
 
-    procedure selectFrom(sel: in std_logic_vector(3 downto 0);
-                    R0, R1, R2, R3, R4, R5, R6, R7
+    procedure selectFrom(signal sel: in std_logic_vector(3 downto 0);
+                    signal R0, R1, R2, R3, R4, R5, R6, R7
                 , SP, T, IH, PC : in std_logic_vector(15 downto 0);
-                res: out std_logic_vector(15 downto 0)) is
+                signal res: out std_logic_vector(15 downto 0)) is
     begin
         case sel is
-            when "0000" => res <= R0;
+            when Dst_R0 => res <= R0;
             when Dst_R1 => res <= R1;
             when Dst_R2 => res <= R2;
             when Dst_R3 => res <= R3;
@@ -38,7 +38,7 @@ ARCHITECTURE Behaviour OF RegisterFile IS
             when Dst_R6 => res <= R6;
             when Dst_R7 => res <= R7;
             when Dst_SP => res <= SP;
-            when Dst_T => res <= T;
+            when Dst_T  => res <= T;
             when Dst_IH => res <= IH;
             when Dst_PC => res <= PC;
             when others => res <= (others => '0');
