@@ -23,11 +23,11 @@ architecture RTL of testbench is
     signal hda1, hda2 : RAM;
 
     component CPU IS PORT (
-        CLK     :    IN    STD_LOGIC; -- 
+       CLK     :    IN    STD_LOGIC; -- 
         CLK_11  :    IN    STD_LOGIC; -- 11M
         CLK_50  :    IN    STD_LOGIC; -- 50M
         RST     :    IN    STD_LOGIC;
-        
+
         INT     :    IN    STD_LOGIC;
         
         Ram1_en:     OUT   STD_LOGIC;
@@ -47,6 +47,9 @@ architecture RTL of testbench is
         tbre:        IN    STD_LOGIC;
         tsre:        IN    STD_LOGIC;
         
+        ps2clk     : in    STD_LOGIC;
+        ps2data    : in    STD_LOGIC;
+
         VGA_R:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
         VGA_G:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
         VGA_B:       OUT   STD_LOGIC_VECTOR( 2 downto 0);
@@ -54,17 +57,20 @@ architecture RTL of testbench is
         Vs:          OUT   STD_LOGIC;
         
         --FLASH
-        flash_byte : out STD_LOGIC := '1'; --²Ù×÷Ä£Ê½,²ÉÓÃ×ÖÄ£Ê½£¬µØÖ·Îª 22 downto 1
-        flash_vpen : out STD_LOGIC := '1'; --Ð´±£»¤£¬ÖÃÎª1
-        flash_ce   : out STD_LOGIC := '0'; --Ê¹ÄÜÐÅºÅ,¸ÃÄ£¿éÖ»¸ºÔðflashµÄ¶Á£¬¹ÊceÖÃÎª0¼´¿É
-        flash_oe   : out STD_LOGIC := '1'; --¶ÁÊ¹ÄÜ
-        flash_we   : out STD_LOGIC := '1'; --Ð´Ê¹ÄÜ
-        flash_rp   : out STD_LOGIC := '1'; --¹¤×÷Ä£Ê½£¬1Îª¹¤×÷
-        flash_addr : out STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000"; --flashÄÚ´æµØÖ·
-        flash_data : inout STD_LOGIC_VECTOR( 15 downto 0 ); --flashÊä³öÐÅºÅ
+        -- flash_byte : OUT STD_LOGIC := '1'; 
+        -- flash_vpen : OUT STD_LOGIC := '1';
+        -- flash_ce   : OUT STD_LOGIC := '0';
+        -- flash_oe   : OUT STD_LOGIC := '1';
+        -- flash_we   : OUT STD_LOGIC := '1';
+        -- flash_rp   : OUT STD_LOGIC := '0';
+        -- flash_addr : OUT STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000";
+        -- flash_data : INOUT STD_LOGIC_VECTOR( 15 downto 0 );
         
         -- used to display debug info
-        LED:         OUT   STD_LOGIC_VECTOR(15 downto 0)
+        SW         : IN    STD_LOGIC_VECTOR(15 downto 0);
+        LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
+        Number1    : OUT   STD_LOGIC_VECTOR( 6 downto 0);
+        Number0    : OUT   STD_LOGIC_VECTOR( 6 downto 0)
     );
     END component;
 
@@ -107,6 +113,8 @@ architecture RTL of testbench is
     signal flash_data :    STD_LOGIC_VECTOR( 15 downto 0 );
 
     signal LED:            STD_LOGIC_VECTOR(15 downto 0);
+
+    signal ps2data : STD_LOGIC;
 
 begin
     clk_gen : process is
@@ -214,6 +222,9 @@ begin
         data_ready => data_ready,
         tbre => tbre,
         tsre => tsre,
+
+        ps2clk   => '0',
+        ps2data  => ps2data,
         
         VGA_R => VGA_R,
         VGA_G => VGA_G,
@@ -221,15 +232,15 @@ begin
         Hs => Hs,
         Vs => Vs,
         
-        flash_byte  => flash_byte ,
-        flash_vpen  => flash_vpen ,
-        flash_ce    => flash_ce   ,
-        flash_oe    => flash_oe   ,
-        flash_we    => flash_we   ,
-        flash_rp    => flash_rp   ,
-        flash_addr  => flash_addr ,
-        flash_data  => flash_data ,
-        
+        -- flash_byte  => flash_byte ,
+        -- flash_vpen  => flash_vpen ,
+        -- flash_ce    => flash_ce   ,
+        -- flash_oe    => flash_oe   ,
+        -- flash_we    => flash_we   ,
+        -- flash_rp    => flash_rp   ,
+        -- flash_addr  => flash_addr ,
+        -- flash_data  => flash_data ,
+        SW => x"0000",
         LED => LED
                          );
 

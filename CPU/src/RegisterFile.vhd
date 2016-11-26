@@ -23,10 +23,10 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL SP, IH, T              : STD_LOGIC_VECTOR(15 downto 0);
 
-    procedure selectFrom(sel: in std_logic_vector(3 downto 0);
-                    R0, R1, R2, R3, R4, R5, R6, R7
+    procedure selectFrom(signal sel: in std_logic_vector(3 downto 0);
+                    signal R0, R1, R2, R3, R4, R5, R6, R7
                 , SP, T, IH, PC : in std_logic_vector(15 downto 0);
-                res: out std_logic_vector(15 downto 0))
+                signal res: out std_logic_vector(15 downto 0)) is
     begin
         case sel is
             when Dst_R0 => res <= R0;
@@ -38,17 +38,15 @@ ARCHITECTURE Behaviour OF RegisterFile IS
             when Dst_R6 => res <= R6;
             when Dst_R7 => res <= R7;
             when Dst_SP => res <= SP;
-            when Dst_T => res <= T;
+            when Dst_T  => res <= T;
             when Dst_IH => res <= IH;
             when Dst_PC => res <= PC;
             when others => res <= (others => '0');
         end case;
-    end procedure;
-
+    end selectFrom;
 
 BEGIN
-    process (PCplus1, Read1Register, Read2Register
-        , WriteRegister, WriteData, Data1Src, Data2Src
+    process (PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
         , RegWE, rst)
     begin
         if rst = '0' then
@@ -63,7 +61,6 @@ BEGIN
             SP <= (others => '0');
             IH <= (others => '0');
             T <= (others => '0');
-            PC <= (others => '0');
             Data1 <= (others => '0');
             Data2 <= (others => '0');
         else
