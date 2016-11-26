@@ -53,7 +53,7 @@ ENTITY CPU IS PORT (
     
     -- used to display debug info
     SW         : IN    STD_LOGIC_VECTOR(15 downto 0);
---    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
+    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
     Number1    : OUT   STD_LOGIC_VECTOR( 6 downto 0);
     Number0    : OUT   STD_LOGIC_VECTOR( 6 downto 0)
 );
@@ -124,13 +124,11 @@ ARCHITECTURE Behaviour OF CPU IS
         CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
         Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
         Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        
-        Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-        Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+
         ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
         ZeroExt     :  OUT STD_LOGIC;                     
 
-        ALUOp       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
+        ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
         BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
@@ -140,10 +138,13 @@ ARCHITECTURE Behaviour OF CPU IS
         DstReg      :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         RegWE       :  OUT STD_LOGIC;
         
-        ASrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
-        BSrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
+        ASrc4       :  out std_logic_vector (3 downto 0);
+        BSrc4       :  out std_logic_vector (3 downto 0);
 
-        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
+        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+
+        NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -398,6 +399,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ctrl_ASrc4       : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL ctrl_BSrc4       : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL ctrl_PCMuxSel    : STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    SIGNAL ctrl_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL ctrl_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
@@ -556,8 +559,6 @@ BEGIN
         CurPC       => ctrl_CurPC,
         Instruction => id_Inst,
         Condition   => rf_Data1,
-        Data1Src    => ctrl_Data1Src,
-        Data2Src    => ctrl_Data2Src,
         ImmeSrc     => ctrl_ImmeSrc,
         ZeroExt     => ctrl_ZeroExt,
         ALUOp       => ctrl_ALUOp,
@@ -569,7 +570,9 @@ BEGIN
         RegWE       => ctrl_RegWE,
         ASrc4       => ctrl_ASrc4,
         BSrc4       => ctrl_BSrc4,
-        PCMuxSel    => ctrl_PCMuxSel
+        PCMuxSel    => ctrl_PCMuxSel,
+        NowPC       => ctrl_NowPC,
+        ExceptPC    => ctrl_ExceptPC
     );
 
     u_AddImme: PCAddImm PORT MAP (
