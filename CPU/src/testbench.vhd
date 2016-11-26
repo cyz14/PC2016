@@ -15,12 +15,11 @@ architecture RTL of testbench is
 
     constant PERIOD : time := 200 ps;
     constant MAX_ADDR : integer := 65535;
-    type RAM is array(integer range 0 to 50) -- 小空间便于查看
-        of std_logic_vector(15 downto 0);
+    type RAM is array(natural range <>) of std_logic_vector(15 downto 0);
 
-    signal hda1_ready : std_logic := '0';
-    signal hda2_ready : std_logic := '0';
-    signal hda1, hda2 : RAM;
+    signal hda1_init : std_logic := '0';
+    signal hda2_init : std_logic := '0';
+    signal hda1, hda2 : RAM(0 to 20); -- 小空间便于查看
 
     component CPU IS PORT (
        CLK     :    IN    STD_LOGIC; -- 
@@ -116,6 +115,7 @@ architecture RTL of testbench is
 
     signal ps2data : STD_LOGIC;
 
+
 begin
     clk_gen : process is
     begin
@@ -123,78 +123,74 @@ begin
         clk <= not clk;
     end process clk_gen;
 
-    ram1_init : process is
-        file insinp : text open read_mode is "ram1.txt";
+    rst <= hda1_init and hda2_init;
+
+    ram1 : process (Ram1_en, Ram1_oe, Ram1_we, RAM1_Addr, Ram1_Data, rst) is
+        file inp : text open read_mode is "ram1.txt";
         variable inline : line;
-        variable in_int : integer range 0 to 15;
+        variable in_int : integer range 0 to MAX_ADDR;
         variable var : integer range 0 to MAX_ADDR := 0;
-        variable addr : integer range 0 to MAX_ADDR := 0;
-    begin
-        if (not endfile(insinp)) then
-            readline(insinp, inline);
-            var := 0;
-            for i in 0 to 3 loop
-                read(inline, in_int);
-                var := var * 16 + in_int;
-            end loop;
-            hda1(addr) <= conv_std_logic_vector(var, 16);
-        else 
-            hda1_ready <= '1';
-            wait;
-        end if;
-    end process ram1_init;
-
-    ram2_init : process is
-        file insinp : text open read_mode is "ram2.txt";
-        variable inline : line;
-        variable in_int : integer range 0 to 15;
-        variable var : integer range 0 to MAX_ADDR := 0;
-        variable addr : integer range 0 to MAX_ADDR := 0;
-    begin
-        if (not endfile(insinp)) then
-            readline(insinp, inline);
-            var := 0;
-            for i in 0 to 3 loop
-                read(inline, in_int);
-                var := var * 16 + in_int;
-            end loop;
-            hda2(addr) <= conv_std_logic_vector(var, 16);
-        else 
-            hda2_ready <= '1';
-            wait;
-        end if;
-    end process ram2_init;
-
-    rst <= hda1_ready and hda2_ready;
-
-        --Ram1_en => Ram1_en,
-        --Ram1_oe => Ram1_oe,
-        --Ram1_we => Ram1_we,
-        --RAM1_Addr => RAM1_Addr,
-        --Ram1_Data => Ram1_Data,
-    ram1 : process (Ram1_en, Ram1_oe, Ram1_we, RAM1_Addr, Ram1_Data) is
         variable addr : integer range 0 to MAX_ADDR;
     begin
-        if (Ram1_en = '0') and (Ram1_oe /= Ram1_we) then
+        if hda1_init = '0' then
+            --Ram1_Data <= (others => 'Z');
+            addr := 0;
+            while (not endfile(inp)) loop
+                readline(inp, inline);
+                var := 0;
+                for i in 0 to 3 loop
+                    read(inline, in_int);
+                    var := var * 16 + in_int;
+                end loop;
+                hda1(addr) <= conv_std_logic_vector(var, 16);
+                addr := addr + 1;
+            end loop;
+            hda1_init <= '1';
+        end if;
+        if (rst = '1') and (Ram1_en = '0') and (Ram1_oe /= Ram1_we) then
             addr := CONV_INTEGER(RAM1_Addr);
             if Ram1_oe = '0' then
                 Ram1_Data <= hda1(addr);
             else
                 hda1(addr) <= Ram1_Data;
             end if;
+        else
+            Ram1_Data <= (others => 'Z');
         end if;
     end process ram1;
 
-    ram2 : process (Ram2_en, Ram2_oe, Ram2_we, RAM2_Addr, Ram2_Data) is
+    ram2 : process (Ram2_en, Ram2_oe, Ram2_we, RAM2_Addr, Ram2_Data, rst) is
+        file inp : text open read_mode is "ram2.txt";
+        variable inline : line;
+        variable in_int : integer range 0 to MAX_ADDR;
+        variable var : integer range 0 to MAX_ADDR := 0;
         variable addr : integer range 0 to MAX_ADDR;
     begin
-        if (Ram2_en = '0') and (Ram2_oe /= Ram2_we) then
+        if hda2_init = '0' then
+            --Ram2_Data <= (others => 'Z');
+            addr := 0;
+            while (not endfile(inp)) loop
+                readline(inp, inline);
+                var := 0;
+                for i in 0 to 3 loop
+                    read(inline, in_int);
+                    var := var * 16 + in_int;
+                end loop;
+                hda2(addr) <= conv_std_logic_vector(var, 16);
+                addr := addr + 1;
+            end loop;
+            hda2_init <= '1' after 10 ps;
+            addr := conv_integer(RAM2_Addr);
+        end if;
+        if (rst = '1') and (Ram2_en = '0') and (Ram2_oe /= Ram2_we) then
             addr := conv_integer(RAM2_Addr);
             if Ram2_oe = '0' then
                 Ram2_Data <= hda2(addr);
             else
                 hda2(addr) <= Ram2_Data;
             end if;
+        else
+            Ram2_Data <= (others => 'Z');
         end if;
     end process ram2;
 

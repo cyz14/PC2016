@@ -128,7 +128,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
         ZeroExt     :  OUT STD_LOGIC;                     
 
-        ALUOp       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
+        ALUop       :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         ASrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
         BSrc        :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
@@ -138,10 +138,13 @@ ARCHITECTURE Behaviour OF CPU IS
         DstReg      :  OUT STD_LOGIC_VECTOR( 3 downto 0);
         RegWE       :  OUT STD_LOGIC;
         
-        ASrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
-        BSrc4       :  OUT STD_LOGIC_VECTOR (3 downto 0);
+        ASrc4       :  out std_logic_vector (3 downto 0);
+        BSrc4       :  out std_logic_vector (3 downto 0);
 
-        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
+        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+
+        NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -232,7 +235,7 @@ ARCHITECTURE Behaviour OF CPU IS
         RegWE:      in std_logic;
         Data1:  out std_logic_vector(15 downto 0);
         Data2:  out std_logic_vector(15 downto 0)
-        );
+    );
     END Component;
 
     Component MUX_EXE_MEM IS PORT (
@@ -312,14 +315,14 @@ ARCHITECTURE Behaviour OF CPU IS
     END component;
 
     Component ForwardingUnit IS port(
-		EXE_MEM_REGWRITE : in STD_LOGIC ;  --exe_mem阶段寄存器的写信��
-        EXE_MEM_RD       : in STD_LOGIC_vector (3 DOWNTO 0) ;  --exe_mem阶段目的寄存��
-        MEM_WB_REGWRITE  : in STD_LOGIC ;  --mem_wb 阶段寄存器的写信��
-        MEM_WB_RD        : in STD_LOGIC_vector (3 downto 0);  --mem_wb阶段寄存器的目的寄存��
-        ASrc4            : in STD_LOGIC_vector (3 downto 0);  -- ALU 操作数A的源寄存��
-        BSrc4            : in STD_LOGIC_vector (3 downto 0);  -- ALU 操作数B的源寄存��
-        FORWARDA         : out STD_LOGIC_vector(1 downto 0);  --muxa信号选择
-		FORWARDB         : out STD_LOGIC_vector(1 downto 0)   --muxb信号选择
+		EXE_MEM_REGWRITE : in STD_LOGIC;
+        EXE_MEM_RD       : in STD_LOGIC_vector (3 DOWNTO 0);
+        MEM_WB_REGWRITE  : in STD_LOGIC;
+        MEM_WB_RD        : in STD_LOGIC_vector (3 downto 0);
+        ASrc4            : in STD_LOGIC_vector (3 downto 0);
+        BSrc4            : in STD_LOGIC_vector (3 downto 0);
+        FORWARDA         : out STD_LOGIC_vector(1 downto 0);
+		FORWARDB         : out STD_LOGIC_vector(1 downto 0) 
 	);
     END Component;
 
@@ -340,7 +343,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ps2clk: in STD_LOGIC;
         ps2data: in STD_LOGIC;
 
-        data_ready: out STD_LOGIC; -- ��,有数据到来时变成1,至少保持两个CPU周期
+        data_ready: out STD_LOGIC;
         key_value: out STD_LOGIC_vector(15 downto 0) -- 总是保持前一次的结果
     );
     END Component;
@@ -365,7 +368,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL t_hsync, t_vsync : STD_LOGIC;
     SIGNAL H_count, V_count : STD_LOGIC_VECTOR(9 downto 0);
 
-    SIGNAL if_PCKeep        : STD_LOGIC;
+    SIGNAL if_PCKeep        : STD_LOGIC := '1';
     SIGNAL if_NewPC         : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCToIM        : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCPlus1       : STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -394,6 +397,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ctrl_ASrc4       : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL ctrl_BSrc4       : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL ctrl_PCMuxSel    : STD_LOGIC_VECTOR( 1 DOWNTO 0);
+    SIGNAL ctrl_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL ctrl_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
@@ -563,7 +568,9 @@ BEGIN
         RegWE       => ctrl_RegWE,
         ASrc4       => ctrl_ASrc4,
         BSrc4       => ctrl_BSrc4,
-        PCMuxSel    => ctrl_PCMuxSel
+        PCMuxSel    => ctrl_PCMuxSel,
+        NowPC       => ctrl_NowPC,
+        ExceptPC    => ctrl_ExceptPC
     );
 
     u_AddImme: PCAddImm PORT MAP (
