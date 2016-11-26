@@ -37,8 +37,8 @@ PORT(
 	ps2clk: in std_logic;
 	ps2data: in std_logic;
 
-	data_ready: out std_logic; -- 常0,有数据到来时变成1,至少保持两个CPU周期
-	key_value: out std_logic_vector(15 downto 0) -- 总是保持前一次的结果
+	data_ready: out std_logic;
+	key_value: out std_logic_vector(15 downto 0)
 );
 end keyboard;
 

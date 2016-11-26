@@ -46,6 +46,8 @@ ENTITY CPU IS PORT (
     flash_vpen : OUT STD_LOGIC := '1';
     flash_ce   : OUT STD_LOGIC := '0';
     flash_oe   : OUT STD_LOGIC := '1';
+    flash_we   : OUT STD_LOGIC := '1';
+    flash_rp   : OUT STD_LOGIC := '0';
     flash_addr : OUT STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000";
     flash_data : INOUT STD_LOGIC_VECTOR( 15 downto 0 );
     

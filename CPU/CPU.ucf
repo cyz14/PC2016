@@ -113,7 +113,6 @@ NET "data_ready" LOC = A16;
 NET "tbre" LOC = D14;
 NET "tsre" LOC = N9;
 
-# PlanAhead Generated physical constraints 
 
 NET "Ram2_en" LOC = N10;
 NET "Ram2_oe" LOC = R9;
@@ -165,3 +164,38 @@ NET "flash_addr[4]" LOC = P4;
 NET "flash_addr[3]" LOC = R2;
 NET "flash_addr[2]" LOC = R3;
 NET "flash_addr[1]" LOC = T1;
+
+# PlanAhead Generated physical constraints 
+
+NET "ps2clk" LOC = U6;
+NET "ps2data" LOC = V6;
+NET "Number0[6]" LOC = C7;
+NET "Number0[5]" LOC = D7;
+NET "Number0[4]" LOC = E7;
+NET "Number0[3]" LOC = F7;
+NET "Number0[2]" LOC = A8;
+NET "Number0[1]" LOC = E8;
+NET "Number0[0]" LOC = F8;
+NET "Number1[6]" LOC = C9;
+NET "Number1[5]" LOC = D9;
+NET "Number1[4]" LOC = E9;
+NET "Number1[3]" LOC = F9;
+NET "Number1[2]" LOC = G9;
+NET "Number1[1]" LOC = A10;
+NET "Number1[0]" LOC = B10;
+NET "SW[15]" LOC = J6;
+NET "SW[14]" LOC = J7;
+NET "SW[13]" LOC = K2;
+NET "SW[12]" LOC = K7;
+NET "SW[11]" LOC = M1;
+NET "SW[10]" LOC = N1;
+NET "SW[9]" LOC = N2;
+NET "SW[8]" LOC = R1;
+NET "SW[7]" LOC = R4;
+NET "SW[6]" LOC = U1;
+NET "SW[5]" LOC = V2;
+NET "SW[4]" LOC = V3;
+NET "SW[3]" LOC = V4;
+NET "SW[2]" LOC = U8;
+NET "SW[1]" LOC = R7;
+NET "SW[0]" LOC = T7;
