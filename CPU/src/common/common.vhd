@@ -125,6 +125,7 @@ constant Dst_NONE : std_logic_vector (3 downto 0) := "1000";
 constant Dst_SP   : std_logic_vector (3 downto 0) := "1001";
 constant Dst_T    : std_logic_vector (3 downto 0) := "1010";
 constant Dst_IH   : std_logic_vector (3 downto 0) := "1011";
+constant Dst_PC   : std_logic_vector (3 downto 0) := "1100";
 
 -- ALU op code
 CONSTANT OP_NONE : std_logic_vector (3 downto 0) := "0000";

@@ -99,8 +99,8 @@
     - ALUop: ALU 的操作类型
     - ASrc:  ALU 前面的 A 数据选择器选择信号
     - BSrc:  ALU 前面的 B 数据选择器选择信号
-    - ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
-    - BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+    - ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
+    - BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
 * ID 阶段控制信号
     - ImmeSrc: 包括11位（B指令），8位，5位，4位，3位
     - ZeroExtend: 立即数是否为0扩展
@@ -117,29 +117,16 @@
 ### Input
 
 - PCplus1:向后传递PC，MFPC 指令需要 PC 的值
-- Read1Register: rx
-- Read2Register: ry
 - WriteRegister: WB.DstReg，WB 阶段的目标寄存器
 - WriteData: WB.DstVal，WB 阶段要写入目标寄存器的数值
-- Data1Src: Data1的来源，TYPE DataSrc IS (None, Rx, Ry, PCplus1, SP, T, IH) 
-- Data2Src: Data2的来源, DataSrc  
+- ASrc4: Data1的来源 IS (R0, ..., R7, PCplus1, SP, T, IH, PC)
+- BSrc4: Data2的来源 IS (R0, ..., R7, PCplus1, SP, T, IH, PC)
 - RegWE: WB阶段的寄存器的写使能
 
 > WriteRegister
 > 
-> R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+> R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC(不会在这里改PC)
 
-> Src:
-> 
-> | Code | 意义 |
-> | --- | ---: |
-> |000| None|
-> |001| Rx|
-> |010| Ry|
-> |011| PC|
-> |100| SP|
-> |101| T|
-> |110| IH|
 
 ### Signals
 
@@ -171,8 +158,8 @@
 - ALUop:    ALU 操作
 - ASrc:     ALU A 选择器的选择信号
 - BSrc:     ALU B 选择器的选择信号
-- ASrc4:    ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
-- BSrc4:    ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- ASrc4:    ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
+- BSrc4:    ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
 - Stall:    气泡，暂停信号
 
 ### Output
@@ -366,8 +353,8 @@ author : li
 
 - ID/EXE.MemRead: `STD_LOGIC;` -- 只有 LW 和 LW_SP 指令时为真）
 - ID/EXE.DstReg:  `STD_LOGIC_VECTOR(3 downto 0);`
-- ASrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
-- BSrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- ASrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
+- BSrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
 
 
 > 检测条件 2
@@ -406,8 +393,8 @@ author : li
 - MEM_WB_REGWRITE:   `STD_LOGIC;`
 - MEM_WB_RD:  `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 MEM 段数据冲突
 
-- ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
-- BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH
+- ASrc4: ALU opA 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
+- BSrc4: ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
 
 ### Output
 
