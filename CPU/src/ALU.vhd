@@ -12,7 +12,7 @@ ENTITY ALU IS
 PORT (
     A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
     B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-    OP :  IN  STD_LOGIC_VECTOR(3  downto 0);
+    OP :  IN  STD_LOGIC_VECTOR( 3 downto 0);
     F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
     T  :  OUT STD_LOGIC
 );
@@ -88,6 +88,9 @@ BEGIN
             WHEN OP_SRA  => 
                 F <= tempSRA; 
                 T <= '0';        -- F <= A >>  B(arith)
+            WHEN others =>
+                F <= ZERO16;
+                T <= '0';
         END CASE;
     END PROCESS;
 

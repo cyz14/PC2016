@@ -303,15 +303,19 @@ author : li
 ## DM_RAM1 : DataMemory
 
 ### Input
+
 - CLK: 时钟信号
 - RST: reset
-- ALUOut: 内存需要读写的地址。需要判断是否是数据区，若是指令内存区则留给Ram2操作，若是串口保留地址则操作串口，若是VGA保留地址则操作VGA_RAM
-- MemRead: 是否读内存
 - MemWE:   内存写使能
-- DstVal: 待写入数据
+- MemWriteData:  待写入数据
+- MemRead: 是否读内存
+- ALUOut: 内存需要读写的地址。需要判断是否是数据区，若是指令内存区则留给Ram2操作，若是串口保留地址则操作串口，若是VGA保留地址则操作VGA_RAM
+- InstRead      : IN   STD_LOGIC;
+- InstVal       : IN   STD_LOGIC_VECTOR(15 downto 0);
 
-### Output
+### Output and Control Signals
 
+- DstVal :  OUT   STD_LOGIC_VECTOR(15 downto 0);
 - Ram1OE:   OUT   STD_LOGIC;
 - Ram1WE:   OUT   STD_LOGIC;
 - Ram1EN:   OUT   STD_LOGIC;
@@ -325,9 +329,12 @@ author : li
 - vga_wrn:        OUT  STD_LOGIC;
 - vga_data:       OUT  STD_LOGIC_VECTOR(15 downto 0);
 - VGA r,g,b:      VGA接口的缓存区
-- LedSel:         IN   STD_LOGIC_VECTOR(15 downto 0);
-- LedOut:         OUT  STD_LOGIC_VECTOR(15 downto 0);
-- NumOut:         OUT  STD_LOGIC_VECTOR(7 downto 0)
+- NowPC     :
+- Exception :
+- ExceptPC  : 
+- LedSel    :     IN   STD_LOGIC_VECTOR(15 downto 0);
+- LedOut    :     OUT  STD_LOGIC_VECTOR(15 downto 0);
+- NumOut    :     OUT  STD_LOGIC_VECTOR(7 downto 0)
 
 ## MUX_MEM_WB
 

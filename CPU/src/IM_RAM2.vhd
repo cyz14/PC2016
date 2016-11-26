@@ -10,15 +10,16 @@ entity IM_RAM2 is port(
     rst         : in    std_logic;
     PC_i        : in    std_logic_vector(15 downto 0);
     Ram2_Data   : inout std_logic_vector(15 downto 0);
+    MemRead     : IN    std_logic;
     MemWE       : in    std_logic;
     ALUOut      : in    std_logic_vector(15 downto 0); -- Mem Write Address
-    MemWriteData: in    std_logic_vector(15 downto 0); -- Mem Write Data
+    WriteData   : in    std_logic_vector(15 downto 0); -- Mem Write Data
     Ram2_Addr   : out   std_logic_vector(17 downto 0);
     Instruction : out   std_logic_vector(15 downto 0);
     Ram2_OE     : out   std_logic;
     Ram2_WE     : out   std_logic;
     Ram2_EN     : out   std_logic;
-    LedSel      : out   std_logic_vector(15 downto 0);
+    LedSel      : in    std_logic_vector(15 downto 0);
     LedOut      : out   std_logic_vector(15 downto 0);
     NumOut      : out   std_logic_vector( 7 downto 0)
 );
@@ -44,7 +45,7 @@ begin
         elsif clk'event and clk = '1' then
             if MemWE = MEM_WRITE_ENABLE then
                 Ram2_Addr <= "00" & ALUOut;
-                Ram2_data <= MemWriteData;
+                Ram2_data <= WriteData;
                 -- Write Mode
                 Ram2_OE <= '1';
                 Ram2_WE <= '0';

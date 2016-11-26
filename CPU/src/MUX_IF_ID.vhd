@@ -30,7 +30,7 @@ BEGIN
                 id_Rx   <= (others => '0');
                 id_Ry   <= (others => '0');
                 id_Imme <= (others => '0');
-            elsif clk'event and clk = 1 then
+            elsif clk'event and clk = '1' then
                 if if_Keep = KEEP_DISABLE then
                     id_PCPlus1 <= if_PCPlus1;
                     id_Inst <= if_Inst;

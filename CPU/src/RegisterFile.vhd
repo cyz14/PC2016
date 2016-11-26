@@ -24,7 +24,7 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL SP, IH, T, PC              : STD_LOGIC_VECTOR(15 downto 0);
 
-    SIGNAL DstReg : WriteRegSrc := "0000";
+    SIGNAL DstReg : STD_LOGIC_VECTOR(3 downto 0) := Dst_NONE;
 
     procedure selectIn8Arguments(signal sel: in std_logic_vector(2 downto 0);
         signal r0, r1, r2, r3, r4, r5, r6, r7: in std_logic_vector(15 downto 0);
@@ -107,11 +107,11 @@ BEGIN
                     R6 <= WriteData;
                 when "0111" =>
                     R7 <= WriteData;
-                when "1000" =>
+                when DST_SP =>
                     SP <= WriteData;
-                when "1001" =>
+                when DST_T =>
                     T <= WriteData;
-                when "1010" =>
+                when DST_IH =>
                     IH <= WriteData;
                 when others =>
                     -- do nothing

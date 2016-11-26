@@ -33,42 +33,42 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use WORK.COMMON.ALL;
 
 entity DM_RAM1 is port (
-    CLK:            IN   STD_LOGIC;
-    RST:            IN   STD_LOGIC;
+    CLK           : IN   STD_LOGIC;
+    RST           : IN   STD_LOGIC;
     
-    MemWE:          IN   STD_LOGIC;
-    MemWriteData:   IN   STD_LOGIC_VECTOR(15 downto 0);
-    MemRead:        IN   STD_LOGIC;
-    ALUOut:         IN   STD_LOGIC_VECTOR(15 downto 0); -- if MemWE, this is Address
+    MemWE         : IN   STD_LOGIC;
+    WriteData  : IN   STD_LOGIC_VECTOR(15 downto 0);
+    MemRead       : IN   STD_LOGIC;
+    ALUOut        : IN   STD_LOGIC_VECTOR(15 downto 0); -- if MemWE, this is Address
     
-    InstRead:       IN   STD_LOGIC;
-    InstVal:        IN   STD_LOGIC_VECTOR(15 downto 0);
+    InstRead      : IN   STD_LOGIC;
+    InstVal       : IN   STD_LOGIC_VECTOR(15 downto 0);
     
-    DstVal:         OUT  STD_LOGIC_VECTOR(15 downto 0);
+    DstVal        : OUT  STD_LOGIC_VECTOR(15 downto 0);
     
-    Ram1OE:         OUT   STD_LOGIC;
-    Ram1WE:         OUT   STD_LOGIC;
-    Ram1EN:         OUT   STD_LOGIC;
-    Ram1Addr:       OUT   STD_LOGIC_VECTOR(17 downto 0);
-    Ram1Data:       INOUT STD_LOGIC_VECTOR(15 downto 0);
+    Ram1OE        : OUT   STD_LOGIC;
+    Ram1WE        : OUT   STD_LOGIC;
+    Ram1EN        : OUT   STD_LOGIC;
+    Ram1Addr      : OUT   STD_LOGIC_VECTOR(17 downto 0);
+    Ram1Data      : INOUT STD_LOGIC_VECTOR(15 downto 0);
     
-    rdn:            OUT  STD_LOGIC;
-    wrn:            OUT  STD_LOGIC;
-    data_ready:     IN   STD_LOGIC;
-    tbre:           IN   STD_LOGIC;
-    tsre:           IN   STD_LOGIC;
+    rdn           : OUT  STD_LOGIC;
+    wrn           : OUT  STD_LOGIC;
+    data_ready    : IN   STD_LOGIC;
+    tbre          : IN   STD_LOGIC;
+    tsre          : IN   STD_LOGIC;
     
-    keyboard_val:   IN   STD_LOGIC_VECTOR(15 downto 0);
-	vga_wrn:        OUT  STD_LOGIC;
-	vga_data:       OUT  STD_LOGIC_VECTOR(15 downto 0);
+    keyboard_val  : IN   STD_LOGIC_VECTOR(15 downto 0);
+	vga_wrn       : OUT  STD_LOGIC;
+	vga_data      : OUT  STD_LOGIC_VECTOR(15 downto 0);
     
-    NowPC:          IN   STD_LOGIC_VECTOR(15 downto 0);
-    Exception:      OUT  STD_LOGIC;
-    ExceptPC:       OUT  STD_LOGIC_VECTOR(15 downto 0);
+    NowPC         : IN   STD_LOGIC_VECTOR(15 downto 0);
+    Exception     : OUT  STD_LOGIC;
+    ExceptPC      : OUT  STD_LOGIC_VECTOR(15 downto 0);
     
-    LedSel:         IN   STD_LOGIC_VECTOR(15 downto 0);
-    LedOut:         OUT  STD_LOGIC_VECTOR(15 downto 0);
-    NumOut:         OUT  STD_LOGIC_VECTOR(7 downto 0)
+    LedSel        : IN   STD_LOGIC_VECTOR(15 downto 0);
+    LedOut        : OUT  STD_LOGIC_VECTOR(15 downto 0);
+    NumOut        : OUT  STD_LOGIC_VECTOR(7 downto 0)
 );
 end DM_RAM1;
 
@@ -105,7 +105,7 @@ begin
     Ram1WE <= not IsWriteMode or SyncClk;
     wrn <= not IsUartWrite or SyncClk;
     vga_wrn <= not IsVGAWrite or SyncClk;
-    vga_data <= MemWriteData;
+    vga_data <= WriteData;
     rdn <= UartUpRead or not UartReadyLoad;
     DstVal <= (LastALUOut and ALUOutMask) 
             or (Ram1Data and MemOutMask) 
@@ -149,7 +149,7 @@ begin
             IsWriteMode <= not MemWE;
             LastException <= '0';
             if MemWE = RAM_WRITE_ENABLE then
-                Ram1Data <= MemWriteData;
+                Ram1Data <= WriteData;
                 Ram1Addr(15 downto 0) <= ALUOut;
             else
                 Ram1Data <= (others => 'Z');

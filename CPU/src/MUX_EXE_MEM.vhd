@@ -5,20 +5,25 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 
 
 ENTITY MUX_EXE_MEM IS PORT (
-    rst, clk: in std_logic;
-    DstReg: in std_logic_vector(3 downto 0);
-    RegWE: in std_logic;
-    MemRead: in std_logic;
-    MemWE: in std_logic;
-    MemWriteData: in std_logic_vector(15 downto 0);
-    ALUOut: in std_logic_vector(15 downto 0);
-    T: in std_logic;
-    Stall : in std_logic;
+    rst             : IN  STD_LOGIC;
+    clk             : IN  STD_LOGIC;
+    DstReg          : IN  STD_LOGIC_VECTOR(3 downto 0);
+    RegWE           : IN  STD_LOGIC;
+    MemRead         : IN  STD_LOGIC;
+    MemWE           : IN  STD_LOGIC;
+    MemWriteData    : IN  STD_LOGIC_VECTOR(15 downto 0);
+    ALUOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
+    T               : IN  STD_LOGIC;
+    Stall           : IN  STD_LOGIC;
+    o_DstReg        : OUT STD_LOGIC_VECTOR(3 downto 0);
+    o_RegWE         : OUT STD_LOGIC;
+    o_MemRead       : OUT STD_LOGIC;
+    o_MemWE         : OUT STD_LOGIC;
+    o_MemWriteData  : OUT STD_LOGIC_VECTOR(15 downto 0);
+    o_ALUOut        : OUT STD_LOGIC_VECTOR(15 downto 0);
+    o_InstRead      : OUT STD_LOGIC;
+    o_InstVal       : OUT STD_LOGIC_VECTOR(15 downto 0)
 
-    o_DstReg: out std_logic_vector(3 downto 0);
-    o_RegWE, o_MemRead, o_MemWE: out std_logic;
-    o_MemWriteData: out std_logic_vector(15 downto 0);
-    o_ALUOut: out std_logic_vector(15 downto 0)
 );
 END MUX_EXE_MEM;
 
