@@ -160,6 +160,7 @@ begin
             end loop;
             hda2(addr) <= conv_std_logic_vector(var, 16);
         else 
+            wait for 10 ps;
             hda2_ready <= '1';
             wait;
         end if;

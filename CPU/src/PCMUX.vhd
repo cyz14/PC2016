@@ -11,7 +11,7 @@ entity PCMUX is
         PCRx_data : in std_logic_vector(15 downto 0);
         PCAddImm_data : in std_logic_vector(15 downto 0);
         PC_choose : in std_logic_vector(1 downto 0);
-        PCout: out std_logic_vector(15 downto 0)
+        PCout: out std_logic_vector(15 downto 0) := ZERO16
     );
 end PCMUX;
 architecture behaviour of PCMUX is
