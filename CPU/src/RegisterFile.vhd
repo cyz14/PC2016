@@ -26,10 +26,10 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     procedure selectFrom(sel: in std_logic_vector(3 downto 0);
                     R0, R1, R2, R3, R4, R5, R6, R7
                 , SP, T, IH, PC : in std_logic_vector(15 downto 0);
-                res: out std_logic_vector(15 downto 0))
+                res: out std_logic_vector(15 downto 0)) is
     begin
         case sel is
-            when Dst_R0 => res <= R0;
+            when "0000" => res <= R0;
             when Dst_R1 => res <= R1;
             when Dst_R2 => res <= R2;
             when Dst_R3 => res <= R3;
@@ -43,12 +43,10 @@ ARCHITECTURE Behaviour OF RegisterFile IS
             when Dst_PC => res <= PC;
             when others => res <= (others => '0');
         end case;
-    end procedure;
-
+    end selectFrom;
 
 BEGIN
-    process (PCplus1, Read1Register, Read2Register
-        , WriteRegister, WriteData, Data1Src, Data2Src
+    process (PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
         , RegWE, rst)
     begin
         if rst = '0' then
@@ -63,7 +61,6 @@ BEGIN
             SP <= (others => '0');
             IH <= (others => '0');
             T <= (others => '0');
-            PC <= (others => '0');
             Data1 <= (others => '0');
             Data2 <= (others => '0');
         else
