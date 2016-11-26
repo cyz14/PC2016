@@ -53,7 +53,7 @@ ENTITY CPU IS PORT (
     
     -- used to display debug info
     SW         : IN    STD_LOGIC_VECTOR(15 downto 0);
-    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
+--    LED        : OUT   STD_LOGIC_VECTOR(15 downto 0);
     Number1    : OUT   STD_LOGIC_VECTOR( 6 downto 0);
     Number0    : OUT   STD_LOGIC_VECTOR( 6 downto 0)
 );

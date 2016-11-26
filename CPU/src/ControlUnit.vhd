@@ -13,8 +13,7 @@ ENTITY ControlUnit IS PORT (
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
     
-    Data1Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-    Data2Src    :  OUT STD_LOGIC_VECTOR( 2 downto 0);
+
     ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
     ZeroExt     :  OUT STD_LOGIC;                     
 
@@ -70,8 +69,6 @@ BEGIN
             WHEN TYPE_ADD_SUB =>
                 CASE temp_1_0 IS
                     WHEN FUNCT_ADD =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -85,8 +82,6 @@ BEGIN
 						BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SUB =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -106,8 +101,6 @@ BEGIN
             WHEN TYPE_AND_OR_CMP_MFPC_SLLV_SRLV_JR =>
                 CASE temp_4_0 IS 
                     WHEN FUNCT_AND  =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -121,8 +114,6 @@ BEGIN
 						BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_OR   =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -136,8 +127,6 @@ BEGIN
 						BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_CMP  =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -153,8 +142,6 @@ BEGIN
                     WHEN FUNCT_MFPC_JR =>
                         CASE temp_Ry IS 
                             WHEN FUNCT_MFPC => 
-                                Data1Src <= DS_PCplus1;
-                                Data2Src <= DS_NONE;
                                 ImmeSrc  <= IMM_NONE;
                                 ZeroExt  <= '0';
                                 ASrc     <= AS_DATA1;
@@ -168,8 +155,6 @@ BEGIN
                                 BSrc4    <= Dst_NONE;
                                 PCMuxSel <= PC_Add1;
                             WHEN FUNCT_JR   => 
-                                Data1Src <= DS_RX;
-                                Data2Src <= DS_NONE;
                                 ImmeSrc  <= IMM_EIGHT;
                                 ZeroExt  <= '0';
                                 ASrc     <= AS_NONE;
@@ -187,8 +172,6 @@ BEGIN
                         END CASE;
                         
                     WHEN FUNCT_SLLV =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -202,8 +185,6 @@ BEGIN
 						BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SRLV =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_RY;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -222,8 +203,6 @@ BEGIN
             WHEN TYPE_MFIH_MTIH =>
                 CASE temp_7_0 IS
                     WHEN FUNCT_MFIH =>
-                        Data1Src <= DS_IH;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -237,8 +216,6 @@ BEGIN
 						BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_MTIH =>
-                        Data1Src <= DS_RX;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -257,8 +234,6 @@ BEGIN
             WHEN TYPE_MTSP_ADDSP_BTEQZ_BTNEZ =>
                 CASE temp_10_8 IS
                     WHEN FUNCT_MTSP =>
-						Data1Src <= DS_RX;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_NONE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -273,8 +248,6 @@ BEGIN
                         PCMuxSel <= PC_Add1;
                     
                     WHEN FUNCT_ADDSP =>
-						Data1Src <= DS_SP;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_EIGHT;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -288,8 +261,6 @@ BEGIN
 						BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_BTEQZ =>
-						Data1Src <= DS_T;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_EIGHT;
                         ZeroExt  <= '0';
                         ASrc     <= AS_NONE;
@@ -308,8 +279,6 @@ BEGIN
 						end if;
                         
                     WHEN FUNCT_BTNEZ =>
-						Data1Src <= DS_T;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_EIGHT;
                         ZeroExt  <= '0';
                         ASrc     <= AS_NONE;
@@ -332,8 +301,6 @@ BEGIN
             WHEN TYPE_SLL_SRA =>
                 CASE temp_1_0 IS
                     WHEN FUNCT_SLL =>
-						Data1Src <= DS_RY;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_THREE;
                         ZeroExt  <= '1';
                         ASrc     <= AS_DATA1;
@@ -347,8 +314,6 @@ BEGIN
 						BSrc4    <= Dst_NONE;
 						PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SRA =>
-						Data1Src <= DS_RY;
-                        Data2Src <= DS_NONE;
                         ImmeSrc  <= IMM_THREE;
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
@@ -366,8 +331,6 @@ BEGIN
                 END CASE;
             
             WHEN TYPE_MOVE =>
-				Data1Src <= DS_RY;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_NONE;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -381,8 +344,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;	
 				PCMuxSel <= PC_Add1;						
             WHEN TYPE_ADDIU =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -396,8 +357,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_ADDIU3 =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_FOUR;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -411,8 +370,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_LI =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '1';
                 ASrc     <= AS_DATA1;
@@ -426,8 +383,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_SLTI =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -441,8 +396,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_LW =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -456,8 +409,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_LW_SP =>
-				Data1Src <= DS_SP;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -471,8 +422,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_SW =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_RY;
                 ImmeSrc  <= IMM_FIVE;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -486,8 +435,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_SW_SP =>
-				Data1Src <= DS_SP;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_DATA1;
@@ -501,8 +448,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_Add1;
             WHEN TYPE_B =>
-				Data1Src <= DS_NONE;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_ELEVEN;
                 ZeroExt  <= '0';
                 ASrc     <= AS_NONE;
@@ -516,8 +461,6 @@ BEGIN
 				BSrc4    <= Dst_NONE;
 				PCMuxSel <= PC_AddImm;
             WHEN TYPE_BEQZ =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_NONE;
@@ -535,8 +478,6 @@ BEGIN
 					PCMuxSel <= PC_Add1;
 				end if;
             WHEN TYPE_BNEZ =>
-				Data1Src <= DS_RX;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
                 ASrc     <= AS_NONE;
@@ -554,8 +495,6 @@ BEGIN
 					PCMuxSel <= PC_Add1;
 				end if;
             WHEN TYPE_NOP =>
-				Data1Src <= DS_none;
-                Data2Src <= DS_NONE;
                 ImmeSrc  <= IMM_NONE;
                 ZeroExt  <= '0';
                 ASrc     <= AS_NONE;
