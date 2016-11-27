@@ -10,7 +10,7 @@ entity testbench is
 end entity testbench;
 
 architecture RTL of testbench is
-    signal clk : std_logic := '0';
+    signal clk : std_logic := '1';
     signal rst : std_logic := '0';
 
     constant PERIOD : time := 200 ps;
@@ -19,7 +19,7 @@ architecture RTL of testbench is
 
     signal hda1_init : std_logic := '0';
     signal hda2_init : std_logic := '0';
-    signal hda1, hda2 : RAM(0 to 20); -- 小空间便于查看
+    signal hda1, hda2 : RAM(0 to 1000); -- 小空间便于查看
 
     component CPU IS PORT (
         CLK     :    IN    STD_LOGIC; -- 
@@ -109,11 +109,11 @@ architecture RTL of testbench is
     signal flash_we   :  STD_LOGIC := '1';
     signal flash_rp   :  STD_LOGIC := '1';
     signal flash_addr :  STD_LOGIC_VECTOR( 22 downto 1 ) := "0000000000000000000000";
-    signal flash_data :    STD_LOGIC_VECTOR( 15 downto 0 );
+    signal flash_data :  STD_LOGIC_VECTOR( 15 downto 0 );
 
-    signal LED:            STD_LOGIC_VECTOR(15 downto 0);
+    signal LED        :  STD_LOGIC_VECTOR(15 downto 0);
 
-    signal ps2data : STD_LOGIC;
+    signal ps2data    :  STD_LOGIC;
 
 
 begin

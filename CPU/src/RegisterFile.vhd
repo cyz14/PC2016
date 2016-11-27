@@ -7,15 +7,15 @@ use work.common.all;
 
 ENTITY RegisterFile IS
 PORT (
-    rst : in std_logic;
-    PCplus1:    in std_logic_vector(15 downto 0);
-    WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
-    WriteData:  IN  STD_LOGIC_VECTOR(15 downto 0);
-    ASrc4:      in std_logic_vector(3 downto 0);
-    BSrc4:      in std_logic_vector(3 downto 0);
-    RegWE:      in std_logic;
-    Data1:  out std_logic_vector(15 downto 0);
-    Data2:  out std_logic_vector(15 downto 0)
+    rst:           in std_logic;
+    PCplus1:       in std_logic_vector(15 downto 0);
+    RegWE:         in std_logic;
+    WriteRegister: IN  STD_LOGIC_VECTOR(3  downto 0);
+    WriteData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+    ASrc4:         in std_logic_vector(3 downto 0);
+    BSrc4:         in std_logic_vector(3 downto 0);
+    Data1:         out std_logic_vector(15 downto 0);
+    Data2:         out std_logic_vector(15 downto 0)
 );
 END RegisterFile;
 
@@ -60,7 +60,7 @@ BEGIN
             R7 <= (others => '0');
             SP <= (others => '0');
             IH <= (others => '0');
-            T <= (others => '0');
+            T  <= (others => '0');
             Data1 <= (others => '0');
             Data2 <= (others => '0');
         else
@@ -75,7 +75,7 @@ BEGIN
                     when Dst_R6 => R6 <= WriteData;
                     when Dst_R7 => R7 <= WriteData;
                     when DST_SP => SP <= WriteData;
-                    when DST_T => T <= WriteData;
+                    when DST_T  => T  <= WriteData;
                     when DST_IH => IH <= WriteData;
                     when others => null; -- do nothing
                 end case;

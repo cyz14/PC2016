@@ -7,31 +7,40 @@ use WORK.COMMON.ALL;
 
 ENTITY MUX_MEM_WB IS PORT (
     rst, clk: in std_logic;
-    ALUOut: in std_logic_vector(15 downto 0);
-    MemData: in std_logic_vector(15 downto 0);
-    MemRead: in std_logic;
-    DstReg: in std_logic_vector(3 downto 0);
-    RegWE: in std_logic;
+    ALUOut:   in std_logic_vector(15 downto 0);
+    MemData:  in std_logic_vector(15 downto 0);
+    MemRead:  in std_logic;
+    DstReg:   in std_logic_vector(3 downto 0);
+    RegWE:    in std_logic;
 
     DstReg_o: out std_logic_vector(3 downto 0);
-    RegWE_o: out std_logic;
+    RegWE_o:  out std_logic;
     DstVal_o: out std_logic_vector(15 downto 0)
 );
 END MUX_MEM_WB;
 
 ARCHITECTURE Behaviour OF MUX_MEM_WB IS
+    SIGNAL tempDstReg_o : std_logic_vector(3 downto 0) := DST_NONE;
+    SIGNAL tempRegWE_o  : std_logic := '1';
+    SIGNAL tempDstVal_o : std_logic_vector(15 downto 0) := ZERO16;
 BEGIN
+    DstReg_o <= tempDstReg_o;
+    RegWE_o  <= tempRegWE_o;
+    DstVal_o <= tempDstVal_o;
+
     process (rst, clk)
-    begin
+    BEGIN    
         if rst = '0' then
-            RegWE_o <= '1';
+            tempRegWE_o <= '1';
+            tempDstReg_o <= DST_NONE;
+            tempDstVal_o <= ZERO16;
         elsif clk'event and clk = '1' then
-            DstReg_o <= DstReg;
-            RegWE_o <= RegWE;
+            tempDstReg_o <= DstReg;
+            tempRegWE_o  <= RegWE;
             if MemRead = RAM_READ_ENABLE then
-                DstVal_o <= MemData;
+                tempDstVal_o <= MemData;
             else
-                DstVal_o <= ALUOut;
+                tempDstVal_o <= ALUOut;
             end if;
         end if;
     end process;

@@ -1,1 +1,10 @@
 ipcore_dir/
+isim/
+*_isim_beh.*
+isim.*
+xilinxsim.ini
+netgen/
+*.cr.mti
+*.mpf
+*.wlf
+fuseRelaunch.cmd

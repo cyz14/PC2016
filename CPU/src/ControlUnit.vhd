@@ -355,8 +355,8 @@ BEGIN
                 WHEN TYPE_LI =>
                     ImmeSrc  <= IMM_EIGHT;
                     ZeroExt  <= '1';
-                    ASrc     <= AS_DATA1;
-                    BSrc     <= AS_IMME;
+                    ASrc     <= AS_IMME;
+                    BSrc     <= AS_NONE;
                     tempALUop<= OP_POS;
                     RegWE    <= '1';
                     DstReg   <= "0" & temp_Rx;

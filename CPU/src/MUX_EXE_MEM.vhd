@@ -3,6 +3,7 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
+use WORK.COMMON.ALL;
 
 ENTITY MUX_EXE_MEM IS PORT (
     rst             : IN  STD_LOGIC;
@@ -35,6 +36,8 @@ BEGIN
             o_RegWE <= '1';
             o_MemWE <= '1';
             o_MemRead <= '1';
+            o_ALUOut <= ZERO16;
+            o_MemWriteData <= ZERO16;
         elsif clk'event and clk = '1' then 
             if Stall = '0' then
                 o_RegWE <= '1';

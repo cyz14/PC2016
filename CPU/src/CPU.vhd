@@ -228,11 +228,11 @@ ARCHITECTURE Behaviour OF CPU IS
     Component RegisterFile IS PORT (
         rst : in std_logic;
         PCplus1:    in std_logic_vector(15 downto 0);
+        RegWE:      in std_logic;
         WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
         WriteData:  IN  STD_LOGIC_VECTOR(15 downto 0);
         ASrc4:      in std_logic_vector(3 downto 0);
         BSrc4:      in std_logic_vector(3 downto 0);
-        RegWE:      in std_logic;
         Data1:  out std_logic_vector(15 downto 0);
         Data2:  out std_logic_vector(15 downto 0)
     );
@@ -594,11 +594,11 @@ BEGIN
     u_RegFile: RegisterFile Port MAP (
         rst             => RST,
         PCplus1         => id_PCPlus1,
+        RegWE           => wb_RegWE,
         WriteRegister   => wb_DstReg,
         WriteData       => wb_DstVal,
         ASrc4           => ctrl_ASrc4,
         BSrc4           => ctrl_BSrc4,
-        RegWE           => ctrl_RegWE,
         Data1           => rf_Data1,
         Data2           => rf_Data2
     );
