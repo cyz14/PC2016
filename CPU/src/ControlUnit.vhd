@@ -68,7 +68,7 @@ BEGIN
             MemWE       <= RAM_WRITE_DISABLE;    
 
             DstReg      <= Dst_NONE;
-            RegWE       <= '0';
+            RegWE       <= REG_WRITE_DISABLE;
             
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
@@ -104,7 +104,7 @@ BEGIN
                             BSrc     <= AS_DATA2;
                             tempALUop<= OP_ADD;
                             DstReg   <= "0" & temp_Rz;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
 
@@ -115,7 +115,7 @@ BEGIN
                             BSrc     <= AS_DATA2;
                             tempALUop<= OP_SUB;
                             DstReg   <= "0" & temp_Rz;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
 
@@ -131,7 +131,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
                             tempALUop<= OP_AND;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
@@ -143,7 +143,7 @@ BEGIN
                             BSrc     <= AS_DATA2;
                             tempALUop    <= OP_OR;
                             MemRead <= RAM_READ_DISABLE;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
@@ -155,8 +155,7 @@ BEGIN
                             BSrc     <= AS_DATA2;
                             tempALUop    <= OP_CMP;
                             MemRead <= RAM_READ_DISABLE;
-                            MemWE   <= '0';
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
@@ -167,11 +166,10 @@ BEGIN
                                     ImmeSrc  <= IMM_NONE;
                                     ZeroExt  <= '0';
                                     ASrc     <= AS_DATA1;
-                                    BSrc     <= AS_DATA2;
+                                    BSrc     <= AS_NONE;
                                     tempALUop<= OP_POS;
                                     MemRead  <= RAM_READ_DISABLE;
-                                    MemWE    <= '0';
-                                    RegWE    <= '1';
+                                    RegWE    <= REG_WRITE_ENABLE;
                                     DstReg   <= "0" & temp_Rx;
                                     ASrc4    <= Dst_PC;
                                     
@@ -179,7 +177,7 @@ BEGIN
                                     ImmeSrc  <= IMM_EIGHT;
                                     ZeroExt  <= '0';
                                     MemRead  <= RAM_WRITE_DISABLE;
-                                    RegWE    <= '1';
+                                    RegWE    <= REG_WRITE_ENABLE;
                                     DstReg   <= Dst_NONE;
                                     PCMuxSel <= PC_Rx;
                                 WHEN others =>
@@ -192,10 +190,10 @@ BEGIN
                             ASrc      <= AS_DATA1;
                             BSrc      <= AS_DATA2;
                             tempALUop <= OP_SLL;
-                            RegWE     <= '1';
+                            RegWE     <= REG_WRITE_ENABLE;
                             DstReg    <= "0" & temp_Ry;
-                            ASrc4     <= "0" & temp_Rx;
-                            BSrc4     <= "0" & temp_Ry;
+                            ASrc4     <= "0" & temp_Ry;
+                            BSrc4     <= "0" & temp_Rx;
                             
                         WHEN FUNCT_SRLV =>
                             ImmeSrc  <= IMM_NONE;
@@ -203,10 +201,10 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
                             tempALUop<= OP_SRL;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Ry;
-                            ASrc4    <= "0" & temp_Rx;
-                            BSrc4    <= "0" & temp_Ry;
+                            ASrc4    <= "0" & temp_Ry;
+                            BSrc4    <= "0" & temp_Rx;
                             
                         WHEN others => 
                             null;
@@ -218,7 +216,7 @@ BEGIN
                             ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= Dst_IH;
                             BSrc4    <= Dst_NONE;
@@ -229,7 +227,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
                             tempALUop    <= OP_POS;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_IH;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= Dst_NONE;
@@ -245,7 +243,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
                             tempALUop    <= OP_POS;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_SP;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= Dst_NONE;
@@ -256,7 +254,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
                             tempALUop    <= OP_ADD;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_SP;
                             ASrc4    <= Dst_SP;
                             BSrc4    <= Dst_NONE;
@@ -266,9 +264,9 @@ BEGIN
                             ZeroExt  <= '0';
                             ASrc     <= AS_NONE;
                             BSrc     <= AS_NONE;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_DISABLE;
                             DstReg   <= Dst_NONE;
-                            ASrc4    <= Dst_NONE;
+                            ASrc4    <= Dst_T;
                             BSrc4    <= Dst_NONE;
                             if(condition = ZERO16) THEN
                                 PCMuxSel <= PC_AddImm;
@@ -281,8 +279,9 @@ BEGIN
                             ZeroExt  <= '0';
                             ASrc     <= AS_NONE;
                             BSrc     <= AS_NONE;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_DISABLE;
                             DstReg   <= Dst_NONE;
+							ASrc4    <= Dst_T;
                             if(not (condition = ZERO16)) THEN
                                 PCMuxSel <= PC_AddImm;
                             else
@@ -299,7 +298,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
                             tempALUop    <= OP_SLL;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Ry;
                             BSrc4    <= Dst_NONE;
@@ -310,7 +309,7 @@ BEGIN
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
                             tempALUop    <= OP_SRA;
-                            RegWE    <= '1';
+                            RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Ry;
                             BSrc4    <= Dst_NONE;
@@ -325,7 +324,7 @@ BEGIN
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_NONE;
                     tempALUop<= OP_POS;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= "0" & temp_Ry;
                     BSrc4    <= Dst_NONE;    
@@ -336,7 +335,7 @@ BEGIN
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -347,7 +346,7 @@ BEGIN
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Ry;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -358,9 +357,9 @@ BEGIN
                     ASrc     <= AS_IMME;
                     BSrc     <= AS_NONE;
                     tempALUop<= OP_POS;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
-                    ASrc4    <= "0" & temp_Rx;
+                    ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
                     
                 WHEN TYPE_SLTI =>
@@ -368,8 +367,8 @@ BEGIN
                     ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;                  
-                    RegWE    <= '1';
+                    tempALUop<= OP_LT;                  
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= Dst_T;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -381,7 +380,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemRead  <= RAM_READ_ENABLE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Ry;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -393,7 +392,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemRead  <= RAM_READ_ENABLE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= Dst_SP;
                     BSrc4    <= Dst_NONE;
@@ -405,7 +404,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -417,7 +416,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_SP;
                     BSrc4    <= Dst_NONE;
@@ -427,7 +426,7 @@ BEGIN
                     ZeroExt  <= '0';
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
@@ -437,8 +436,9 @@ BEGIN
                     ZeroExt  <= '0';
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
+					ASrc4    <= '0' & temp_Rx;
                     if (condition = ZERO16) THEN
                         PCMuxSel <= PC_AddImm;
                     else
@@ -447,8 +447,9 @@ BEGIN
                 WHEN TYPE_BNEZ =>
                     ImmeSrc  <= IMM_EIGHT;
                     ZeroExt  <= '0';
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
+					ASrc4    <= '0' & temp_Rx;
                     if (not (condition = ZERO16)) THEN
                         PCMuxSel <= PC_AddImm;
                     else
@@ -459,7 +460,7 @@ BEGIN
                     ZeroExt  <= '0';
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
-                    RegWE    <= '1';
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
