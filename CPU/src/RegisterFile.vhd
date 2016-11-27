@@ -64,7 +64,7 @@ BEGIN
             Data1 <= (others => '0');
             Data2 <= (others => '0');
         else
-            if RegWE = '0' then 
+            if RegWE = REG_WRITE_ENABLE then 
                 case WriteRegister is
                     when Dst_R0 => R0 <= WriteData;
                     when Dst_R1 => R1 <= WriteData;
