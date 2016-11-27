@@ -22,7 +22,7 @@ END MUX_MEM_WB;
 ARCHITECTURE Behaviour OF MUX_MEM_WB IS
     
 BEGIN
-    process (rst, clk)
+    process (rst, clk, DstReg, RegWE)
     BEGIN    
         if rst = '0' then
             RegWE_o <= '1';
@@ -30,12 +30,12 @@ BEGIN
             DstVal_o <= ZERO16;
         elsif clk'event and clk = '1' then
             DstReg_o <= DstReg;
-            RegWE_o  <= RegWE;
             if MemRead = RAM_READ_ENABLE then
                 DstVal_o <= MemData;
             else
                 DstVal_o <= ALUOut;
             end if;
+            RegWE_o  <= RegWE;
         end if;
     end process;
 END Behaviour;

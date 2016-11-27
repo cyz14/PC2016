@@ -19,29 +19,25 @@ ENTITY MUX_ALU_A IS PORT (
 END MUX_ALU_A;
 
 ARCHITECTURE Behaviour OF MUX_ALU_A IS
-    
-    SIGNAL tempAOp : STD_LOGIC_VECTOR(15 downto 0);
 
 BEGIN
-    AOp <= tempAOp;
     
-    Process(Data1, Immediate, ExeMemALUOut, MemWbDstVal, ASrc, ForwardingA)
+    Process(ASrc, ForwardingA)
     BEGIN
-        tempAOp <= ZERO16;
         CASE ForwardingA IS
             WHEN "00" =>
                 CASE ASrc IS
-                    WHEN AS_NONE  => tempAOp <= ZERO16;
-                    WHEN AS_DATA1 => tempAOp <= Data1;
-                    WHEN AS_IMME  => tempAOp <= Immediate;
-                    WHEN others   => tempAOp <= ZERO16;
+                    WHEN AS_NONE  => AOp <= ZERO16;
+                    WHEN AS_DATA1 => AOp <= Data1;
+                    WHEN AS_IMME  => AOp <= Immediate;
+                    WHEN others   => AOp <= ZERO16;
                 END CASE;
             WHEN "01" =>
-                tempAOp <= ExeMemALUOut;
+                AOp <= ExeMemALUOut;
             WHEN "10" =>
-                tempAOp <= MemWbDstVal;
+                AOp <= MemWbDstVal;
             WHEN others =>
-                tempAOp <= ZERO16;
+                AOp <= ZERO16;
         END CASE;
     END Process;
 
