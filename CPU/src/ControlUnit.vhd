@@ -38,9 +38,9 @@ END ENTITY;
 ARCHITECTURE Behaviour OF ControlUnit IS
 
     SIGNAL tempInsType :  STD_LOGIC_VECTOR(4 downto 0);
-    SIGNAL temp_Rx      :  STD_LOGIC_VECTOR(2 downto 0);
-    SIGNAL temp_Ry      :  STD_LOGIC_VECTOR(2 downto 0);
-    SIGNAL temp_Rz      :  STD_LOGIC_VECTOR(2 downto 0);
+    SIGNAL temp_Rx     :  STD_LOGIC_VECTOR(2 downto 0);
+    SIGNAL temp_Ry     :  STD_LOGIC_VECTOR(2 downto 0);
+    SIGNAL temp_Rz     :  STD_LOGIC_VECTOR(2 downto 0);
     SIGNAL temp_1_0    :  STD_LOGIC_VECTOR(1 downto 0);
     SIGNAL temp_4_0    :  STD_LOGIC_VECTOR(4 downto 0);
     SIGNAL temp_7_0    :  STD_LOGIC_VECTOR(7 downto 0);
@@ -49,20 +49,20 @@ ARCHITECTURE Behaviour OF ControlUnit IS
     SIGNAL tempExcept  :  STD_LOGIC;
     SIGNAL tempExceptPC:  STD_LOGIC_VECTOR(15 downto 0);
 BEGIN
-    tempInsType <= Instruction(15 downto 11);
-    temp_Rx      <= Instruction(10 downto  8);
-    temp_Ry      <= Instruction( 7 downto  5);
-    temp_Rz      <= Instruction( 4 downto  2);
-    temp_10_8   <= Instruction(10 downto  8);
-    temp_7_0    <= Instruction( 7 downto  0);
-    temp_4_0    <= Instruction( 4 downto  0);
-    temp_1_0    <= Instruction( 1 downto  0);
 
-    
     ALUop <= tempALUop;
     
     PROCESS(Instruction, Condition)
     BEGIN
+        tempInsType <= Instruction(15 downto 11);
+        temp_Rx     <= Instruction(10 downto  8);
+        temp_Ry     <= Instruction( 7 downto  5);
+        temp_Rz     <= Instruction( 4 downto  2);
+        temp_10_8   <= Instruction(10 downto  8);
+        temp_7_0    <= Instruction( 7 downto  0);
+        temp_4_0    <= Instruction( 4 downto  0);
+        temp_1_0    <= Instruction( 1 downto  0);
+
         CASE tempInsType IS
             WHEN TYPE_ADD_SUB =>
                 CASE temp_1_0 IS
@@ -71,13 +71,13 @@ BEGIN
                         ZeroExt  <= '0';
                         ASrc     <= AS_DATA1;
                         BSrc     <= AS_DATA2;
-                        tempALUop    <= OP_ADD;
+                        tempALUop<= OP_ADD;
                         MemRead  <= '1';
                         MemWE    <= RAM_WRITE_DISABLE;
                         DstReg   <= "0" & temp_Rz;
                         RegWE    <= '1';
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SUB =>
                         ImmeSrc  <= IMM_NONE;
@@ -89,9 +89,9 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         DstReg   <= "0" & temp_Rz;
                         RegWE    <= '1';
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
-						PCMuxSel <= PC_Add1;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
+                        PCMuxSel <= PC_Add1;
                     WHEN others => 
                         tempExcept <= '1';
                         tempExceptPC <= CurPC;
@@ -108,8 +108,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_OR   =>
                         ImmeSrc  <= IMM_NONE;
@@ -121,8 +121,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_CMP  =>
                         ImmeSrc  <= IMM_NONE;
@@ -134,8 +134,8 @@ BEGIN
                         MemWE   <= '0';
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_MFPC_JR =>
                         CASE temp_Ry IS 
@@ -179,8 +179,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Ry;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SRLV =>
                         ImmeSrc  <= IMM_NONE;
@@ -192,8 +192,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Ry;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= "0" & temp_Ry;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= "0" & temp_Ry;
                         PCMuxSel <= PC_Add1;
                     WHEN others => 
                         null;
@@ -210,8 +210,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= Dst_IH;
-						BSrc4    <= Dst_NONE;
+                        ASrc4    <= Dst_IH;
+                        BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_MTIH =>
                         ImmeSrc  <= IMM_NONE;
@@ -223,8 +223,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= Dst_IH;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= Dst_NONE;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     WHEN others => 
                         null;
@@ -241,8 +241,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= Dst_SP;
-						ASrc4    <= "0" & temp_Rx;
-						BSrc4    <= Dst_NONE;
+                        ASrc4    <= "0" & temp_Rx;
+                        BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     
                     WHEN FUNCT_ADDSP =>
@@ -255,8 +255,8 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= Dst_SP;
-						ASrc4    <= Dst_SP;
-						BSrc4    <= Dst_NONE;
+                        ASrc4    <= Dst_SP;
+                        BSrc4    <= Dst_NONE;
                         PCMuxSel <= PC_Add1;
                     WHEN FUNCT_BTEQZ =>
                         ImmeSrc  <= IMM_EIGHT;
@@ -268,13 +268,13 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= Dst_NONE;
-						ASrc4    <= Dst_NONE;
-						BSrc4    <= Dst_NONE;
-						if(condition = ZERO16) THEN
-							PCMuxSel <= PC_AddImm;
-						else
-							PCMuxSel <= PC_Add1;
-						end if;
+                        ASrc4    <= Dst_NONE;
+                        BSrc4    <= Dst_NONE;
+                        if(condition = ZERO16) THEN
+                            PCMuxSel <= PC_AddImm;
+                        else
+                            PCMuxSel <= PC_Add1;
+                        end if;
                         
                     WHEN FUNCT_BTNEZ =>
                         ImmeSrc  <= IMM_EIGHT;
@@ -286,13 +286,13 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= Dst_NONE;
-						ASrc4    <= Dst_NONE;
-						BSrc4    <= Dst_NONE;
-						if(not (condition = ZERO16)) THEN
-							PCMuxSel <= PC_AddImm;
-						else
-							PCMuxSel <= PC_Add1;
-						end if;
+                        ASrc4    <= Dst_NONE;
+                        BSrc4    <= Dst_NONE;
+                        if(not (condition = ZERO16)) THEN
+                            PCMuxSel <= PC_AddImm;
+                        else
+                            PCMuxSel <= PC_Add1;
+                        end if;
                     WHEN others =>
                         null;
                 END CASE;
@@ -308,9 +308,9 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= "0" & temp_Ry;
-						BSrc4    <= Dst_NONE;
-						PCMuxSel <= PC_Add1;
+                        ASrc4    <= "0" & temp_Ry;
+                        BSrc4    <= Dst_NONE;
+                        PCMuxSel <= PC_Add1;
                     WHEN FUNCT_SRA =>
                         ImmeSrc  <= IMM_THREE;
                         ZeroExt  <= '0';
@@ -321,9 +321,9 @@ BEGIN
                         MemWE    <= RAM_WRITE_DISABLE;
                         RegWE    <= '1';
                         DstReg   <= "0" & temp_Rx;
-						ASrc4    <= "0" & temp_Ry;
-						BSrc4    <= Dst_NONE;
-						PCMuxSel <= PC_Add1;
+                        ASrc4    <= "0" & temp_Ry;
+                        BSrc4    <= Dst_NONE;
+                        PCMuxSel <= PC_Add1;
                     WHEN others =>
                         null;
                 END CASE;
@@ -338,9 +338,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Rx;
-				ASrc4    <= "0" & temp_Ry;
-				BSrc4    <= Dst_NONE;	
-				PCMuxSel <= PC_Add1;						
+                ASrc4    <= "0" & temp_Ry;
+                BSrc4    <= Dst_NONE;    
+                PCMuxSel <= PC_Add1;                        
             WHEN TYPE_ADDIU =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -351,9 +351,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Rx;
-				ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_ADDIU3 =>
                 ImmeSrc  <= IMM_FOUR;
                 ZeroExt  <= '0';
@@ -364,9 +364,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Ry;
-				ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_LI =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '1';
@@ -377,9 +377,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Rx;
-				ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_SLTI =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -390,9 +390,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_T;
-				ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_LW =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -403,9 +403,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Ry;
-				ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_LW_SP =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -416,9 +416,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= "0" & temp_Rx;
-				ASrc4    <= Dst_SP;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= Dst_SP;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_SW =>
                 ImmeSrc  <= IMM_FIVE;
                 ZeroExt  <= '0';
@@ -429,9 +429,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_ENABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-	            ASrc4    <= "0" & temp_Rx;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= "0" & temp_Rx;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_SW_SP =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -442,9 +442,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_ENABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-				ASrc4    <= Dst_SP;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= Dst_SP;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN TYPE_B =>
                 ImmeSrc  <= IMM_ELEVEN;
                 ZeroExt  <= '0';
@@ -455,9 +455,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-				ASrc4    <= Dst_NONE;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_AddImm;
+                ASrc4    <= Dst_NONE;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_AddImm;
             WHEN TYPE_BEQZ =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -468,13 +468,13 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-				ASrc4    <= Dst_NONE;
-				BSrc4    <= Dst_NONE;
-				if (condition = ZERO16) THEN
-					PCMuxSel <= PC_AddImm;
-				else
-					PCMuxSel <= PC_Add1;
-				end if;
+                ASrc4    <= Dst_NONE;
+                BSrc4    <= Dst_NONE;
+                if (condition = ZERO16) THEN
+                    PCMuxSel <= PC_AddImm;
+                else
+                    PCMuxSel <= PC_Add1;
+                end if;
             WHEN TYPE_BNEZ =>
                 ImmeSrc  <= IMM_EIGHT;
                 ZeroExt  <= '0';
@@ -485,13 +485,13 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-				ASrc4    <= Dst_NONE;
-				BSrc4    <= Dst_NONE;
-				if (not (condition = ZERO16)) THEN
-					PCMuxSel <= PC_AddImm;
-				else
-					PCMuxSel <= PC_Add1;
-				end if;
+                ASrc4    <= Dst_NONE;
+                BSrc4    <= Dst_NONE;
+                if (not (condition = ZERO16)) THEN
+                    PCMuxSel <= PC_AddImm;
+                else
+                    PCMuxSel <= PC_Add1;
+                end if;
             WHEN TYPE_NOP =>
                 ImmeSrc  <= IMM_NONE;
                 ZeroExt  <= '0';
@@ -502,9 +502,9 @@ BEGIN
                 MemWE    <= RAM_WRITE_DISABLE;
                 RegWE    <= '1';
                 DstReg   <= Dst_NONE;
-				ASrc4    <= Dst_NONE;
-				BSrc4    <= Dst_NONE;
-				PCMuxSel <= PC_Add1;
+                ASrc4    <= Dst_NONE;
+                BSrc4    <= Dst_NONE;
+                PCMuxSel <= PC_Add1;
             WHEN others =>
                 null;
         END CASE;

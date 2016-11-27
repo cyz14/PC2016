@@ -543,7 +543,7 @@ BEGIN
     u_IF_ID: MUX_IF_ID PORT MAP (
         clk        => clk_sel,
         rst        => RST,
-        if_Keep    => if_PCKeep,
+        if_Keep    => '1',--if_PCKeep,
         if_PCPlus1 => if_NewPC,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,

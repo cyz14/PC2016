@@ -52,7 +52,7 @@ begin
     with sel select clkout <= 
         not(clk25 and clk50) when "11", -- clk25
         not clk17 when "10",
-        clk12 when "00",
+        clk when "00",
         clk6 when others;
 
     PROCESS(rst, clk50)
