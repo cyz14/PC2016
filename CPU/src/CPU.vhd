@@ -87,22 +87,23 @@ ARCHITECTURE Behaviour OF CPU IS
     End Component;
 
     Component IM_RAM2 IS PORT (
-        clk         : IN    STD_LOGIC;
-        rst         : IN    STD_LOGIC;
-        PC_i        : IN    STD_LOGIC_VECTOR(15 downto 0);
-        Ram2_Data   : INOUT STD_LOGIC_VECTOR(15 downto 0);
-        MemRead     : IN    STD_LOGIC;
-        MemWE       : IN    STD_LOGIC;
-        ALUOut      : IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Address
-        WriteData   : IN    STD_LOGIC_vector(15 downto 0); -- Mem Write Data
-        Ram2_Addr   : OUT   STD_LOGIC_VECTOR(17 downto 0);
-        Instruction : OUT   STD_LOGIC_VECTOR(15 downto 0);
-        Ram2_OE     : OUT   STD_LOGIC;
-        Ram2_WE     : OUT   STD_LOGIC;
-        Ram2_EN     : OUT   STD_LOGIC;
-        LedSel      : IN    STD_LOGIC_VECTOR(15 downto 0);
-        LedOut      : OUT   STD_LOGIC_VECTOR(15 downto 0);
-        NumOut      : OUT   STD_LOGIC_VECTOR( 7 downto 0)
+        clk:           IN    STD_LOGIC;
+        rst:           IN    STD_LOGIC;
+        PC_i:          IN    STD_LOGIC_VECTOR(15 downto 0);
+        mem_MemRead:   IN    STD_LOGIC;
+        mem_MemWE:     IN    STD_LOGIC;
+        mem_ALUOut:    IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Address
+        mem_WriteData: IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Data
+        Ram2_Addr:     OUT   STD_LOGIC_VECTOR(17 downto 0);
+        Ram2_Data:     inout STD_LOGIC_VECTOR(15 downto 0);
+        Ram2_OE:       OUT   STD_LOGIC;
+        Ram2_WE:       OUT   STD_LOGIC;
+        Ram2_EN:       OUT   STD_LOGIC;
+        Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0);
+
+        LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
+        LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
+        NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
         );
     End Component;
 
@@ -312,19 +313,18 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     END Component;
 
-    component HazardDetectingUnit IS 
-        port (
-        rst,clk:    IN STD_LOGIC;
-        MemRead:    IN STD_LOGIC;
-        DstReg:     IN STD_LOGIC_VECTOR(3 downto 0);
-        ASrc4:      IN STD_LOGIC_VECTOR(3 downto 0);
-        BSrc4:      IN STD_LOGIC_VECTOR(3 downto 0);
-        ALUOut:     IN STD_LOGIC_VECTOR(15 downto 0);
-        MemWE:      IN STD_LOGIC;
+    component HazardDetectingUnit IS PORT (
+        rst,clk:    in std_logic;
+        MemRead:    in std_logic;
+        DstReg:     in std_logic_vector(3 downto 0);
+        ASrc4:      in std_logic_vector(3 downto 0);
+        BSrc4:      in std_logic_vector(3 downto 0);
+        ALUOut:     in std_logic_vector(15 downto 0);
+        MemWE:      in std_logic;
 
-        PC_Keep:    OUT STD_LOGIC;
-        IFID_Keep:  OUT STD_LOGIC;
-        IDEX_Stall: OUT STD_LOGIC
+        PC_Keep:    out std_logic;
+        IFID_Keep:  out std_logic;
+        IDEX_Stall: out std_logic
     );
     END component;
 
@@ -388,7 +388,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL if_PCPlus1       : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCRx          : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCAddImm      : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL if_Inst      : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+    SIGNAL if_Inst          : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
 
     SIGNAL id_Inst          : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL id_PCPlus1       : STD_LOGIC_VECTOR(15 downto 0);
@@ -467,6 +467,9 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL fwd_ForwardA     : STD_LOGIC_VECTOR( 1 downto 0);
     SIGNAL fwd_ForwardB     : STD_LOGIC_VECTOR( 1 downto 0);
 
+    SIGNAL hdu_IFID_Keep    : STD_LOGIC;
+    SIGNAL hdu_IDEX_Stall   : STD_LOGIC;
+
     signal keyboard_data_ready: STD_LOGIC;
     signal keyboard_key_value: STD_LOGIC_vector(15 downto 0);
 
@@ -538,12 +541,12 @@ BEGIN
         rst          => RST,
         PC_i         => if_PCToIM,
         Ram2_Data    => Ram2_Data,
-        MemRead      => '1',
-        MemWE        => mem_MemWE,
-        ALUOut       => mem_ALUOut,
-        WriteData    => mem_WriteData,
+        mem_MemRead  => mem_MemRead,
+        mem_MemWE    => mem_MemWE,
+        mem_ALUOut   => mem_ALUOut,
+        mem_WriteData=> mem_WriteData,
         Ram2_Addr    => Ram2_Addr,
-        Instruction  => if_Inst,
+        Ram2_Inst    => if_Inst,
         Ram2_OE      => Ram2_OE,
         Ram2_WE      => Ram2_WE,
         Ram2_EN      => Ram2_EN,
@@ -555,7 +558,7 @@ BEGIN
     u_MUX_IF_ID: MUX_IF_ID PORT MAP (
         clk        => clk_sel,
         rst        => RST,
-        if_Keep    => '1',
+        if_Keep    => hdu_IFID_Keep,
         if_PCPlus1 => if_PCPlus1,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,
@@ -625,7 +628,7 @@ BEGIN
         BSrc          => ctrl_BSrc,
         ASrc4         => ctrl_ASrc4,
         BSrc4         => ctrl_BSrc4,
-        Stall         => '1', -- whether stop for a stage from HazardDetectingUnit
+        Stall         => hdu_IDEX_Stall, -- whether stop for a stage from HazardDetectingUnit
         Data1_o       => exe_Data1_o,
         Data2_o       => exe_Data2_o,
         Immediate_o   => exe_Immediate_o,
@@ -752,18 +755,17 @@ BEGIN
     );
 
     u_HazardDetectingUnit: HazardDetectingUnit PORT MAP (
-        rst => 
-        clk => 
-        MemRead: IN STD_LOGIC;
-        DstReg: IN STD_LOGIC_VECTOR(3 downto 0);
-        ASrc4: IN STD_LOGIC_VECTOR(3 downto 0);
-        BSrc4: IN STD_LOGIC_VECTOR(3 downto 0);
-        ALUOut: IN STD_LOGIC_VECTOR(15 downto 0);
-        MemWE: IN STD_LOGIC;
-
-        PC_Keep: OUT STD_LOGIC;
-        IFID_Keep: OUT STD_LOGIC;
-        IDEX_Stall: OUT STD_LOGIC
+        rst => RST,
+        clk => clk_sel,
+        MemRead => exe_MemRead_o,
+        DstReg  => exe_DstReg_o,
+        ASrc4   => ctrl_ASrc4,
+        BSrc4   => ctrl_BSrc4,
+        ALUOut  => alu_F,
+        MemWE   => mem_MemWE,
+        PC_Keep => if_PCKeep,
+        IFID_Keep => hdu_IFID_Keep,
+        IDEX_Stall => hdu_IDEX_Stall
     );
 
     u_keyboard: Keyboard PORT MAP (

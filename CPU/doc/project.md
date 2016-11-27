@@ -49,12 +49,16 @@
 
 - PCplus1: PCplus1 ＝ PC ＋ 1
 
-## InsMemory -- Ram2
+## IM_Ram2 -- Instruction Memory
 
 ### Input
 
-- PC: STD_LOGIC_VECTOR(15 downto 0);  -- Instruction Address
+- PC_i: STD_LOGIC_VECTOR(15 downto 0);  -- Instruction Address
 - Ram2Data: STD_LOGIC_VECTOR(15 downto 0); -- Instruction from Ram2
+- mem_MemWE: STD_LOGIC;
+- mem_ALUOut: STD_LOGIC_VECTOR(15 downto 0); -- when this is in InsMemory range, Pause PC
+- mem_WriteData: STD_LOGIC_VECTOR(15 downto 0);
+- mem_MemRead: STD_LOGIC; 
 
 ### Output
 
@@ -62,7 +66,7 @@
 - Ram2CE: Ram2 控制信号
 - Ram2OE: Ram2 控制信号
 - Ram2WE: Ram2 控制信号
-- Instruction: STD_LOGIC_VECTOR(15 downto 0);
+- ram2_Inst: STD_LOGIC_VECTOR(15 downto 0); -- 
 
 ## MUX_IF_ID
 
