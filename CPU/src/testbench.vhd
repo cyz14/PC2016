@@ -22,7 +22,7 @@ architecture RTL of testbench is
     signal hda1, hda2 : RAM(0 to 20); -- 小空间便于查看
 
     component CPU IS PORT (
-       CLK     :    IN    STD_LOGIC; -- 
+        CLK     :    IN    STD_LOGIC; -- 
         CLK_11  :    IN    STD_LOGIC; -- 11M
         CLK_50  :    IN    STD_LOGIC; -- 50M
         RST     :    IN    STD_LOGIC;
