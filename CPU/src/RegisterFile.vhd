@@ -46,8 +46,8 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     end selectFrom;
 
 BEGIN
-    process (PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
-        , RegWE, rst)
+    process (rst, PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
+        , RegWE)
     begin
         if rst = '0' then
             R0 <= (others => '0');

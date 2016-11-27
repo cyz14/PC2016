@@ -20,27 +20,21 @@ ENTITY MUX_MEM_WB IS PORT (
 END MUX_MEM_WB;
 
 ARCHITECTURE Behaviour OF MUX_MEM_WB IS
-    SIGNAL tempDstReg_o : std_logic_vector(3 downto 0) := DST_NONE;
-    SIGNAL tempRegWE_o  : std_logic := '1';
-    SIGNAL tempDstVal_o : std_logic_vector(15 downto 0) := ZERO16;
+    
 BEGIN
-    DstReg_o <= tempDstReg_o;
-    RegWE_o  <= tempRegWE_o;
-    DstVal_o <= tempDstVal_o;
-
     process (rst, clk)
     BEGIN    
         if rst = '0' then
-            tempRegWE_o <= '1';
-            tempDstReg_o <= DST_NONE;
-            tempDstVal_o <= ZERO16;
+            RegWE_o <= '1';
+            DstReg_o <= DST_NONE;
+            DstVal_o <= ZERO16;
         elsif clk'event and clk = '1' then
-            tempDstReg_o <= DstReg;
-            tempRegWE_o  <= RegWE;
+            DstReg_o <= DstReg;
+            RegWE_o  <= RegWE;
             if MemRead = RAM_READ_ENABLE then
-                tempDstVal_o <= MemData;
+                DstVal_o <= MemData;
             else
-                tempDstVal_o <= ALUOut;
+                DstVal_o <= ALUOut;
             end if;
         end if;
     end process;

@@ -37,7 +37,7 @@ entity DM_RAM1 is port (
     RST           : IN   STD_LOGIC;
     
     MemWE         : IN   STD_LOGIC;
-    WriteData  : IN   STD_LOGIC_VECTOR(15 downto 0);
+    WriteData     : IN   STD_LOGIC_VECTOR(15 downto 0);
     MemRead       : IN   STD_LOGIC;
     ALUOut        : IN   STD_LOGIC_VECTOR(15 downto 0); -- if MemWE, this is Address
     

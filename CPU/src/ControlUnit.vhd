@@ -54,7 +54,7 @@ BEGIN
 
     ALUop <= tempALUop;
     
-    PROCESS(clk, rst, Instruction, Condition)
+    PROCESS(rst, Instruction, Condition)
     BEGIN
         if rst = '0' THEN
             ImmeSrc     <= IMM_NONE; 
@@ -77,7 +77,7 @@ BEGIN
 
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
-        elsif clk'event and clk = '1' THEN
+        else -- if clk'event and clk = '1' THEN
             tempInsType <= Instruction(15 downto 11);
             temp_Rx     <= Instruction(10 downto  8);
             temp_Ry     <= Instruction( 7 downto  5);

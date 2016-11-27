@@ -20,34 +20,10 @@ END ALU;
 
 ARCHITECTURE Behaviour OF ALU IS
 
-    SIGNAL tempNUL: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
     SIGNAL tempADD: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
-    SIGNAL tempSUB: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
-    SIGNAL tempAND: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempOR : STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempXOR: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempCMP: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempLT : STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempPOS: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempSLL: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempSRL: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempSRA: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16;
-    SIGNAL tempROL: STD_LOGIC_VECTOR(15 downto 0)   := ZERO16; -- useless
+    SIGNAL tempSUB: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);    
 
 BEGIN
-    tempNUL <= ZERO16;
-    tempADD <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) + ieee.numeric_std.unsigned('0' & B));
-    tempSUB <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) - ieee.numeric_std.unsigned('0' & B));
-    tempAND <= A AND B;
-    tempOR  <= A OR  B;
-    tempXOR <= A XOR B;
-    tempCMP <= ZERO16 WHEN A = B ELSE ONE16;
-    tempLT  <= ONE16  WHEN A < B ELSE ZERO16;
-    tempPOS <= A;
-    tempSLL <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SLL CONV_INTEGER(B));
-    tempSRL <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRL CONV_INTEGER(B));
-    tempSRA <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRA CONV_INTEGER(B));
-    tempROL <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) ROL CONV_INTEGER(B));
     
     PROCESS (A, B, OP)
     BEGIN
@@ -56,37 +32,55 @@ BEGIN
                 F <= ZERO16;
                 T <= '0'; -- 
             WHEN OP_ADD  => 
+                tempADD <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) + ieee.numeric_std.unsigned('0' & B));
                 F <= tempADD(15 downto 0);
                 T <= tempADD(16); -- 
             WHEN OP_SUB  => 
+                tempSUB <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) - ieee.numeric_std.unsigned('0' & B));
                 F <= tempSUB(15 downto 0);
                 T <= tempSUB(16); -- F <= A  -  B
             WHEN OP_AND  => 
-                F <= tempAND;
+                F <= A AND B;
                 T <= '0'; -- F <= A  &  B
             WHEN OP_OR   =>
-                F <= tempOR;
+                F <= A OR  B;
                 T <= '0'; -- F <= A  |  B
             WHEN OP_XOR  => 
-                F <= tempXOR;
+                F <= A XOR B;
                 T <= '0'; -- F <= A xor B
             WHEN OP_CMP  => 
-                F <= tempCMP;
-                T <= tempCMP(0); -- F <= A !=  B, not equal
-            WHEN OP_LT   => 
-                F <= tempLT;
-                T <= tempLT(0);  -- F <= A  <  B
+                IF A = B THEN
+                    F <= ZERO16; 
+                ELSE 
+                    F <= ONE16;
+                END IF;
+                IF A = B THEN
+                    T <= '0';
+                ELSE
+                    T <= '1'; -- F <= A !=  B, not equal
+                END IF;
+            WHEN OP_LT   =>
+                IF A < B THEN
+                    F <= ONE16;
+                ELSE 
+                    F <= ZERO16;
+                END IF;
+                IF A < B THEN
+                    T <= '1'; 
+                ELSE
+                    T <= '0'; -- F <= A  <  B
+                END IF;
             WHEN OP_POS  => 
-                F <= tempPOS;
+                F <= A;
                 T <= '0';        -- F <= A
             WHEN OP_SLL  => 
-                F <= tempSLL;
+                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SLL CONV_INTEGER(B));
                 T <= '0';        -- F <= A <<  B
             WHEN OP_SRL  => 
-                F <= tempSRL;
+                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRL CONV_INTEGER(B));
                 T <= '0';        -- F <= A >>  B(logical)
             WHEN OP_SRA  => 
-                F <= tempSRA; 
+                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRA CONV_INTEGER(B));
                 T <= '0';        -- F <= A >>  B(arith)
             WHEN others =>
                 F <= ZERO16;

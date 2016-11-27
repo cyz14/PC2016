@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+use WORK.COMMON.ALL;
+
 entity ForwardingUnit is     -- 
 	port(
 		EXE_MEM_REGWRITE : in std_logic ;  --exe_mem阶段寄存器的写信号
@@ -27,7 +29,7 @@ begin
 	begin
 		temp_FORWARDA <= "00";   --正常赋值
 		temp_FORWARDB <= "00";
-		if (EXE_MEM_REGWRITE = '1') then      --取alu计算结束那个寄存器数
+		if (EXE_MEM_REGWRITE = RAM_WRITE_ENABLE) then      --取alu计算结束那个寄存器数
 			if (EXE_MEM_RD = ASrc4)  then   
 				temp_FORWARDA <= "01";
 			elsif (EXE_MEM_RD = BSrc4)  then
@@ -35,7 +37,7 @@ begin
 			end if;
 		end if;
 		
-		if (MEM_WB_REGWRITE = '1' ) THEN      --取写回的那个寄存器数
+		if (MEM_WB_REGWRITE = RAM_WRITE_ENABLE ) THEN      --取写回的那个寄存器数
 			if(MEM_WB_RD = ASrc4) then
 				temp_FORWARDA <= "10";
 			elsif(MEM_WB_RD = BSrc4) then
