@@ -121,6 +121,8 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component ControlUnit IS PORT (
+        clk         :  IN  STD_LOGIC;
+        rst         :  IN  STD_LOGIC;
         CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
         Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
         Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -544,7 +546,7 @@ BEGIN
         clk        => clk_sel,
         rst        => RST,
         if_Keep    => '1',--if_PCKeep,
-        if_PCPlus1 => if_NewPC,
+        if_PCPlus1 => if_PCPlus1,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,
         id_Inst    => id_Inst,
@@ -554,6 +556,8 @@ BEGIN
     );
 
     u_CtrlUnit: ControlUnit PORT MAP (
+        clk         => clk_sel,
+        rst         => RST,
         CurPC       => ctrl_CurPC,
         Instruction => id_Inst,
         Condition   => rf_Data1,
