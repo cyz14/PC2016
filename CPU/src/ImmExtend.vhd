@@ -27,8 +27,13 @@ begin
             -- 3bit: SLL and SRA instructions, 00110 + rx + ry + imm(3) + 00/01
             when IMM_THREE => -- 3 bit
                 Imme(2 downto 0) <= inImme(4 downto 2);
-                Imme(3) <= not(inImme(0) or inImme(1) or inImme(2));
-                Imme(15 downto 4) <= (others => '0');
+                --Imme(3) <= not(inImme(4) or inImme(3) or inImme(2));
+                if (inImme(4 downto 2) = "000") then
+                    Imme(3) <= '1'; 
+                else
+                    Imme(3) <= '0';
+                end if;
+                Imme(15 downto 4) <= (others => '0'); 
             
             -- 4bit: ADDIU3, 01000 + rx + ry + 0 + imm(4)
             when IMM_FOUR => -- 4 bit

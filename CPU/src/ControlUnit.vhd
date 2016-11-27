@@ -53,7 +53,15 @@ ARCHITECTURE Behaviour OF ControlUnit IS
 BEGIN
 
     ALUop <= tempALUop;
-    
+    tempInsType <= Instruction(15 downto 11);
+    temp_Rx     <= Instruction(10 downto  8);
+    temp_Ry     <= Instruction( 7 downto  5);
+    temp_Rz     <= Instruction( 4 downto  2);
+    temp_10_8   <= Instruction(10 downto  8);
+    temp_7_0    <= Instruction( 7 downto  0);
+    temp_4_0    <= Instruction( 4 downto  0);
+    temp_1_0    <= Instruction( 1 downto  0);
+
     PROCESS(rst, Instruction, Condition)
     BEGIN
         if rst = '0' THEN
@@ -78,15 +86,6 @@ BEGIN
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
         else -- if clk'event and clk = '1' THEN
-            tempInsType <= Instruction(15 downto 11);
-            temp_Rx     <= Instruction(10 downto  8);
-            temp_Ry     <= Instruction( 7 downto  5);
-            temp_Rz     <= Instruction( 4 downto  2);
-            temp_10_8   <= Instruction(10 downto  8);
-            temp_7_0    <= Instruction( 7 downto  0);
-            temp_4_0    <= Instruction( 4 downto  0);
-            temp_1_0    <= Instruction( 1 downto  0);
-            tempALUop   <= OP_NONE;
             ASrc        <= AS_NONE;
             BSrc        <= AS_NONE;
             ASrc4       <= Dst_NONE;
@@ -95,10 +94,11 @@ BEGIN
             MemWE       <= RAM_WRITE_DISABLE;
             MemRead     <= RAM_READ_DISABLE;
             RegWE       <= REG_WRITE_DISABLE;
+            tempALUop   <= OP_NONE;
 
-            CASE tempInsType IS
+            Case Instruction(15 downto 11) IS
                 WHEN TYPE_ADD_SUB =>
-                    CASE temp_1_0 IS
+                    CASE Instruction(1 downto 0) IS
                         WHEN FUNCT_ADD =>
                             ImmeSrc  <= IMM_NONE;
                             ZeroExt  <= '0';
@@ -126,7 +126,7 @@ BEGIN
                             tempExceptPC <= CurPC;
                     END CASE;
                 WHEN TYPE_AND_OR_CMP_MFPC_SLLV_SRLV_JR =>
-                    CASE temp_4_0 IS 
+                    CASE Instruction(4 downto 0) IS 
                         WHEN FUNCT_AND  =>
                             ImmeSrc  <= IMM_NONE;
                             ZeroExt  <= '0';
@@ -290,7 +290,7 @@ BEGIN
                             null;
                     END CASE;
                 WHEN TYPE_SLL_SRA =>
-                    CASE temp_1_0 IS
+                    CASE Instruction(1 downto 0) IS
                         WHEN FUNCT_SLL =>
                             ImmeSrc  <= IMM_THREE;
                             ZeroExt  <= '1';
