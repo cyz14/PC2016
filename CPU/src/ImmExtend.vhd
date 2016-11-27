@@ -21,6 +21,8 @@ begin
         variable ext, Signf : std_logic;
     begin
         Signf := not ZeroExtend;
+        Imme <= (others => '0');
+        
         case ImmeSrc is
             -- 3bit: SLL and SRA instructions, 00110 + rx + ry + imm(3) + 00/01
             when IMM_THREE => -- 3 bit

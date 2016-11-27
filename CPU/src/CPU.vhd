@@ -114,8 +114,6 @@ ARCHITECTURE Behaviour OF CPU IS
         if_Inst      :  IN  STD_LOGIC_VECTOR(15 downto 0);
         id_PCPlus1   :  OUT STD_LOGIC_VECTOR(15 downto 0);
         id_Inst      :  OUT STD_LOGIC_VECTOR(15 downto 0);
-        id_Rx        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-        id_Ry        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
         id_Imme      :  OUT STD_LOGIC_VECTOR(10 downto 0)
     );
     END Component;
@@ -300,6 +298,20 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     END Component;
 
+    Component MUX_MEM_WB IS PORT (
+        rst, clk: in std_logic;
+        ALUOut: in std_logic_vector(15 downto 0);
+        MemData: in std_logic_vector(15 downto 0);
+        MemRead: in std_logic;
+        DstReg: in std_logic_vector(3 downto 0);
+        RegWE: in std_logic;
+
+        DstReg_o: out std_logic_vector(3 downto 0);
+        RegWE_o: out std_logic;
+        DstVal_o: out std_logic_vector(15 downto 0)
+    );
+    END Component;
+
     component HazardDetectingUnit IS 
         port (
         rst,clk: IN STD_LOGIC;
@@ -381,8 +393,6 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL id_Inst          : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL id_PCPlus1       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL id_PCAddImm      : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL id_Rx            : STD_LOGIC_VECTOR( 2 downto 0);
-    SIGNAL id_Ry            : STD_LOGIC_VECTOR( 2 downto 0);
     SIGNAL id_Imme          : STD_LOGIC_VECTOR(10 downto 0);
     SIGNAL ext_Imme         : STD_LOGIC_VECTOR(15 downto 0);
 
@@ -542,16 +552,14 @@ BEGIN
         NumOut       => ram2_numout
     );
     
-    u_IF_ID: MUX_IF_ID PORT MAP (
+    u_MUX_IF_ID: MUX_IF_ID PORT MAP (
         clk        => clk_sel,
         rst        => RST,
-        if_Keep    => '1',--if_PCKeep,
+        if_Keep    => '1',
         if_PCPlus1 => if_PCPlus1,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,
         id_Inst    => id_Inst,
-        id_Rx      => id_Rx,
-        id_Ry      => id_Ry,
         id_Imme    => id_Imme
     );
 
@@ -719,6 +727,19 @@ BEGIN
         NumOut        => ram1_numout
     );
 
+    u_Mux_MEM_WB: MUX_MEM_WB PORT MAP (
+        rst      => RST,
+        clk      => clk_sel,
+        ALUOut   => mem_ALUOut,
+        MemData  => mem_ReadData,
+        MemRead  => mem_MemRead,
+        DstReg   => mem_DstReg,
+        RegWE    => mem_RegWE,
+        DstReg_o => wb_DstReg,
+        RegWE_o  => wb_RegWE,
+        DstVal_o => wb_DstVal
+    );
+
     u_ForwardUnit: ForwardingUnit PORT MAP (
         EXE_MEM_REGWRITE => mem_RegWE,
         EXE_MEM_RD       => mem_DstReg,
@@ -729,6 +750,8 @@ BEGIN
         FORWARDA         => fwd_ForwardA,
 		FORWARDB         => fwd_ForwardB
     );
+
+    
 
     u_keyboard: Keyboard PORT MAP (
         rst         => RST,

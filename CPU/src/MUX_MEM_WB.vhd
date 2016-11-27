@@ -3,6 +3,8 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
+use WORK.COMMON.ALL;
+
 ENTITY MUX_MEM_WB IS PORT (
     rst, clk: in std_logic;
     ALUOut: in std_logic_vector(15 downto 0);
@@ -11,9 +13,9 @@ ENTITY MUX_MEM_WB IS PORT (
     DstReg: in std_logic_vector(3 downto 0);
     RegWE: in std_logic;
 
-    o_DstReg: out std_logic_vector(3 downto 0);
-    o_RegWE: out std_logic;
-    o_DestVal: out std_logic_vector(15 downto 0)
+    DstReg_o: out std_logic_vector(3 downto 0);
+    RegWE_o: out std_logic;
+    DstVal_o: out std_logic_vector(15 downto 0)
 );
 END MUX_MEM_WB;
 
@@ -22,14 +24,14 @@ BEGIN
     process (rst, clk)
     begin
         if rst = '0' then
-            o_RegWE <= '1';
+            RegWE_o <= '1';
         elsif clk'event and clk = '1' then
-            o_DstReg <= DstReg;
-            o_RegWE <= RegWE;
-            if MemRead = '0' then
-                o_DestVal <= MemData;
+            DstReg_o <= DstReg;
+            RegWE_o <= RegWE;
+            if MemRead = RAM_READ_ENABLE then
+                DstVal_o <= MemData;
             else
-                o_DestVal <= ALUOut;
+                DstVal_o <= ALUOut;
             end if;
         end if;
     end process;

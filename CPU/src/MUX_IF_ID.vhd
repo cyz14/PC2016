@@ -13,8 +13,6 @@ ENTITY MUX_IF_ID IS PORT (
 	if_Inst      :  IN  STD_LOGIC_VECTOR(15 downto 0);
 	id_PCPlus1   :  OUT STD_LOGIC_VECTOR(15 downto 0);
     id_Inst      :  OUT STD_LOGIC_VECTOR(15 downto 0);
-    id_Rx        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
-    id_Ry        :  OUT STD_LOGIC_VECTOR( 2 downto 0);
     id_Imme      :  OUT STD_LOGIC_VECTOR(10 downto 0)
 );
 END MUX_IF_ID;
@@ -27,18 +25,12 @@ BEGIN
             if(rst = '0') then
                 id_PCPlus1 <= (others => '0');
                 id_Inst <= (others => '0');
-                id_Rx   <= (others => '0');
-                id_Ry   <= (others => '0');
                 id_Imme <= (others => '0');
             elsif clk'event and clk = '1' then
                 if if_Keep = KEEP_DISABLE then
                     id_PCPlus1 <= if_PCPlus1;
                     id_Inst <= if_Inst;
-                    id_Rx   <= if_Inst(10 downto 8);
-                    id_Ry   <= if_Inst( 7 downto 5);
                     id_Imme <= if_Inst(10 downto 0);
-                else
-                    null; -- keep if Inst and PC for a period
                 end if;
             end if;
 	end process;
