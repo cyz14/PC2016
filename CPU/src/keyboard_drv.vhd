@@ -39,10 +39,10 @@ end keyboard_drv;
 
 architecture Behavioral of keyboard_drv is
 
-signal kclk : std_logic; -- 去毛刺键盘时钟
-signal kdata : std_logic; -- 去毛刺键盘数据
+signal kclk : std_logic;
+signal kdata : std_logic;
 signal last_kclk : std_logic;
-signal clk1, clk2, check : std_logic; -- 临时时钟，校验位
+signal clk1, clk2, check : std_logic;
 signal stat : std_logic_vector(3 downto 0);
 signal data : std_logic_vector(7 downto 0);
 signal paral_data : std_logic_vector(7 downto 0);
@@ -76,7 +76,7 @@ begin
 			
 			if last_kclk = '0' and kclk = '1' then
 				case stat is
-					when "0000" => --数据状态
+					when "0000" =>
 						if kdata = '0' then
 							stat <= "0010";
 							check <= '1';
@@ -85,62 +85,62 @@ begin
 						else
 							stat <= "0000";
 						end if;
-					when "0010" => --数据状态
+					when "0010" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(0) <= kdata;
 						stat <= "0011";
-					when "0011" => --数据状态
+					when "0011" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(1) <= kdata;
 						stat <= "0100";
-					when "0100" => --数据状态
+					when "0100" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(2) <= kdata;
 						stat <= "0101";
-					when "0101" => --数据状态
+					when "0101" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(3) <= kdata;
 						stat <= "0110";
-					when "0110" => --数据状态
+					when "0110" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(4) <= kdata;
 						stat <= "0111";
-					when "0111" => --数据状态
+					when "0111" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(5) <= kdata;
 						stat <= "1000";
-					when "1000" => --数据状态
+					when "1000" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(6) <= kdata;
 						stat <= "1001";
-					when "1001" => --数据状态
+					when "1001" =>
 						if kdata = '1' then
 							check <= not check;
 						end if;
 						data(7) <= kdata;
 						stat <= "1010";
-					when "1010" => --校验状态
+					when "1010" =>
 						if check = kdata then
 							stat <= "1011";
 						else
 							stat <= "0000";
 							count <= 0;
 						end if;
-					when "1011" => -- 结束状态
+					when "1011" =>
 						if kdata = '1' then
 							paral_data <= data;
 							count <= 0;

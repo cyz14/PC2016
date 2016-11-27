@@ -340,7 +340,7 @@ BEGIN
                     BSrc     <= AS_NONE;
                     tempALUop<= OP_POS;
                     DstReg   <= "0" & temp_Rx;
-                    ASrc4    <= "0" & temp_Rx;
+                    ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
                     
                 WHEN TYPE_SLTI =>
@@ -348,7 +348,7 @@ BEGIN
                     ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    tempALUop<= OP_LT;
                     DstReg   <= Dst_T;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -382,6 +382,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -393,6 +394,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     tempALUop<= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_SP;
                     BSrc4    <= Dst_NONE;
@@ -410,8 +412,10 @@ BEGIN
                 WHEN TYPE_BEQZ =>
                     ImmeSrc  <= IMM_EIGHT;
                     ZeroExt  <= '0';
+                    ASrc4    <= '0' & temp_Rx;
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     if (condition = ZERO16) THEN
                         PCMuxSel <= PC_AddImm;
@@ -421,6 +425,8 @@ BEGIN
                 WHEN TYPE_BNEZ =>
                     ImmeSrc  <= IMM_EIGHT;
                     ZeroExt  <= '0';
+                    ASrc4    <= '0' & temp_Rx;
+                    RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     if (not (condition = ZERO16)) THEN
                         PCMuxSel <= PC_AddImm;

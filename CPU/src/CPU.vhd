@@ -314,16 +314,16 @@ ARCHITECTURE Behaviour OF CPU IS
 
     component HazardDetectingUnit IS 
         port (
-        rst,clk: IN STD_LOGIC;
-        MemRead: IN STD_LOGIC;
-        DstReg: IN STD_LOGIC_VECTOR(3 downto 0);
-        ASrc4: IN STD_LOGIC_VECTOR(3 downto 0);
-        BSrc4: IN STD_LOGIC_VECTOR(3 downto 0);
-        ALUOut: IN STD_LOGIC_VECTOR(15 downto 0);
-        MemWE: IN STD_LOGIC;
+        rst,clk:    IN STD_LOGIC;
+        MemRead:    IN STD_LOGIC;
+        DstReg:     IN STD_LOGIC_VECTOR(3 downto 0);
+        ASrc4:      IN STD_LOGIC_VECTOR(3 downto 0);
+        BSrc4:      IN STD_LOGIC_VECTOR(3 downto 0);
+        ALUOut:     IN STD_LOGIC_VECTOR(15 downto 0);
+        MemWE:      IN STD_LOGIC;
 
-        PC_Keep: OUT STD_LOGIC;
-        IFID_Keep: OUT STD_LOGIC;
+        PC_Keep:    OUT STD_LOGIC;
+        IFID_Keep:  OUT STD_LOGIC;
         IDEX_Stall: OUT STD_LOGIC
     );
     END component;
@@ -751,7 +751,20 @@ BEGIN
 		FORWARDB         => fwd_ForwardB
     );
 
-    
+    u_HazardDetectingUnit: HazardDetectingUnit PORT MAP (
+        rst => 
+        clk => 
+        MemRead: IN STD_LOGIC;
+        DstReg: IN STD_LOGIC_VECTOR(3 downto 0);
+        ASrc4: IN STD_LOGIC_VECTOR(3 downto 0);
+        BSrc4: IN STD_LOGIC_VECTOR(3 downto 0);
+        ALUOut: IN STD_LOGIC_VECTOR(15 downto 0);
+        MemWE: IN STD_LOGIC;
+
+        PC_Keep: OUT STD_LOGIC;
+        IFID_Keep: OUT STD_LOGIC;
+        IDEX_Stall: OUT STD_LOGIC
+    );
 
     u_keyboard: Keyboard PORT MAP (
         rst         => RST,
