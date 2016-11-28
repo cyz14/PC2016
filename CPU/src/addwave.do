@@ -6,6 +6,8 @@ add wave -position end  sim:/testbench/u_cpu/if_Inst
 add wave -position end  sim:/testbench/u_cpu/ctrl_ImmeSrc
 add wave -position end  sim:/testbench/u_cpu/ext_Imme
 add wave -position end  sim:/testbench/u_cpu/ctrl_PCMuxSel
+add wave -position end  sim:/testbench/u_cpu/ctrl_ASrc
+add wave -position end  sim:/testbench/u_cpu/ctrl_BSrc
 add wave -position end  sim:/testbench/u_cpu/rf_Data1
 add wave -position end  sim:/testbench/u_cpu/rf_Data2
 add wave -position end  sim:/testbench/u_cpu/u_ForwardUnit/FORWARDA

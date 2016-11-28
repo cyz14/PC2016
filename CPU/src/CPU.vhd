@@ -195,6 +195,15 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     END Component;
 
+    Component MUX_Write_Data IS PORT (
+        Data2:          IN  STD_LOGIC_VECTOR(15 downto 0);
+        ExeMemALUOut:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemWbDstVal:    IN  STD_LOGIC_VECTOR(15 downto 0);
+        ForwardingB:    IN  STD_LOGIC_VECTOR( 1 downto 0);
+        WriteData:      OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
+    END Component;
+
     Component MUX_ALU_A IS PORT (
         Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
         Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -428,6 +437,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL exe_ASrc4_o      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_BSrc4_o      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mux_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL exe_OP_A         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_OP_B         : STD_LOGIC_VECTOR(15 downto 0);
@@ -644,6 +654,14 @@ BEGIN
         MemWriteData  => exe_MemWriteData
     );
 
+    u_Mux_Write_Data: MUX_Write_Data PORT MAP (
+        Data2 =>    exe_MemWriteData,
+        ExeMemALUOut => mem_ALUOut,
+        MemWbDstVal => wb_DstVal,
+        ForwardingB => fwd_ForwardB,
+        WriteData => mux_MemWriteData
+    ); 
+
     u_Mux_ALU_A: MUX_ALU_A PORT MAP (
         Data1         => exe_Data1_o,
         Immediate     => exe_Immediate_o,
@@ -679,7 +697,7 @@ BEGIN
         RegWE          => exe_RegWE_o,
         MemRead        => exe_MemRead_o,
         MemWE          => exe_MemWE_o,
-        MemWriteData      => exe_MemWriteData,
+        MemWriteData   => mux_MemWriteData,
         ALUOut         => alu_F,
         T              => alu_T,
         Stall          => '1', -- not stop

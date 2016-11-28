@@ -24,20 +24,17 @@ BEGIN
     
     Process(BSrc, ForwardingB, Immediate, Data2, ExeMemALUOut, MemWbDstVal)
     BEGIN
-        CASE ForwardingB IS
-            WHEN FWD_NONE =>
-                CASE BSrc IS
-                    WHEN AS_NONE  => BOp <= ZERO16;
-                    WHEN AS_DATA2 => BOp <= Data2;
-                    WHEN AS_IMME  => BOp <= Immediate;
-                    WHEN others   => BOp <= ZERO16;
+        CASE BSrc IS
+            WHEN AS_NONE  => BOp <= ZERO16;
+            WHEN AS_DATA2 => 
+                CASE ForwardingB IS -- Forwarding only happens with RegisterData
+                    WHEN FWD_NONE => BOp <= Data2;
+                    WHEN FWD_MEM  => BOp <= ExeMemALUOut;
+                    WHEN FWD_WB   => BOp <= MemWbDstVal;
+                    WHEN others   => BOp <= Data2;
                 END CASE;
-            WHEN FWD_MEM =>
-                BOp <= ExeMemALUOut;
-            WHEN FWD_WB  =>
-                BOp <= MemWbDstVal;
-            WHEN others =>
-                BOp <= ZERO16;
+            WHEN AS_IMME => BOp <= Immediate;
+            WHEN others  => BOp <= ZERO16;
         END CASE;
     END Process;
 
