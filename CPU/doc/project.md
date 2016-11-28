@@ -2,14 +2,43 @@
 
 ## 目前进度
 
-|指令   |是否检测
-|:---|-------
-|      |   
-|LI    |Yes
-|MTIH  |Yes
-|SLL   |Yes
-|ADDIU |Yes
-|MTSP  |Yes
+### 基础指令
+
+|Number|Instruction|Checked
+|:-----|-----------|-------
+|1     |ADDIU      |Yes
+|2     |ADDIU3     |
+|3     |ADDSP      |
+|4     |ADDU       |
+|5     |AND        |
+|6     |B          | 
+|7     |BEQZ       |
+|8     |BNEZ       |
+|9     |BTEQZ      |
+|10    |CMP        |
+|11    |JR         |
+|12    |LI         |Yes
+|13    |LW         |
+|14    |LW_SP      |
+|15    |MFIH       |
+|16    |MFPC       |
+|17    |MTIH       |Yes
+|18    |MTSP       |Yes
+|19    |NOP        |
+|20    |OR         |
+|21    |SLL        |Yes
+|22    |SRA        |
+|23    |SUBU       |
+|24    |SW         |Yes
+|25    |SW_SP      |
+
+### 扩展指令
+|Number|Instruction|Checked
+|1|SLLV|
+|2|SRLV|
+|3|BTNEZ|
+|4|MOVE|
+|5|SLTI|
 
 ## 统一定义
 
