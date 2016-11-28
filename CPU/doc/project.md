@@ -20,7 +20,7 @@
 |12    |LI         |Yes
 |13    |LW         |
 |14    |LW_SP      |
-|15    |MFIH       |
+|15    |MFIH       |Yes
 |16    |MFPC       |
 |17    |MTIH       |Yes
 |18    |MTSP       |Yes

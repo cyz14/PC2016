@@ -163,6 +163,7 @@ BEGIN
                                 WHEN FUNCT_JR   => 
                                     ImmeSrc  <= IMM_EIGHT;
                                     RegWE    <= REG_WRITE_DISABLE;
+                                    ASrc4    <= "0" & temp_Rx;
                                     DstReg   <= Dst_NONE;
                                     PCMuxSel <= PC_Rx;
                                 WHEN others =>
@@ -198,6 +199,7 @@ BEGIN
                             ImmeSrc  <= IMM_NONE;
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
+                            ALUop    <= OP_POS;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= Dst_IH;

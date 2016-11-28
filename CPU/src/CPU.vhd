@@ -61,14 +61,16 @@ END CPU;
 
 ARCHITECTURE Behaviour OF CPU IS
 
-    Component PCMUX IS
-        port(
-        clk, rst : IN STD_LOGIC;
-        PCAdd1_data : IN STD_LOGIC_VECTOR(15 downto 0);
-        PCRx_data : IN STD_LOGIC_VECTOR(15 downto 0);
-        PCAddImm_data : IN STD_LOGIC_VECTOR(15 downto 0);
-        PC_choose : IN STD_LOGIC_VECTOR(1 downto 0);
-        PCout: OUT STD_LOGIC_VECTOR(15 downto 0)
+    Component PCMUX IS PORT (
+        clk, rst:      IN STD_LOGIC;
+        PCAdd1_data:   IN STD_LOGIC_VECTOR(15 downto 0);
+        PCRx_data:     IN STD_LOGIC_VECTOR(15 downto 0);
+        PCAddImm_data: IN STD_LOGIC_VECTOR(15 downto 0);
+        PC_choose:     IN STD_LOGIC_VECTOR(1 downto 0);
+        ExeMemALUOut:  IN STD_LOGIC_VECTOR(15 downto 0);
+        MemWbDstVal:   IN STD_LOGIC_VECTOR(15 downto 0);
+        ForwardA:      IN STD_LOGIC_VECTOR(1 downto 0);
+        PCout:         out STD_LOGIC_VECTOR(15 downto 0) := ZERO16
         );
     END Component; 
 
@@ -532,6 +534,9 @@ BEGIN
         PCRx_data     => if_PCRx,
         PCAddImm_data => id_PCAddImm,
         PC_choose     => ctrl_PCMuxSel,
+        ExeMemALUOut  => mem_ALUOut,
+        MemWbDstVal   => wb_DstVal,
+        ForwardA      => fwd_ForwardA,
         PCOUT         => if_NewPC
     );
     
