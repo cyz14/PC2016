@@ -60,7 +60,7 @@ BEGIN
     temp_4_0    <= Instruction( 4 downto  0);
     temp_1_0    <= Instruction( 1 downto  0);
 
-    PROCESS(clk, rst, Instruction, Condition) -- with clk in the list, it will calculate again in falling edge
+    PROCESS(clk, rst, Instruction, Condition, temp_1_0, temp_4_0, temp_7_0, temp_10_8, temp_Rz, temp_Ry, temp_Rx, tempInsType) -- with clk in the list, it will calculate again in falling edge
     BEGIN
         if rst = '0' THEN
             ImmeSrc     <= IMM_NONE;
@@ -77,7 +77,7 @@ BEGIN
             PCMuxSel    <= PC_Add1;
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
-        elsif clk'event and clk = '0' THEN
+        else
             ImmeSrc     <= IMM_NONE;
             ZeroExt     <= ZERO_EXTEND_DISABLE;
             ALUop       <= OP_NONE;
@@ -269,7 +269,7 @@ BEGIN
                             null;
                     END CASE;
                 WHEN TYPE_SLL_SRA =>
-                    CASE Instruction(1 downto 0) IS
+                    CASE temp_1_0 IS
                         WHEN FUNCT_SLL =>
                             ImmeSrc  <= IMM_THREE;
                             ZeroExt  <= ZERO_EXTEND_ENABLE;

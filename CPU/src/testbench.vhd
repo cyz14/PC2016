@@ -19,7 +19,7 @@ architecture RTL of testbench is
 
     signal hda1_init : std_logic := '0';
     signal hda2_init : std_logic := '0';
-    signal hda1, hda2 : RAM(0 to 40000); -- 小空间便于查看
+    signal hda1, hda2 : RAM(0 to 50000); -- 小空间便于查看
 
     component CPU IS PORT (
         CLK     :    IN    STD_LOGIC; -- 
@@ -155,7 +155,7 @@ begin
                 hda1(addr) <= Ram1_Data;
             end if;
         else
-            Ram1_Data <= (others => 'Z');
+            Ram1_Data <= (others => '0'); -- 'Z'
         end if;
     end process ram1;
 
@@ -190,7 +190,7 @@ begin
                 hda2(addr) <= Ram2_Data;
             end if;
         else
-            Ram2_Data <= (others => 'Z');
+            Ram2_Data <= (others => '0'); -- 
         end if;
     end process ram2;
 

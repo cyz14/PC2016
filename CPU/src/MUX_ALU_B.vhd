@@ -22,19 +22,19 @@ ARCHITECTURE Behaviour OF MUX_ALU_B IS
     
 BEGIN
     
-    Process(BSrc, ForwardingB)
+    Process(BSrc, ForwardingB, Immediate, Data2, ExeMemALUOut, MemWbDstVal)
     BEGIN
         CASE ForwardingB IS
-            WHEN "00" =>
+            WHEN FWD_NONE =>
                 CASE BSrc IS
                     WHEN AS_NONE  => BOp <= ZERO16;
                     WHEN AS_DATA2 => BOp <= Data2;
                     WHEN AS_IMME  => BOp <= Immediate;
                     WHEN others   => BOp <= ZERO16;
                 END CASE;
-            WHEN "01" =>
+            WHEN FWD_MEM =>
                 BOp <= ExeMemALUOut;
-            WHEN "10" =>
+            WHEN FWD_WB  =>
                 BOp <= MemWbDstVal;
             WHEN others =>
                 BOp <= ZERO16;
