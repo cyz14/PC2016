@@ -103,47 +103,47 @@ CONSTANT FUNCT_SLL    :  STD_LOGIC_VECTOR(1 downto 0) := "00";
 CONSTANT FUNCT_SRA    :  STD_LOGIC_VECTOR(1 downto 0) := "11";
 
 -- RegisterFile DataSrc
-constant DS_NONE    : std_logic_vector(2 downto 0) := "000";
-constant DS_RX      : std_logic_vector(2 downto 0) := "001";
-constant DS_RY      : std_logic_vector(2 downto 0) := "010";
-constant DS_PCplus1 : std_logic_vector(2 downto 0) := "011";
-constant DS_SP      : std_logic_vector(2 downto 0) := "100";
-constant DS_IH      : std_logic_vector(2 downto 0) := "101";
-constant DS_T       : std_logic_vector(2 downto 0) := "110";
+CONSTANT DS_NONE    : std_logic_vector(2 downto 0) := "000";
+CONSTANT DS_RX      : std_logic_vector(2 downto 0) := "001";
+CONSTANT DS_RY      : std_logic_vector(2 downto 0) := "010";
+CONSTANT DS_PCplus1 : std_logic_vector(2 downto 0) := "011";
+CONSTANT DS_SP      : std_logic_vector(2 downto 0) := "100";
+CONSTANT DS_IH      : std_logic_vector(2 downto 0) := "101";
+CONSTANT DS_T       : std_logic_vector(2 downto 0) := "110";
 
 -- ALU oprand Src
-constant AS_NONE  : std_logic_vector(1 downto 0) := "00";
-constant AS_DATA1 : std_logic_vector(1 downto 0) := "01";
-constant AS_DATA2 : std_logic_vector(1 downto 0) := "10";
-constant AS_IMME  : std_logic_vector(1 downto 0) := "11";
+CONSTANT AS_NONE  : std_logic_vector(1 downto 0) := "00";
+CONSTANT AS_DATA1 : std_logic_vector(1 downto 0) := "01";
+CONSTANT AS_DATA2 : std_logic_vector(1 downto 0) := "10";
+CONSTANT AS_IMME  : std_logic_vector(1 downto 0) := "11";
 
 CONSTANT Dst_R0   : std_logic_vector (3 downto 0) := "0000";
 CONSTANT Dst_R1   : std_logic_vector (3 downto 0) := "0001";
-constant Dst_R2   : std_logic_vector (3 downto 0) := "0010";
-constant Dst_R3   : std_logic_vector (3 downto 0) := "0011";
-constant Dst_R4   : std_logic_vector (3 downto 0) := "0100";
-constant Dst_R5   : std_logic_vector (3 downto 0) := "0101";
-constant Dst_R6   : std_logic_vector (3 downto 0) := "0110";
-constant Dst_R7   : std_logic_vector (3 downto 0) := "0111";
-constant Dst_NONE : std_logic_vector (3 downto 0) := "1000";
-constant Dst_SP   : std_logic_vector (3 downto 0) := "1001";
-constant Dst_T    : std_logic_vector (3 downto 0) := "1010";
-constant Dst_IH   : std_logic_vector (3 downto 0) := "1011";
-constant Dst_PC   : std_logic_vector (3 downto 0) := "1100";
+CONSTANT Dst_R2   : std_logic_vector (3 downto 0) := "0010";
+CONSTANT Dst_R3   : std_logic_vector (3 downto 0) := "0011";
+CONSTANT Dst_R4   : std_logic_vector (3 downto 0) := "0100";
+CONSTANT Dst_R5   : std_logic_vector (3 downto 0) := "0101";
+CONSTANT Dst_R6   : std_logic_vector (3 downto 0) := "0110";
+CONSTANT Dst_R7   : std_logic_vector (3 downto 0) := "0111";
+CONSTANT Dst_NONE : std_logic_vector (3 downto 0) := "1000";
+CONSTANT Dst_SP   : std_logic_vector (3 downto 0) := "1001";
+CONSTANT Dst_T    : std_logic_vector (3 downto 0) := "1010";
+CONSTANT Dst_IH   : std_logic_vector (3 downto 0) := "1011";
+CONSTANT Dst_PC   : std_logic_vector (3 downto 0) := "1100";
 
 -- ALU op code
 CONSTANT OP_NONE : std_logic_vector (3 downto 0) := "0000";
 CONSTANT OP_ADD  : std_logic_vector (3 downto 0) := "0001";
-constant OP_SUB  : std_logic_vector (3 downto 0) := "0010";
-constant OP_AND  : std_logic_vector (3 downto 0) := "0011";
-constant OP_OR   : std_logic_vector (3 downto 0) := "0100";
-constant OP_XOR  : std_logic_vector (3 downto 0) := "0101";
-constant OP_CMP  : std_logic_vector (3 downto 0) := "0110";
-constant OP_LT   : std_logic_vector (3 downto 0) := "0111"; -- LessThan op in SLTI
-constant OP_POS  : std_logic_vector (3 downto 0) := "1000";
-constant OP_SLL  : std_logic_vector (3 downto 0) := "1001";
-constant OP_SRL  : std_logic_vector (3 downto 0) := "1010";
-constant OP_SRA  : std_logic_vector (3 downto 0) := "1011";
+CONSTANT OP_SUB  : std_logic_vector (3 downto 0) := "0010";
+CONSTANT OP_AND  : std_logic_vector (3 downto 0) := "0011";
+CONSTANT OP_OR   : std_logic_vector (3 downto 0) := "0100";
+CONSTANT OP_XOR  : std_logic_vector (3 downto 0) := "0101";
+CONSTANT OP_CMP  : std_logic_vector (3 downto 0) := "0110";
+CONSTANT OP_LT   : std_logic_vector (3 downto 0) := "0111"; -- LessThan op in SLTI
+CONSTANT OP_POS  : std_logic_vector (3 downto 0) := "1000";
+CONSTANT OP_SLL  : std_logic_vector (3 downto 0) := "1001";
+CONSTANT OP_SRL  : std_logic_vector (3 downto 0) := "1010";
+CONSTANT OP_SRA  : std_logic_vector (3 downto 0) := "1011";
 
 -- Immediate Source
 CONSTANT IMM_NONE   : std_logic_vector (2 downto 0) := "000";
@@ -172,7 +172,7 @@ CONSTANT background_b:  STD_LOGIC_VECTOR(2 downto 0) := ZERO3;
 -- Declare functions and procedure
 --
 -- function <function_name>  (signal <signal_name> : in <type_declaration>) return <type_declaration>;
--- procedure <procedure_name> (<type_declaration> <constant_name>	: in <type_declaration>);
+-- procedure <procedure_name> (<type_declaration> <CONSTANT_name>	: in <type_declaration>);
 --
 
 end common;

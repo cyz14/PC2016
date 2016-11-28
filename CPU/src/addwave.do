@@ -30,4 +30,5 @@ add wave -position end  sim:/testbench/u_cpu/u_RegFile/R4
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R5
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R6
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R7
+add wave -position end  sim:/testbench/u_cpu/u_RegFile/SP
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/IH

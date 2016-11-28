@@ -35,9 +35,7 @@ begin
 			elsif (EXE_MEM_RD = BSrc4)  then
 				temp_FORWARDB <= FWD_MEM;
 			end if;
-		end if;
-		
-		if (MEM_WB_REGWRITE = RAM_WRITE_ENABLE ) THEN      --取写回的那个寄存器数
+		elsif (MEM_WB_REGWRITE = RAM_WRITE_ENABLE) THEN   --取写回的那个寄存器数
 			if(MEM_WB_RD = ASrc4) then
 				temp_FORWARDA <= FWD_WB;
 			elsif(MEM_WB_RD = BSrc4) then

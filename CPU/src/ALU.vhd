@@ -32,9 +32,8 @@ BEGIN
                 F <= ZERO16;
                 T <= '0'; -- 
             WHEN OP_ADD  => 
-                tempADD <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) + ieee.numeric_std.unsigned('0' & B));
-                F <= tempADD(15 downto 0);
-                T <= tempADD(16); -- 
+                F <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) + ieee.numeric_std.unsigned(B));
+                tempAdd <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) + ieee.numeric_std.unsigned('0' & B));
             WHEN OP_SUB  => 
                 tempSUB <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) - ieee.numeric_std.unsigned('0' & B));
                 F <= tempSUB(15 downto 0);

@@ -225,7 +225,7 @@ BEGIN
                             ALUop    <= OP_POS;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_SP;
-                            ASrc4    <= "0" & temp_Rx;
+                            ASrc4    <= "0" & temp_Ry;
                             BSrc4    <= Dst_NONE;
                         
                         WHEN FUNCT_ADDSP =>

@@ -385,11 +385,11 @@ author : li
 ### Input
 
 > EXE 段检测条件:
->   - EXE/MEM.RegWE AND EXE/MEM.DstReg != 0 AND
->   - EXE/MEM.DstReg = ID/EXE.rx (ry)
+>   - EXE/MEM.RegWE AND
+>   - ( EXE/MEM.DstReg = ID/EXE.ASrc4 OR EXE/MEM.DstReg = ID/EXE.BSrc4 )
 > MEM 段检测条件:
->   - MEM/WB.RegWE AND MEM/WB.DstReg != 0 AND
->   - (MEM/WB.DstReg = ID/EXE.rx OR MEM/WB.DstReg = ID/EXE.ry)
+>   - MEM/WB.RegWE AND
+>   - (MEM/WB.DstReg = ID/EXE.ASrc4 OR MEM/WB.DstReg = ID/EXE.BSrc4)
 
 - EXE_MEM_REGWRITE:  `STD_LOGIC;`
 - EXE_MEM_RD: `STD_LOGIC_VECTOR(2 downto 0);`  -- 用于检测 EXE 段数据冲突
@@ -449,15 +449,15 @@ author : li
 当前指令的ID/EXE段和上一条指令的EXE/MEM段
 
 本条指令的源寄存器之一和上一条指令的目的寄存器相同，需要将 rx/ry 保存到ID/EX段
-上一条指令需要改写目的寄存器,且不是0寄存器
+上一条指令需要改写目的寄存器,且不是0寄存器(THCO MIPS不是标准的MIPS，不需要检测0寄存器情况)
 
-    EXE/MEM.RegWE AND EXE/MEM.DstReg != 0 AND
-    EXE/MEM.DstReg = ID/EXE.rx (ry)
+    EXE/MEM.RegWE AND
+    (EXE/MEM.DstReg = ID/EXE.ASrc4 OR EXE/MEM.DstReg = ID/EXE.BSrc4) 
 
 #### 2. MEM段数据冲突的检测
 
-    MEM/WB.RegWE AND MEM/WB.DstReg != 0 AND
-    (MEM/WB.DstReg = ID/EXE.rx OR MEM/WB.DstReg = ID/EXE.ry)
+    MEM/WB.RegWE AND
+    (MEM/WB.DstReg = ID/EXE.ASrc4 OR MEM/WB.DstReg = ID/EXE.BSrc4)
 
 
 ### 冲突检测单元 HazardDetectingUnit
