@@ -219,6 +219,22 @@ author : li
 
 - Imme(16): 
 
+##  MUX_Write_Data 
+
+### Input Port
+```    
+ Data2:          IN  STD_LOGIC_VECTOR(15 downto 0);
+ ExeMemALUOut:   IN  STD_LOGIC_VECTOR(15 downto 0);
+ MemWbDstVal:    IN  STD_LOGIC_VECTOR(15 downto 0);
+ ForwardingB:    IN  STD_LOGIC_VECTOR( 1 downto 0);
+```
+
+### Output Port
+   
+```
+WriteData:      OUT STD_LOGIC_VECTOR(15 downto 0)
+```
+ 
 
 
 ## MUX_ALU_A 四选一数据选择器
