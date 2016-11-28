@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-use work.common.ALL;
+use WORK.COMMON.ALL;
 
 ENTITY ControlUnit IS PORT (
     clk         :  IN  STD_LOGIC;
@@ -47,12 +47,10 @@ ARCHITECTURE Behaviour OF ControlUnit IS
     SIGNAL temp_4_0    :  STD_LOGIC_VECTOR(4 downto 0);
     SIGNAL temp_7_0    :  STD_LOGIC_VECTOR(7 downto 0);
     SIGNAL temp_10_8   :  STD_LOGIC_VECTOR(2 downto 0);
-    SIGNAL tempALUop   :  STD_LOGIC_VECTOR(3 downto 0);
     SIGNAL tempExcept  :  STD_LOGIC;
     SIGNAL tempExceptPC:  STD_LOGIC_VECTOR(15 downto 0);
 BEGIN
 
-    ALUop <= tempALUop;
     tempInsType <= Instruction(15 downto 11);
     temp_Rx     <= Instruction(10 downto  8);
     temp_Ry     <= Instruction( 7 downto  5);
@@ -62,49 +60,44 @@ BEGIN
     temp_4_0    <= Instruction( 4 downto  0);
     temp_1_0    <= Instruction( 1 downto  0);
 
-    PROCESS(rst, Instruction, Condition)
+    PROCESS(clk, rst, Instruction, Condition) -- with clk in the list, it will calculate again in falling edge
     BEGIN
         if rst = '0' THEN
-            ImmeSrc     <= IMM_NONE; 
-            ZeroExt     <= '0';        
-
-            tempALUop   <= OP_NONE;
+            ImmeSrc     <= IMM_NONE;
+            ZeroExt     <= ZERO_EXTEND_DISABLE;
+            ALUop       <= OP_NONE;
             ASrc        <= AS_NONE;
             BSrc        <= AS_NONE;
-
             MemRead     <= RAM_READ_DISABLE;
-            MemWE       <= RAM_WRITE_DISABLE;    
-
+            MemWE       <= RAM_WRITE_DISABLE;
             DstReg      <= Dst_NONE;
             RegWE       <= REG_WRITE_DISABLE;
-            
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
-
             PCMuxSel    <= PC_Add1;
-
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
-        else -- if clk'event and clk = '1' THEN
+        elsif clk'event and clk = '0' THEN
+            ImmeSrc     <= IMM_NONE;
+            ZeroExt     <= ZERO_EXTEND_DISABLE;
+            ALUop       <= OP_NONE;
             ASrc        <= AS_NONE;
             BSrc        <= AS_NONE;
+            MemRead     <= RAM_READ_DISABLE;
+            MemWE       <= RAM_WRITE_DISABLE;
+            DstReg      <= Dst_NONE;
+            RegWE       <= REG_WRITE_DISABLE;
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
-            MemWE       <= RAM_WRITE_DISABLE;
-            MemRead     <= RAM_READ_DISABLE;
-            RegWE       <= REG_WRITE_DISABLE;
-            tempALUop   <= OP_NONE;
-
-            Case Instruction(15 downto 11) IS
+            Case tempInsType IS
                 WHEN TYPE_ADD_SUB =>
-                    CASE Instruction(1 downto 0) IS
+                    CASE temp_1_0 IS
                         WHEN FUNCT_ADD =>
-                            ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
+                            ImmeSrc  <= IMM_NONE;                
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_ADD;
+                            ALUop    <= OP_ADD;
                             DstReg   <= "0" & temp_Rz;
                             RegWE    <= REG_WRITE_ENABLE;
                             ASrc4    <= "0" & temp_Rx;
@@ -112,10 +105,9 @@ BEGIN
 
                         WHEN FUNCT_SUB =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_SUB;
+                            ALUop    <= OP_SUB;
                             DstReg   <= "0" & temp_Rz;
                             RegWE    <= REG_WRITE_ENABLE;
                             ASrc4    <= "0" & temp_Rx;
@@ -129,10 +121,9 @@ BEGIN
                     CASE Instruction(4 downto 0) IS 
                         WHEN FUNCT_AND  =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_AND;
+                            ALUop    <= OP_AND;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
@@ -140,10 +131,9 @@ BEGIN
                             
                         WHEN FUNCT_OR   =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_OR;
+                            ALUop    <= OP_OR;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
@@ -151,10 +141,9 @@ BEGIN
                             
                         WHEN FUNCT_CMP  =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_CMP;
+                            ALUop    <= OP_CMP;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Rx;
@@ -164,17 +153,15 @@ BEGIN
                             CASE temp_Ry IS 
                                 WHEN FUNCT_MFPC => 
                                     ImmeSrc  <= IMM_NONE;
-                                    ZeroExt  <= '0';
                                     ASrc     <= AS_DATA1;
                                     BSrc     <= AS_NONE;
-                                    tempALUop<= OP_POS;
+                                    ALUop    <= OP_POS;
                                     RegWE    <= REG_WRITE_ENABLE;
                                     DstReg   <= "0" & temp_Rx;
                                     ASrc4    <= Dst_PC;
                                     
                                 WHEN FUNCT_JR   => 
                                     ImmeSrc  <= IMM_EIGHT;
-                                    ZeroExt  <= '0';
                                     RegWE    <= REG_WRITE_DISABLE;
                                     DstReg   <= Dst_NONE;
                                     PCMuxSel <= PC_Rx;
@@ -184,10 +171,9 @@ BEGIN
                             
                         WHEN FUNCT_SLLV =>
                             ImmeSrc   <= IMM_NONE;
-                            ZeroExt   <= '0';
                             ASrc      <= AS_DATA1;
                             BSrc      <= AS_DATA2;
-                            tempALUop <= OP_SLL;
+                            ALUop     <= OP_SLL;
                             RegWE     <= REG_WRITE_ENABLE;
                             DstReg    <= "0" & temp_Ry;
                             ASrc4     <= "0" & temp_Ry;
@@ -195,10 +181,9 @@ BEGIN
                             
                         WHEN FUNCT_SRLV =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
-                            tempALUop<= OP_SRL;
+                            ALUop    <= OP_SRL;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Ry;
                             ASrc4    <= "0" & temp_Ry;
@@ -211,7 +196,6 @@ BEGIN
                     CASE temp_7_0 IS
                         WHEN FUNCT_MFIH =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
                             RegWE    <= REG_WRITE_ENABLE;
@@ -221,10 +205,9 @@ BEGIN
                             
                         WHEN FUNCT_MTIH =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
-                            tempALUop<= OP_POS;
+                            ALUop    <= OP_POS;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_IH;
                             ASrc4    <= "0" & temp_Rx;
@@ -237,10 +220,9 @@ BEGIN
                     CASE temp_10_8 IS
                         WHEN FUNCT_MTSP =>
                             ImmeSrc  <= IMM_NONE;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_NONE;
-                            tempALUop<= OP_POS;
+                            ALUop    <= OP_POS;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_SP;
                             ASrc4    <= "0" & temp_Rx;
@@ -248,10 +230,9 @@ BEGIN
                         
                         WHEN FUNCT_ADDSP =>
                             ImmeSrc  <= IMM_EIGHT;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
-                            tempALUop<= OP_ADD;
+                            ALUop    <= OP_ADD;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= Dst_SP;
                             ASrc4    <= Dst_SP;
@@ -259,7 +240,6 @@ BEGIN
                             
                         WHEN FUNCT_BTEQZ =>
                             ImmeSrc  <= IMM_EIGHT;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_NONE;
                             BSrc     <= AS_NONE;
                             RegWE    <= REG_WRITE_DISABLE;
@@ -274,7 +254,6 @@ BEGIN
                             
                         WHEN FUNCT_BTNEZ =>
                             ImmeSrc  <= IMM_EIGHT;
-                            ZeroExt  <= '0';
                             ASrc     <= AS_NONE;
                             BSrc     <= AS_NONE;
                             RegWE    <= REG_WRITE_DISABLE;
@@ -293,10 +272,10 @@ BEGIN
                     CASE Instruction(1 downto 0) IS
                         WHEN FUNCT_SLL =>
                             ImmeSrc  <= IMM_THREE;
-                            ZeroExt  <= '1';
+                            ZeroExt  <= ZERO_EXTEND_ENABLE;
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
-                            tempALUop<= OP_SLL;
+                            ALUop    <= OP_SLL;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Ry;
@@ -304,10 +283,10 @@ BEGIN
                             
                         WHEN FUNCT_SRA =>
                             ImmeSrc  <= IMM_THREE;
-                            ZeroExt  <= '0';
+                            ZeroExt  <= ZERO_EXTEND_ENABLE;
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_IMME;
-                            tempALUop<= OP_SRA;
+                            ALUop    <= OP_SRA;
                             RegWE    <= REG_WRITE_ENABLE;
                             DstReg   <= "0" & temp_Rx;
                             ASrc4    <= "0" & temp_Ry;
@@ -319,10 +298,9 @@ BEGIN
                 
                 WHEN TYPE_MOVE =>
                     ImmeSrc  <= IMM_NONE;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_NONE;
-                    tempALUop<= OP_POS;
+                    ALUop    <= OP_POS;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= "0" & temp_Ry;
@@ -330,10 +308,9 @@ BEGIN
                                             
                 WHEN TYPE_ADDIU =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= "0" & temp_Rx;
@@ -341,10 +318,9 @@ BEGIN
                     
                 WHEN TYPE_ADDIU3 =>
                     ImmeSrc  <= IMM_FOUR;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Ry;
                     ASrc4    <= "0" & temp_Rx;
@@ -352,21 +328,17 @@ BEGIN
                     
                 WHEN TYPE_LI =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '1';
+                    ZeroExt  <= ZERO_EXTEND_ENABLE;
                     ASrc     <= AS_IMME;
-                    BSrc     <= AS_NONE;
-                    tempALUop<= OP_POS;
+                    ALUop    <= OP_POS;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
-                    ASrc4    <= Dst_NONE;
-                    BSrc4    <= Dst_NONE;
                     
                 WHEN TYPE_SLTI =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_LT;       
+                    ALUop    <= OP_LT;       
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= Dst_T;
                     ASrc4    <= "0" & temp_Rx;
@@ -374,10 +346,9 @@ BEGIN
                     
                 WHEN TYPE_LW =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     MemRead  <= RAM_READ_ENABLE;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Ry;
@@ -386,10 +357,9 @@ BEGIN
                     
                 WHEN TYPE_LW_SP =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     MemRead  <= RAM_READ_ENABLE;
                     RegWE    <= REG_WRITE_ENABLE;
                     DstReg   <= "0" & temp_Rx;
@@ -398,31 +368,28 @@ BEGIN
                     
                 WHEN TYPE_SW =>
                     ImmeSrc  <= IMM_FIVE;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
                     RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= "0" & temp_Rx;
-                    BSrc4    <= Dst_NONE;
+                    BSrc4    <= "0" & temp_Ry;
                     
                 WHEN TYPE_SW_SP =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
-                    tempALUop<= OP_ADD;
+                    ALUop    <= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
                     RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_SP;
-                    BSrc4    <= Dst_NONE;
+                    BSrc4    <= "0" & temp_Ry;
                     
                 WHEN TYPE_B =>
                     ImmeSrc  <= IMM_ELEVEN;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
                     RegWE    <= REG_WRITE_DISABLE;
@@ -432,7 +399,6 @@ BEGIN
                     PCMuxSel <= PC_AddImm;
                 WHEN TYPE_BEQZ =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc4    <= '0' & temp_Rx;
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
@@ -446,7 +412,6 @@ BEGIN
                     end if;
                 WHEN TYPE_BNEZ =>
                     ImmeSrc  <= IMM_EIGHT;
-                    ZeroExt  <= '0';
                     ASrc4    <= '0' & temp_Rx;
                     RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
@@ -458,7 +423,6 @@ BEGIN
                     end if;
                 WHEN TYPE_NOP =>
                     ImmeSrc  <= IMM_NONE;
-                    ZeroExt  <= '0';
                     ASrc     <= AS_NONE;
                     BSrc     <= AS_NONE;
                     RegWE    <= REG_WRITE_DISABLE;

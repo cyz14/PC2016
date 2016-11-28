@@ -50,7 +50,7 @@ BEGIN
             Data2_o  <= ZERO16;
             Immediate_o <= ZERO16;
             DstReg_o <= DST_NONE;
-            RegWE_o  <= ZERO1;
+            RegWE_o  <= REG_WRITE_DISABLE;
             MemRead_o<= RAM_READ_DISABLE;
             MemWE_o  <= RAM_WRITE_DISABLE;
             ALUOp_o  <= OP_NONE;

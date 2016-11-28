@@ -20,7 +20,7 @@ begin
     process (ImmeSrc, inImme, ZeroExtend)
         variable ext, Signf : std_logic;
     begin
-        Signf := not ZeroExtend;
+        Signf := ZeroExtend;
         Imme <= (others => '0');
         
         case ImmeSrc is
