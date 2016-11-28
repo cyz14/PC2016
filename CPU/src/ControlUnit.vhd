@@ -62,41 +62,34 @@ BEGIN
 
     PROCESS(clk, rst, Instruction, Condition) -- with clk in the list, it will calculate again in falling edge
     BEGIN
-        ImmeSrc     <= IMM_NONE;
-        ZeroExt  <= ZERO_EXTEND_DISABLE;
-        ALUop       <= OP_NONE;
-        ASrc        <= AS_NONE;
-        BSrc        <= AS_NONE;
-        MemRead     <= RAM_READ_DISABLE;
-        MemWE       <= RAM_WRITE_DISABLE;
-        DstReg      <= Dst_NONE;
-        RegWE       <= REG_WRITE_DISABLE;
-        ASrc4       <= Dst_NONE;
-        BSrc4       <= Dst_NONE;
-        PCMuxSel    <= PC_Add1;
-
         if rst = '0' THEN
             ImmeSrc     <= IMM_NONE;
-            ZeroExt     <= ZERO_EXTEND_DISABLE;        
-
+            ZeroExt     <= ZERO_EXTEND_DISABLE;
             ALUop       <= OP_NONE;
             ASrc        <= AS_NONE;
             BSrc        <= AS_NONE;
-
             MemRead     <= RAM_READ_DISABLE;
-            MemWE       <= RAM_WRITE_DISABLE;    
-
+            MemWE       <= RAM_WRITE_DISABLE;
             DstReg      <= Dst_NONE;
             RegWE       <= REG_WRITE_DISABLE;
-            
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
-
             PCMuxSel    <= PC_Add1;
-
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
         elsif clk'event and clk = '0' THEN
+            ImmeSrc     <= IMM_NONE;
+            ZeroExt     <= ZERO_EXTEND_DISABLE;
+            ALUop       <= OP_NONE;
+            ASrc        <= AS_NONE;
+            BSrc        <= AS_NONE;
+            MemRead     <= RAM_READ_DISABLE;
+            MemWE       <= RAM_WRITE_DISABLE;
+            DstReg      <= Dst_NONE;
+            RegWE       <= REG_WRITE_DISABLE;
+            ASrc4       <= Dst_NONE;
+            BSrc4       <= Dst_NONE;
+            PCMuxSel    <= PC_Add1;
             Case tempInsType IS
                 WHEN TYPE_ADD_SUB =>
                     CASE temp_1_0 IS

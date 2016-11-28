@@ -32,7 +32,7 @@ begin
 
     Ram2_EN <= RAM_ENABLE; -- Always Enable Ram2
 
-    process(rst, PC_i, mem_MemWE, mem_MemRead)
+    process(rst, PC_i, mem_MemWE, mem_MemRead, mem_ALUOut, mem_WriteData)
     begin
         if rst = '0' then
             Ram2_EN <= RAM_ENABLE;
