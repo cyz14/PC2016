@@ -27,21 +27,21 @@ begin
 
 	process(EXE_MEM_REGWRITE,EXE_MEM_RD,MEM_WB_REGWRITE,MEM_WB_RD,ASrc4,BSrc4)
 	begin
-		temp_FORWARDA <= "00";   --正常赋值
-		temp_FORWARDB <= "00";
+		temp_FORWARDA <= FWD_NONE;   --正常赋值
+		temp_FORWARDB <= FWD_NONE;
 		if (EXE_MEM_REGWRITE = RAM_WRITE_ENABLE) then      --取alu计算结束那个寄存器数
 			if (EXE_MEM_RD = ASrc4)  then   
-				temp_FORWARDA <= "01";
+				temp_FORWARDA <= FWD_MEM;
 			elsif (EXE_MEM_RD = BSrc4)  then
-				temp_FORWARDB <= "01";
+				temp_FORWARDB <= FWD_MEM;
 			end if;
 		end if;
 		
 		if (MEM_WB_REGWRITE = RAM_WRITE_ENABLE ) THEN      --取写回的那个寄存器数
 			if(MEM_WB_RD = ASrc4) then
-				temp_FORWARDA <= "10";
+				temp_FORWARDA <= FWD_WB;
 			elsif(MEM_WB_RD = BSrc4) then
-				temp_FORWARDB <= "10";
+				temp_FORWARDB <= FWD_WB;
 			end if;
 		end if;
 

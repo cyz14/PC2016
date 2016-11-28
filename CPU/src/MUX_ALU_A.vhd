@@ -25,16 +25,16 @@ BEGIN
     Process(ASrc, ForwardingA, Immediate, Data1, ExeMemALUOut, MemWbDstVal)
     BEGIN
         CASE ForwardingA IS
-            WHEN "00" =>
+            WHEN FWD_NONE =>
                 CASE ASrc IS
                     WHEN AS_NONE  => AOp <= ZERO16;
                     WHEN AS_DATA1 => AOp <= Data1;
                     WHEN AS_IMME  => AOp <= Immediate;
                     WHEN others   => AOp <= ZERO16;
                 END CASE;
-            WHEN "01" =>
+            WHEN FWD_MEM =>
                 AOp <= ExeMemALUOut;
-            WHEN "10" =>
+            WHEN FWD_WB  =>
                 AOp <= MemWbDstVal;
             WHEN others =>
                 AOp <= ZERO16;

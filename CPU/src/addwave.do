@@ -8,6 +8,9 @@ add wave -position end  sim:/testbench/u_cpu/ext_Imme
 add wave -position end  sim:/testbench/u_cpu/ctrl_PCMuxSel
 add wave -position end  sim:/testbench/u_cpu/rf_Data1
 add wave -position end  sim:/testbench/u_cpu/rf_Data2
+add wave -position end  sim:/testbench/u_cpu/u_ForwardUnit/FORWARDA
+add wave -position end  sim:/testbench/u_cpu/u_Mux_ALU_A/ExeMemALUOut
+add wave -position end  sim:/testbench/u_cpu/u_Mux_ALU_A/AOp
 add wave -position end  sim:/testbench/u_cpu/exe_ALUOp_o
 add wave -position end  sim:/testbench/u_cpu/u_ALU/A
 add wave -position end  sim:/testbench/u_cpu/u_ALU/B
@@ -19,6 +22,7 @@ add wave -position end  sim:/testbench/u_cpu/exe_BSrc4_o
 add wave -position end  sim:/testbench/u_cpu/wb_RegWE
 add wave -position end  sim:/testbench/u_cpu/wb_DstVal
 add wave -position end  sim:/testbench/u_cpu/wb_DstReg
+add wave -position end  sim:/testbench/u_cpu/u_RegFile/R0
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R1
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R2
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R3
@@ -26,3 +30,4 @@ add wave -position end  sim:/testbench/u_cpu/u_RegFile/R4
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R5
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R6
 add wave -position end  sim:/testbench/u_cpu/u_RegFile/R7
+add wave -position end  sim:/testbench/u_cpu/u_RegFile/IH
