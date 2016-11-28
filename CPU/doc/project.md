@@ -10,8 +10,8 @@
 |2     |ADDIU3     |Yes
 |3     |ADDSP      |Yes
 |4     |ADDU       |Yes
-|5     |AND        |
-|6     |B          | 
+|5     |AND        |Yes
+|6     |B          |
 |7     |BEQZ       |
 |8     |BNEZ       |
 |9     |BTEQZ      |
@@ -25,10 +25,10 @@
 |17    |MTIH       |Yes
 |18    |MTSP       |Yes
 |19    |NOP        |
-|20    |OR         |
+|20    |OR         |Yes
 |21    |SLL        |Yes
-|22    |SRA        |
-|23    |SUBU       |
+|22    |SRA        |Yes
+|23    |SUBU       |Yes
 |24    |SW         |Yes
 |25    |SW_SP      |
 
