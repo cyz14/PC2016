@@ -59,7 +59,7 @@ BEGIN
             ASrc4_o  <= DST_NONE;
             BSrc4_o  <= DST_NONE;
             MemWriteData <= ZERO16;
-        ELSIF (rising_edge(clk)) THEN
+        ELSIF clk'event and clk = '1' THEN
             IF Stall = '0' THEN
                  -- do nothing, wait for a period until Stall is 0
                  null;

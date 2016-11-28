@@ -22,7 +22,7 @@ ARCHITECTURE Behaviour OF MUX_ALU_A IS
 
 BEGIN
     
-    Process(ASrc, ForwardingA)
+    Process(ASrc, ForwardingA, Immediate, Data1)
     BEGIN
         CASE ForwardingA IS
             WHEN "00" =>
