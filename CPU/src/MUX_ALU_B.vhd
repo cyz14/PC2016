@@ -22,7 +22,7 @@ ARCHITECTURE Behaviour OF MUX_ALU_B IS
     
 BEGIN
     
-    Process(BSrc, ForwardingB)
+    Process(BSrc, ForwardingB, Immediate, Data2, ExeMemALUOut, MemWbDstVal)
     BEGIN
         CASE ForwardingB IS
             WHEN "00" =>
