@@ -1,5 +1,16 @@
 <link href="./github.css" rel="stylesheet" />
 
+## 目前进度
+
+|指令   |是否检测
+|:---|-------
+|      |   
+|LI    |Yes
+|MTIH  |Yes
+|SLL   |Yes
+|ADDIU |Yes
+|MTSP  |Yes
+
 ## 统一定义
 
 - 统一检测时钟上升沿开始运算。
