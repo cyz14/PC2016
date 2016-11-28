@@ -8,8 +8,11 @@ for _, argc in enumerate(sys.argv):
     print argc
     
 print
-    
-file = open("fibonacci.o", "rb")
+
+if sys.argv[1].endswith(".o"):
+    file = open(sys.argv[1], "rb")
+else:
+    file = open("test.o", "rb")
 
 data = file.read(-1)
 insl = map(ord, data)

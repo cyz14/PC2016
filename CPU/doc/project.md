@@ -7,9 +7,9 @@
 |Number|Instruction|Checked
 |:-----|-----------|-------
 |1     |ADDIU      |Yes
-|2     |ADDIU3     |
-|3     |ADDSP      |
-|4     |ADDU       |
+|2     |ADDIU3     |Yes
+|3     |ADDSP      |Yes
+|4     |ADDU       |Yes
 |5     |AND        |
 |6     |B          | 
 |7     |BEQZ       |
