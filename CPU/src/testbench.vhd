@@ -19,7 +19,7 @@ architecture RTL of testbench is
 
     signal hda1_init : std_logic := '0';
     signal hda2_init : std_logic := '0';
-    signal hda1, hda2 : RAM(0 to 3000); -- 小空间便于查看
+    signal hda1, hda2 : RAM(0 to 40000); -- 小空间便于查看
 
     component CPU IS PORT (
         CLK     :    IN    STD_LOGIC; -- 
