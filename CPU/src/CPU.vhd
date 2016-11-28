@@ -631,7 +631,7 @@ BEGIN
         Immediate     => ext_Imme,
         DstReg        => ctrl_DstReg,
         RegWE         => ctrl_RegWE,
-        MemRead       => ctrl_MemWE,
+        MemRead       => ctrl_MemRead,
         MemWE         => ctrl_MemWE,
         ALUOp         => ctrl_ALUOp,
         ASrc          => ctrl_ASrc,
