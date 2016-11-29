@@ -13,7 +13,8 @@ ENTITY ControlUnit IS PORT (
     CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
-
+    InDelayslot :  IN  STD_LOGIC;
+    LastPCSel   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
     ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
     ZeroExt     :  OUT STD_LOGIC;                     
 
@@ -27,9 +28,10 @@ ENTITY ControlUnit IS PORT (
     DstReg      :  OUT STD_LOGIC_VECTOR( 3 downto 0);
     RegWE       :  OUT STD_LOGIC;
     
-    ASrc4       :  out std_logic_vector (3 downto 0);
-    BSrc4       :  out std_logic_vector (3 downto 0);
-
+    ASrc4       :  OUT STD_LOGIC_VECTOR(3 downto 0);
+    BSrc4       :  OUT STD_LOGIC_VECTOR(3 downto 0);
+    
+    NextInDelayslot : OUT STD_LOGIC;
     PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
     NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
@@ -75,6 +77,7 @@ BEGIN
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
+            NextInDelayslot <= IN_SLOT_FALSE;
             NowPC       <= CurPC;
             ExceptPC    <= ZERO16;
         else
@@ -90,6 +93,8 @@ BEGIN
             ASrc4       <= Dst_NONE;
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
+            NextInDelayslot <= IN_SLOT_FALSE;
+
             Case tempInsType IS
                 WHEN TYPE_ADD_SUB =>
                     CASE temp_1_0 IS
@@ -165,6 +170,7 @@ BEGIN
                                     RegWE    <= REG_WRITE_DISABLE;
                                     ASrc4    <= "0" & temp_Rx;
                                     DstReg   <= Dst_NONE;
+                                    NextInDelayslot <= IN_SLOT_TRUE;
                                     PCMuxSel <= PC_Rx;
                                 WHEN others =>
                                     null;
@@ -250,6 +256,7 @@ BEGIN
                             BSrc4    <= Dst_NONE;
                             if(condition = ZERO16) THEN
                                 PCMuxSel <= PC_AddImm;
+                                NextInDelayslot <= IN_SLOT_TRUE;
                             else
                                 PCMuxSel <= PC_Add1;
                             end if;
@@ -264,6 +271,7 @@ BEGIN
                             BSrc4    <= Dst_NONE;
                             if(not (condition = ZERO16)) THEN
                                 PCMuxSel <= PC_AddImm;
+                                NextInDelayslot <= IN_SLOT_TRUE;
                             else
                                 PCMuxSel <= PC_Add1;
                             end if;
@@ -399,6 +407,7 @@ BEGIN
                     ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
                     PCMuxSel <= PC_AddImm;
+                    NextInDelayslot <= IN_SLOT_TRUE;
                 WHEN TYPE_BEQZ =>
                     ImmeSrc  <= IMM_EIGHT;
                     ASrc4    <= '0' & temp_Rx;
@@ -409,6 +418,7 @@ BEGIN
 					ASrc4    <= '0' & temp_Rx;
                     if (condition = ZERO16) THEN
                         PCMuxSel <= PC_AddImm;
+                        NextInDelayslot <= IN_SLOT_TRUE;
                     else
                         PCMuxSel <= PC_Add1;
                     end if;
@@ -420,6 +430,7 @@ BEGIN
 					ASrc4    <= '0' & temp_Rx;
                     if (not (condition = ZERO16)) THEN
                         PCMuxSel <= PC_AddImm;
+                        NextInDelayslot <= IN_SLOT_TRUE;
                     else
                         PCMuxSel <= PC_Add1;
                     end if;

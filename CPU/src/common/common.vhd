@@ -26,6 +26,9 @@ package common is
 -- constant <constant_name>		: integer := <value;
 --
 
+CONSTANT IN_SLOT_TRUE   : STD_LOGIC := '1';
+CONSTANT IN_SLOT_FALSE  : STD_LOGIC := '0';
+
 CONSTANT ONE16  : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000001";
 
 CONSTANT ZERO1  : STD_LOGIC                     := '0';

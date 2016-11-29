@@ -127,7 +127,8 @@ ARCHITECTURE Behaviour OF CPU IS
         CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
         Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
         Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
-
+        InDelayslot :  IN  STD_LOGIC;
+        LastPCSel   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
         ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
         ZeroExt     :  OUT STD_LOGIC;                     
 
@@ -143,7 +144,7 @@ ARCHITECTURE Behaviour OF CPU IS
         
         ASrc4       :  out std_logic_vector (3 downto 0);
         BSrc4       :  out std_logic_vector (3 downto 0);
-
+        NextInDelayslot : OUT STD_LOGIC;
         PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
 
         NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
@@ -180,6 +181,10 @@ ARCHITECTURE Behaviour OF CPU IS
         BSrc:         IN     STD_LOGIC_VECTOR( 1 downto 0);
         ASrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
         BSrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
+        InDelayslot:  IN     STD_LOGIC;
+        PCSel:        IN     STD_LOGIC_VECTOR( 1 downto 0);  
+        InDelayslot_o:OUT    STD_LOGIC;
+        PCSel_o:      OUT    STD_LOGIC_VECTOR( 1 downto 0);
         Stall:        IN     STD_LOGIC; -- whether stop for a stage from HazardDetectingUnit
         Data1_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
         Data2_o:      OUT    STD_LOGIC_VECTOR(15 downto 0);
@@ -422,6 +427,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ctrl_PCMuxSel    : STD_LOGIC_VECTOR( 1 DOWNTO 0);
     SIGNAL ctrl_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ctrl_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL ctrl_InDelayslot : STD_LOGIC;
 
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
@@ -440,6 +446,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL exe_BSrc4_o      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mux_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_InDelayslot  : STD_LOGIC;
+    SIGNAL exe_PCSel        : STD_LOGIC_VECTOR( 1 downto 0);
 
     SIGNAL exe_OP_A         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_OP_B         : STD_LOGIC_VECTOR(15 downto 0);
@@ -587,6 +595,8 @@ BEGIN
         CurPC       => ctrl_CurPC,
         Instruction => id_Inst,
         Condition   => rf_Data1,
+        InDelayslot => exe_InDelayslot,
+        LastPCSel   => exe_PCSel,
         ImmeSrc     => ctrl_ImmeSrc,
         ZeroExt     => ctrl_ZeroExt,
         ALUOp       => ctrl_ALUOp,
@@ -598,6 +608,7 @@ BEGIN
         RegWE       => ctrl_RegWE,
         ASrc4       => ctrl_ASrc4,
         BSrc4       => ctrl_BSrc4,
+        NextInDelayslot => ctrl_InDelayslot, 
         PCMuxSel    => ctrl_PCMuxSel,
         NowPC       => ctrl_NowPC,
         ExceptPC    => ctrl_ExceptPC
@@ -643,6 +654,10 @@ BEGIN
         BSrc          => ctrl_BSrc,
         ASrc4         => ctrl_ASrc4,
         BSrc4         => ctrl_BSrc4,
+        InDelayslot   => ctrl_InDelayslot,
+        PCSel         => ctrl_PCMuxSel,
+        InDelayslot_o => exe_InDelayslot,
+        PCSel_o       => exe_PCSel,
         Stall         => hdu_IDEX_Stall, -- whether stop for a stage from HazardDetectingUnit
         Data1_o       => exe_Data1_o,
         Data2_o       => exe_Data2_o,
