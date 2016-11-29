@@ -30,7 +30,7 @@
 |22    |SRA        |Yes
 |23    |SUBU       |Yes
 |24    |SW         |Yes
-|25    |SW_SP      |
+|25    |SW_SP      |Yes
 
 ### 扩展指令
 |Number|Instruction|Checked

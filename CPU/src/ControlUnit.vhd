@@ -396,7 +396,7 @@ BEGIN
                     RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_SP;
-                    BSrc4    <= "0" & temp_Ry;
+                    BSrc4    <= "0" & temp_Rx;
                     
                 WHEN TYPE_B =>
                     ImmeSrc  <= IMM_ELEVEN;
