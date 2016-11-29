@@ -74,8 +74,6 @@ end DM_RAM1;
 
 architecture Behavioral of DM_RAM1 is
 
-    SIGNAL LastALUOut: STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL ALUOutMask: STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL MemOutMask: STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL InstOutMask: STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL UartOutMask: STD_LOGIC_VECTOR(15 downto 0);
@@ -107,8 +105,7 @@ begin
     vga_wrn <= not IsVGAWrite or SyncClk;
     vga_data <= WriteData;
     rdn <= UartUpRead or not UartReadyLoad;
-    DstVal <= (LastALUOut and ALUOutMask) 
-            or (Ram1Data and MemOutMask) 
+    DstVal <= (Ram1Data and MemOutMask) 
             or (InstVal and InstOutMask) 
             or (UartOut and UartOutMask) 
             or (keyboard_val and KeyboardOutMask);
@@ -137,10 +134,9 @@ begin
             SyncClkWorking <= '0';
             SyncClkA <= '1';
             SyncClkB <= '0';
-        ELSIF CLK'event and CLK = '1' THEN
+        ELSIF CLK'event and CLK = '0' THEN
             SyncClkWorking <= '1';
             SyncClkA <= not SyncClkA;
-            LastALUOut <= ALUOut;
             Ram1OE <= not MemWE;
             Ram1Addr(15 downto 0) <= ALUOut;
             IsUartWrite <= '0';
@@ -156,14 +152,12 @@ begin
             end if;
             
             KeyboardOutMask <= (others => '0');
-            if InstRead = '1' then -- read InstructionMemory
+            if InstRead = '0' then -- read InstructionMemory
                 InstOutMask <= (others => '1');
-                ALUOutMask <= (others => '0');
                 MemOutMask <= (others => '0');
                 UartOutMask <= (others => '0');
             elsif MemRead = RAM_READ_ENABLE then -- Read DataMemory
                 InstOutMask <= (others => '0');
-                ALUOutMask <= (others => '0');
                 MemOutMask <= (others => '1');
                 UartOutMask <= (others => '0');
                 if ALUOut = x"BF00" then -- read from Uart
@@ -184,7 +178,6 @@ begin
                 end if;
             else -- Write Mem or do nothing
                 InstOutMask <= (others => '0');
-                ALUOutMask <= (others => '1');
                 MemOutMask <= (others => '0');
                 UartOutMask <= (others => '0');
                 if MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF00" then -- write uart
@@ -200,13 +193,6 @@ begin
                     IsVGAWrite <= '1';
                 end if;
             end if;
-            
-            -- if LastException = '1' then
-                -- UartReadyLoad <= '0';
-                -- IsWriteMode <= '0';
-                -- IsUartWrite <= '0';
-                -- LastException <= '0';
-            -- end if;
         END IF;
     END Process;
 

@@ -351,7 +351,7 @@ BEGIN
                     BSrc4    <= Dst_NONE;
                     
                 WHEN TYPE_LW =>
-                    ImmeSrc  <= IMM_EIGHT;
+                    ImmeSrc  <= IMM_FIVE;
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_IMME;
                     ALUop    <= OP_ADD;

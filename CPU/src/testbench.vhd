@@ -133,7 +133,7 @@ begin
         variable addr : integer range 0 to MAX_ADDR;
     begin
         if hda1_init = '0' then
-            --Ram1_Data <= (others => 'Z');
+            Ram1_Data <= (others => 'Z');
             addr := 0;
             while (not endfile(inp)) loop
                 readline(inp, inline);
@@ -143,6 +143,10 @@ begin
                     var := var * 16 + in_int;
                 end loop;
                 hda1(addr) <= conv_std_logic_vector(var, 16);
+                addr := addr + 1;
+            end loop;
+            while (addr < 50000) loop
+                hda1(addr) <= (others => '0');
                 addr := addr + 1;
             end loop;
             hda1_init <= '1';
@@ -155,7 +159,7 @@ begin
                 hda1(addr) <= Ram1_Data;
             end if;
         else
-            Ram1_Data <= (others => '0'); -- 'Z'
+            Ram1_Data <= (others => 'Z');
         end if;
     end process ram1;
 
@@ -167,7 +171,7 @@ begin
         variable addr : integer range 0 to MAX_ADDR;
     begin
         if hda2_init = '0' then
-            --Ram2_Data <= (others => 'Z');
+            Ram2_Data <= (others => 'Z');
             addr := 0;
             while (not endfile(inp)) loop
                 readline(inp, inline);
@@ -190,7 +194,7 @@ begin
                 hda2(addr) <= Ram2_Data;
             end if;
         else
-            Ram2_Data <= (others => '0'); -- 
+            Ram2_Data <= (others => 'Z'); 
         end if;
     end process ram2;
 
