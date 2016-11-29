@@ -137,7 +137,7 @@ begin
             SyncClkWorking <= '0';
             SyncClkA <= '1';
             SyncClkB <= '0';
-        ELSIF CLK'event and CLK = '0' THEN
+        ELSIF CLK'event and CLK = '1' THEN
             SyncClkWorking <= '1';
             SyncClkA <= not SyncClkA;
             LastALUOut <= ALUOut;

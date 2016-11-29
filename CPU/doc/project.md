@@ -6,30 +6,30 @@
 
 |Number|Instruction|Checked
 |:-----|-----------|-------
-|1     |ADDIU      |
-|2     |ADDIU3     |
-|3     |ADDSP      |
-|4     |ADDU       |
+|1     |ADDIU      |Yes
+|2     |ADDIU3     |Yes
+|3     |ADDSP      |Yes
+|4     |ADDU       |Yes
 |5     |AND        |Yes
 |6     |B          |
 |7     |BEQZ       |
 |8     |BNEZ       |
 |9     |BTEQZ      |
-|10    |CMP        |
+|10    |CMP        |Yes
 |11    |JR         |
 |12    |LI         |Yes
 |13    |LW         |
 |14    |LW_SP      |
-|15    |MFIH       |
+|15    |MFIH       |Yes
 |16    |MFPC       |
-|17    |MTIH       |
-|18    |MTSP       |
+|17    |MTIH       |Yes
+|18    |MTSP       |Yes
 |19    |NOP        |
 |20    |OR         |Yes
-|21    |SLL        |
-|22    |SRA        |
-|23    |SUBU       |
-|24    |SW         |
+|21    |SLL        |Yes
+|22    |SRA        |Yes
+|23    |SUBU       |Yes
+|24    |SW         |Yes
 |25    |SW_SP      |
 
 ### 扩展指令

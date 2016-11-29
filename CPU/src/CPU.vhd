@@ -218,14 +218,20 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     End Component;
 
-    Component MUX_ALU_B IS PORT (
-        BSrc:        IN  STD_LOGIC_VECTOR( 1 downto 0);
+    Component MUX_Data2 IS PORT (
         ForwardingB: IN  STD_LOGIC_VECTOR( 1 downto 0);
         Data2:       IN  STD_LOGIC_VECTOR(15 downto 0);
-        Immediate:   IN  STD_LOGIC_VECTOR(15 downto 0);
         ALUOut:      IN  STD_LOGIC_VECTOR(15 downto 0);
         MemDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
         BOp:         OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
+    END Component;
+
+    Component MUX_ALU_B IS PORT (
+        BSrc:      IN  STD_LOGIC_VECTOR( 1 downto 0);
+        Data2:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        Immediate: IN  STD_LOGIC_VECTOR(15 downto 0);
+        BOp:       OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16
     );
     END Component;
 
@@ -436,6 +442,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL exe_ALUOp      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_ASrc       : STD_LOGIC_VECTOR( 1 downto 0);
     SIGNAL exe_BSrc       : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_BOp        : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_ASrc4      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_BSrc4      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
@@ -642,11 +649,9 @@ BEGIN
         AOp          => id_data1
     );
 
-    u_Mux_ALU_B: MUX_ALU_B PORT MAP (
-        BSrc         => ctrl_BSrc,
+    u_Mux_Data2: MUX_Data2 PORT MAP (
         ForwardingB  => fwd_ForwardB,
         Data2        => rf_Data2,
-        Immediate    => ext_Imme,
         ALUOut       => alu_F,
         MemDstVal    => mem_DstVal,
         BOp          => id_data2
@@ -687,9 +692,16 @@ BEGIN
         MemWriteData  => exe_MemWriteData
     );
 
+    u_Mux_ALU_B: MUX_ALU_B PORT MAP (
+        BSrc       => exe_BSrc,
+        Data2      => exe_Data2,
+        Immediate  => exe_Imme,
+        BOp        => exe_BOp
+    );
+
     u_ALU: ALU PORT MAP (
         A  => exe_Data1,
-        B  => exe_Data2,
+        B  => exe_BOp,
         OP => exe_ALUOp,
         F  => alu_F,
         T  => alu_T

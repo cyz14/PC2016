@@ -98,7 +98,7 @@ BEGIN
     BEGIN
         if rst = '0' then
             Data2 <= (others => '0');
-        elsif not (ASrc4 = DST_NONE) and BSrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
+        elsif not (BSrc4 = DST_NONE) and BSrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
             Data2 <= WriteData;
         else
             selectFrom(BSrc4, R0, R1, R2, R3, R4, R5, R6

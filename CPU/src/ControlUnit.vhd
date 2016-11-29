@@ -16,7 +16,7 @@ ENTITY ControlUnit IS PORT (
 
     InDelayslot :  IN  STD_LOGIC;
     LastPCSel   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
-    
+
     ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
     ZeroExt     :  OUT STD_LOGIC;                     
 
@@ -147,12 +147,11 @@ BEGIN
                             BSrc4    <= "0" & temp_Ry;
                             
                         WHEN FUNCT_CMP  =>
-                            ImmeSrc  <= IMM_NONE;
                             ASrc     <= AS_DATA1;
                             BSrc     <= AS_DATA2;
                             ALUop    <= OP_CMP;
                             RegWE    <= REG_WRITE_ENABLE;
-                            DstReg   <= "0" & temp_Rx;
+                            DstReg   <= Dst_T;
                             ASrc4    <= "0" & temp_Rx;
                             BSrc4    <= "0" & temp_Ry;
                             
@@ -309,7 +308,6 @@ BEGIN
                     END CASE;
                 
                 WHEN TYPE_MOVE =>
-                    ImmeSrc  <= IMM_NONE;
                     ASrc     <= AS_DATA1;
                     BSrc     <= AS_NONE;
                     ALUop    <= OP_POS;
@@ -384,8 +382,8 @@ BEGIN
                     BSrc     <= AS_IMME;
                     ALUop    <= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
-                    RegWE    <= REG_WRITE_DISABLE;
-                    DstReg   <= Dst_NONE;
+                    -- RegWE    <= REG_WRITE_DISABLE;
+                    -- DstReg   <= Dst_NONE;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= "0" & temp_Ry;
                     
