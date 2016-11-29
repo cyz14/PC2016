@@ -11,7 +11,7 @@
 |3     |ADDSP      |Yes
 |4     |ADDU       |Yes
 |5     |AND        |Yes
-|6     |B          |
+|6     |B          |Yes
 |7     |BEQZ       |
 |8     |BNEZ       |
 |9     |BTEQZ      |
