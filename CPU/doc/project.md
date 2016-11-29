@@ -16,7 +16,7 @@
 |8     |BNEZ       |
 |9     |BTEQZ      |
 |10    |CMP        |Yes
-|11    |JR         |
+|11    |JR         |Yes
 |12    |LI         |Yes
 |13    |LW         |
 |14    |LW_SP      |
@@ -24,7 +24,7 @@
 |16    |MFPC       |Yes
 |17    |MTIH       |Yes
 |18    |MTSP       |Yes
-|19    |NOP        |
+|19    |NOP        |Yes
 |20    |OR         |Yes
 |21    |SLL        |Yes
 |22    |SRA        |Yes
