@@ -62,8 +62,6 @@ BEGIN
             SP <= (others => '0');
             IH <= (others => '0');
             T  <= (others => '0');
-            Data1 <= (others => '0');
-            Data2 <= (others => '0');
         else--if clk'event and clk = '1' then
             if RegWE = REG_WRITE_ENABLE then 
                 case WriteRegister is
