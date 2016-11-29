@@ -67,11 +67,8 @@ ARCHITECTURE Behaviour OF CPU IS
         PCRx_data:     IN STD_LOGIC_VECTOR(15 downto 0);
         PCAddImm_data: IN STD_LOGIC_VECTOR(15 downto 0);
         PC_choose:     IN STD_LOGIC_VECTOR(1 downto 0);
-        ExeMemALUOut:  IN STD_LOGIC_VECTOR(15 downto 0);
-        MemWbDstVal:   IN STD_LOGIC_VECTOR(15 downto 0);
-        ForwardA:      IN STD_LOGIC_VECTOR(1 downto 0);
-        PCout:         out STD_LOGIC_VECTOR(15 downto 0) := ZERO16
-        );
+        PCout:         out STD_LOGIC_VECTOR(15 downto 0)
+    );
     END Component; 
 
     Component PCReg IS
@@ -203,33 +200,32 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component MUX_Write_Data IS PORT (
-        Data2:          IN  STD_LOGIC_VECTOR(15 downto 0);
-        ExeMemALUOut:   IN  STD_LOGIC_VECTOR(15 downto 0);
-        MemWbDstVal:    IN  STD_LOGIC_VECTOR(15 downto 0);
-        ForwardingB:    IN  STD_LOGIC_VECTOR( 1 downto 0);
-        WriteData:      OUT STD_LOGIC_VECTOR(15 downto 0)
+        MemRead:   IN  STD_LOGIC;
+        MemALUOut: IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemData:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        WriteData: OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
     Component MUX_ALU_A IS PORT (
-        Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
-        Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
-        ExeMemALUOut:  IN  STD_LOGIC_VECTOR(15 downto 0);
-        MemWbDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
-        ASrc:          IN  STD_LOGIC_VECTOR( 1 downto 0);
-        ForwardingA:   IN  STD_LOGIC_VECTOR( 1 downto 0);
-        AOp:           OUT STD_LOGIC_VECTOR(15 downto 0)
+        ASrc:        IN  STD_LOGIC_VECTOR( 1 downto 0);
+        ForwardingA: IN  STD_LOGIC_VECTOR( 1 downto 0);
+        Data1:       IN  STD_LOGIC_VECTOR(15 downto 0);
+        Immediate:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        ALUOut:      IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        AOp:         OUT STD_LOGIC_VECTOR(15 downto 0)
     );
-    END Component;
+    End Component;
 
     Component MUX_ALU_B IS PORT (
-        Data2:          IN  STD_LOGIC_VECTOR(15 downto 0);
-        Immediate:      IN  STD_LOGIC_VECTOR(15 downto 0);
-        ExeMemALUOut:   IN  STD_LOGIC_VECTOR(15 downto 0);
-        MemWbDstVal:    IN  STD_LOGIC_VECTOR(15 downto 0);
-        BSrc:           IN  STD_LOGIC_VECTOR( 1 downto 0);
-        ForwardingB:    IN  STD_LOGIC_VECTOR( 1 downto 0);
-        BOp:            OUT STD_LOGIC_VECTOR(15 downto 0)
+        BSrc:        IN  STD_LOGIC_VECTOR( 1 downto 0);
+        ForwardingB: IN  STD_LOGIC_VECTOR( 1 downto 0);
+        Data2:       IN  STD_LOGIC_VECTOR(15 downto 0);
+        Immediate:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        ALUOut:      IN  STD_LOGIC_VECTOR(15 downto 0);
+        MemDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        BOp:         OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -243,15 +239,16 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component RegisterFile IS PORT (
-        rst : in std_logic;
-        PCplus1:    in std_logic_vector(15 downto 0);
-        RegWE:      in std_logic;
-        WriteRegister:  IN  STD_LOGIC_VECTOR(3  downto 0);
-        WriteData:  IN  STD_LOGIC_VECTOR(15 downto 0);
-        ASrc4:      in std_logic_vector(3 downto 0);
-        BSrc4:      in std_logic_vector(3 downto 0);
-        Data1:  out std_logic_vector(15 downto 0);
-        Data2:  out std_logic_vector(15 downto 0)
+        rst:           IN  STD_LOGIC;
+        clk:           IN  STD_LOGIC;
+        PCplus1:       IN  STD_LOGIC_VECTOR(15 downto 0);
+        RegWE:         IN  STD_LOGIC;
+        WriteRegister: IN  STD_LOGIC_VECTOR( 3 downto 0);
+        WriteData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        ASrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
+        BSrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
+        Data1:         OUT STD_LOGIC_VECTOR(15 downto 0);
+        Data2:         OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -317,14 +314,11 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component MUX_MEM_WB IS PORT (
         rst, clk: in std_logic;
-        ALUOut: in std_logic_vector(15 downto 0);
-        MemData: in std_logic_vector(15 downto 0);
-        MemRead: in std_logic;
-        DstReg: in std_logic_vector(3 downto 0);
-        RegWE: in std_logic;
-
-        DstReg_o: out std_logic_vector(3 downto 0);
-        RegWE_o: out std_logic;
+        RegWE:    in std_logic;
+        DstReg:   in std_logic_vector( 3 downto 0);
+        DstVal:   in std_logic_vector(15 downto 0);
+        RegWE_o:  out std_logic;
+        DstReg_o: out std_logic_vector( 3 downto 0);
         DstVal_o: out std_logic_vector(15 downto 0)
     );
     END Component;
@@ -345,14 +339,14 @@ ARCHITECTURE Behaviour OF CPU IS
     END component;
 
     Component ForwardingUnit IS port(
-		EXE_MEM_REGWRITE : in STD_LOGIC;
-        EXE_MEM_RD       : in STD_LOGIC_vector (3 DOWNTO 0);
-        MEM_WB_REGWRITE  : in STD_LOGIC;
-        MEM_WB_RD        : in STD_LOGIC_vector (3 downto 0);
-        ASrc4            : in STD_LOGIC_vector (3 downto 0);
-        BSrc4            : in STD_LOGIC_vector (3 downto 0);
-        FORWARDA         : out STD_LOGIC_vector(1 downto 0);
-		FORWARDB         : out STD_LOGIC_vector(1 downto 0) 
+		EXE_REGWRITE: in std_logic ;  --exe阶段的写信号
+        EXE_DstReg:   in std_logic_vector (3 DOWNTO 0) ;  --exe阶段目的寄存器
+        MEM_REGWRITE: in std_logic ;  --mem 阶段的写信号
+        MEM_DstReg:   in std_logic_vector (3 downto 0);  --mem阶段的目的寄存器
+        ASrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存器
+        BSrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存器
+        FORWARDA:     out std_logic_vector(1 downto 0);  --muxa信号选择
+        FORWARDB:     out std_logic_vector(1 downto 0)   --muxb信号选择
 	);
     END Component;
 
@@ -432,25 +426,25 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
     
-    SIGNAL exe_Data1_o      : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_Data2_o      : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_Immediate_o  : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_DstReg_o     : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_RegWE_o      : STD_LOGIC;
-    SIGNAL exe_MemRead_o    : STD_LOGIC;
-    SIGNAL exe_MemWE_o      : STD_LOGIC;
-    SIGNAL exe_ALUOp_o      : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_ASrc_o       : STD_LOGIC_VECTOR( 1 downto 0);
-    SIGNAL exe_BSrc_o       : STD_LOGIC_VECTOR( 1 downto 0);
-    SIGNAL exe_ASrc4_o      : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_BSrc4_o      : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_Data1      : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_Data2      : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_Imme  : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_DstReg     : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_RegWE      : STD_LOGIC;
+    SIGNAL exe_MemRead    : STD_LOGIC;
+    SIGNAL exe_MemWE      : STD_LOGIC;
+    SIGNAL exe_ALUOp      : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_ASrc       : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_BSrc       : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_ASrc4      : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_BSrc4      : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mux_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_InDelayslot  : STD_LOGIC;
     SIGNAL exe_PCSel        : STD_LOGIC_VECTOR( 1 downto 0);
 
-    SIGNAL exe_OP_A         : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_OP_B         : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_data1          : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_data2          : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL alu_F            : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL alu_T            : STD_LOGIC;
@@ -462,6 +456,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL mem_ALUOut       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_WriteData    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_ReadData     : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_DstVal       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL mem_vga_wrn      : STD_LOGIC;
     SIGNAL mem_vga_data     : STD_LOGIC_VECTOR(15 downto 0);
@@ -542,9 +537,6 @@ BEGIN
         PCRx_data     => if_PCRx,
         PCAddImm_data => id_PCAddImm,
         PC_choose     => ctrl_PCMuxSel,
-        ExeMemALUOut  => mem_ALUOut,
-        MemWbDstVal   => wb_DstVal,
-        ForwardA      => fwd_ForwardA,
         PCOUT         => if_NewPC
     );
     
@@ -592,7 +584,7 @@ BEGIN
     u_CtrlUnit: ControlUnit PORT MAP (
         clk         => clk_sel,
         rst         => RST,
-        CurPC       => ctrl_CurPC,
+        CurPC       => id_PCPlus1,
         Instruction => id_Inst,
         Condition   => rf_Data1,
         InDelayslot => exe_InDelayslot,
@@ -622,6 +614,7 @@ BEGIN
 
     u_RegFile: RegisterFile Port MAP (
         rst             => RST,
+        clk             => clk_sel,
         PCplus1         => id_PCPlus1,
         RegWE           => wb_RegWE,
         WriteRegister   => wb_DstReg,
@@ -639,11 +632,31 @@ BEGIN
         Imme        => ext_Imme
     );
 
+    u_Mux_ALU_A: MUX_ALU_A PORT MAP (
+        ASrc         => ctrl_ASrc,
+        ForwardingA  => fwd_ForwardA,
+        Data1        => rf_Data1,
+        Immediate    => ext_Imme,
+        ALUOut       => alu_F,
+        MemDstVal    => mem_DstVal,
+        AOp          => id_data1
+    );
+
+    u_Mux_ALU_B: MUX_ALU_B PORT MAP (
+        BSrc         => ctrl_BSrc,
+        ForwardingB  => fwd_ForwardB,
+        Data2        => rf_Data2,
+        Immediate    => ext_Imme,
+        ALUOut       => alu_F,
+        MemDstVal    => mem_DstVal,
+        BOp          => id_data2
+    );
+
     u_MUX_ID_EXE: MUX_ID_EXE PORT MAP (
         clk           => clk_sel,
         rst           => RST,
-        Data1         => rf_Data1,
-        Data2         => rf_Data2,
+        Data1         => id_data1,
+        Data2         => id_data2,
         Immediate     => ext_Imme,
         DstReg        => ctrl_DstReg,
         RegWE         => ctrl_RegWE,
@@ -659,53 +672,25 @@ BEGIN
         InDelayslot_o => exe_InDelayslot,
         PCSel_o       => exe_PCSel,
         Stall         => hdu_IDEX_Stall, -- whether stop for a stage from HazardDetectingUnit
-        Data1_o       => exe_Data1_o,
-        Data2_o       => exe_Data2_o,
-        Immediate_o   => exe_Immediate_o,
-        DstReg_o      => exe_DstReg_o,
-        RegWE_o       => exe_RegWE_o,
-        MemRead_o     => exe_MemRead_o,
-        MemWE_o       => exe_MemWE_o,
-        ALUOp_o       => exe_ALUOp_o,
-        ASrc_o        => exe_ASrc_o,
-        BSrc_o        => exe_BSrc_o,
-        ASrc4_o       => exe_ASrc4_o,
-        BSrc4_o       => exe_BSrc4_o,
+        Data1_o       => exe_Data1,
+        Data2_o       => exe_Data2,
+        Immediate_o   => exe_Imme,
+        DstReg_o      => exe_DstReg,
+        RegWE_o       => exe_RegWE,
+        MemRead_o     => exe_MemRead,
+        MemWE_o       => exe_MemWE,
+        ALUOp_o       => exe_ALUOp,
+        ASrc_o        => exe_ASrc,
+        BSrc_o        => exe_BSrc,
+        ASrc4_o       => exe_ASrc4,
+        BSrc4_o       => exe_BSrc4,
         MemWriteData  => exe_MemWriteData
     );
 
-    u_Mux_Write_Data: MUX_Write_Data PORT MAP (
-        Data2 =>    exe_MemWriteData,
-        ExeMemALUOut => mem_ALUOut,
-        MemWbDstVal => wb_DstVal,
-        ForwardingB => fwd_ForwardB,
-        WriteData => mux_MemWriteData
-    ); 
-
-    u_Mux_ALU_A: MUX_ALU_A PORT MAP (
-        Data1         => exe_Data1_o,
-        Immediate     => exe_Immediate_o,
-        ExeMemALUOut  => mem_ALUOut,
-        MemWbDstVal   => wb_DstVal,
-        ASrc          => exe_ASrc_o,
-        ForwardingA   => fwd_ForwardA,
-        AOp           => exe_OP_A
-    );
-
-    u_Mux_ALU_B: MUX_ALU_B PORT MAP (
-        Data2        => exe_Data2_o,
-        Immediate    => exe_Immediate_o,
-        ExeMemALUOut => mem_ALUOut,
-        MemWbDstVal  => wb_DstVal,
-        BSrc         => exe_BSrc_o,
-        ForwardingB  => fwd_ForwardB,
-        BOp          => exe_OP_B
-    );
-
     u_ALU: ALU PORT MAP (
-        A  => exe_OP_A,
-        B  => exe_OP_B,
-        OP => exe_ALUOp_o,
+        A  => exe_Data1,
+        B  => exe_Data2,
+        OP => exe_ALUOp,
         F  => alu_F,
         T  => alu_T
     );
@@ -713,11 +698,11 @@ BEGIN
     u_MUX_EXE_MEM: MUX_EXE_MEM PORT MAP (
         rst            => RST,
         clk            => clk_sel,
-        DstReg         => exe_DstReg_o,
-        RegWE          => exe_RegWE_o,
-        MemRead        => exe_MemRead_o,
-        MemWE          => exe_MemWE_o,
-        MemWriteData   => mux_MemWriteData,
+        DstReg         => exe_DstReg,
+        RegWE          => exe_RegWE,
+        MemRead        => exe_MemRead,
+        MemWE          => exe_MemWE,
+        MemWriteData   => exe_MemWriteData,
         ALUOut         => alu_F,
         T              => alu_T,
         Stall          => '1', -- not stop
@@ -768,35 +753,40 @@ BEGIN
         NumOut        => ram1_numout
     );
 
+    u_Mux_Write_Data: MUX_Write_Data PORT MAP (
+        MemRead   => mem_MemRead,
+        MemALUOut => mem_ALUOut,
+        MemData   => mem_ReadData,
+        WriteData => mem_DstVal
+    );
+
     u_Mux_MEM_WB: MUX_MEM_WB PORT MAP (
         rst      => RST,
         clk      => clk_sel,
-        ALUOut   => mem_ALUOut,
-        MemData  => mem_ReadData,
-        MemRead  => mem_MemRead,
-        DstReg   => mem_DstReg,
         RegWE    => mem_RegWE,
-        DstReg_o => wb_DstReg,
+        DstReg   => mem_DstReg,
+        DstVal   => mem_DstVal,
         RegWE_o  => wb_RegWE,
+        DstReg_o => wb_DstReg,
         DstVal_o => wb_DstVal
     );
 
     u_ForwardUnit: ForwardingUnit PORT MAP (
-        EXE_MEM_REGWRITE => mem_RegWE,
-        EXE_MEM_RD       => mem_DstReg,
-        MEM_WB_REGWRITE  => wb_RegWE,
-        MEM_WB_RD        => wb_DstReg,
-        ASrc4            => exe_ASrc4_o,
-        BSrc4            => exe_BSrc4_o,
-        FORWARDA         => fwd_ForwardA,
-		FORWARDB         => fwd_ForwardB
+        EXE_REGWRITE => exe_RegWE,
+        EXE_DstReg   => exe_DstReg,
+        MEM_REGWRITE => mem_RegWE,
+        MEM_DstReg   => mem_DstReg,
+        ASrc4        => ctrl_ASrc4,
+        BSrc4        => ctrl_BSrc4,
+        FORWARDA     => fwd_ForwardA,
+		FORWARDB     => fwd_ForwardB
     );
 
     u_HazardDetectingUnit: HazardDetectingUnit PORT MAP (
         rst => RST,
         clk => clk_sel,
-        MemRead => exe_MemRead_o,
-        DstReg  => exe_DstReg_o,
+        MemRead => exe_MemRead,
+        DstReg  => exe_DstReg,
         ASrc4   => ctrl_ASrc4,
         BSrc4   => ctrl_BSrc4,
         ALUOut  => alu_F,

@@ -7,14 +7,11 @@ use WORK.COMMON.ALL;
 
 ENTITY MUX_MEM_WB IS PORT (
     rst, clk: in std_logic;
-    ALUOut:   in std_logic_vector(15 downto 0);
-    MemData:  in std_logic_vector(15 downto 0);
-    MemRead:  in std_logic;
-    DstReg:   in std_logic_vector(3 downto 0);
     RegWE:    in std_logic;
-
-    DstReg_o: out std_logic_vector(3 downto 0);
+    DstReg:   in std_logic_vector( 3 downto 0);
+    DstVal:   in std_logic_vector(15 downto 0);
     RegWE_o:  out std_logic;
+    DstReg_o: out std_logic_vector( 3 downto 0);
     DstVal_o: out std_logic_vector(15 downto 0)
 );
 END MUX_MEM_WB;
@@ -22,20 +19,16 @@ END MUX_MEM_WB;
 ARCHITECTURE Behaviour OF MUX_MEM_WB IS
     
 BEGIN
-    process (rst, clk, DstReg, RegWE)
+    process (rst, clk, DstReg, RegWE, DstVal)
     BEGIN    
         if rst = '0' then
-            RegWE_o <= '1';
+            RegWE_o <= REG_WRITE_DISABLE;
             DstReg_o <= DST_NONE;
             DstVal_o <= ZERO16;
         elsif clk'event and clk = '1' then
-            DstReg_o <= DstReg;
-            if MemRead = RAM_READ_ENABLE then
-                DstVal_o <= MemData;
-            else
-                DstVal_o <= ALUOut;
-            end if;
             RegWE_o  <= RegWE;
+            DstReg_o <= DstReg;
+            DstVal_o <= DstVal;
         end if;
     end process;
 END Behaviour;

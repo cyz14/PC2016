@@ -13,8 +13,10 @@ ENTITY ControlUnit IS PORT (
     CurPC       :  IN  STD_LOGIC_VECTOR(15 downto 0);
     Instruction :  IN  STD_LOGIC_VECTOR(15 downto 0); 
     Condition   :  IN  STD_LOGIC_VECTOR(15 downto 0);
+
     InDelayslot :  IN  STD_LOGIC;
     LastPCSel   :  IN  STD_LOGIC_VECTOR( 1 downto 0);
+    
     ImmeSrc     :  OUT STD_LOGIC_VECTOR( 2 downto 0); -- 3, 4, 5, 8, 11 
     ZeroExt     :  OUT STD_LOGIC;                     
 

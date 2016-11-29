@@ -8,13 +8,13 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use WORK.COMMON.ALL;
 
 ENTITY MUX_ALU_A IS PORT (
-    Data1:         IN  STD_LOGIC_VECTOR(15 downto 0);
-    Immediate:     IN  STD_LOGIC_VECTOR(15 downto 0);
-    ExeMemALUOut:  IN  STD_LOGIC_VECTOR(15 downto 0);
-    MemWbDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
-    ASrc:          IN  STD_LOGIC_VECTOR( 1 downto 0);
-    ForwardingA:   IN  STD_LOGIC_VECTOR( 1 downto 0);
-    AOp:           OUT STD_LOGIC_VECTOR(15 downto 0)
+    ASrc:        IN  STD_LOGIC_VECTOR( 1 downto 0);
+    ForwardingA: IN  STD_LOGIC_VECTOR( 1 downto 0);
+    Data1:       IN  STD_LOGIC_VECTOR(15 downto 0);
+    Immediate:   IN  STD_LOGIC_VECTOR(15 downto 0);
+    ALUOut:      IN  STD_LOGIC_VECTOR(15 downto 0);
+    MemDstVal:   IN  STD_LOGIC_VECTOR(15 downto 0);
+    AOp:         OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16
 );
 END MUX_ALU_A;
 
@@ -22,7 +22,7 @@ ARCHITECTURE Behaviour OF MUX_ALU_A IS
 
 BEGIN
     
-    Process(ASrc, ForwardingA, Immediate, Data1, ExeMemALUOut, MemWbDstVal)
+    Process(ASrc, ForwardingA, Immediate, Data1, ALUOut, MemDstVal)
     BEGIN
         CASE ForwardingA IS
             WHEN FWD_NONE =>
@@ -33,9 +33,9 @@ BEGIN
                     WHEN others   => AOp <= ZERO16;
                 END CASE;
             WHEN FWD_MEM =>
-                AOp <= ExeMemALUOut;
+                AOp <= ALUOut;
             WHEN FWD_WB  =>
-                AOp <= MemWbDstVal;
+                AOp <= MemDstVal;
             WHEN others =>
                 AOp <= ZERO16;
         END CASE;

@@ -3,19 +3,20 @@ library ieee;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
-use work.common.all;
+use WORK.COMMON.all;
 
 ENTITY RegisterFile IS
 PORT (
-    rst:           in std_logic;
-    PCplus1:       in std_logic_vector(15 downto 0);
-    RegWE:         in std_logic;
-    WriteRegister: IN  STD_LOGIC_VECTOR(3  downto 0);
+    rst:           IN  STD_LOGIC;
+    clk:           IN  STD_LOGIC;
+    PCplus1:       IN  STD_LOGIC_VECTOR(15 downto 0);
+    RegWE:         IN  STD_LOGIC;
+    WriteRegister: IN  STD_LOGIC_VECTOR( 3 downto 0);
     WriteData:     IN  STD_LOGIC_VECTOR(15 downto 0);
-    ASrc4:         in std_logic_vector(3 downto 0);
-    BSrc4:         in std_logic_vector(3 downto 0);
-    Data1:         out std_logic_vector(15 downto 0);
-    Data2:         out std_logic_vector(15 downto 0)
+    ASrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
+    BSrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
+    Data1:         OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16;
+    Data2:         OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16
 );
 END RegisterFile;
 
@@ -23,10 +24,10 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     SIGNAL R0, R1, R2, R3, R4, R5, R6, R7 : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL SP, IH, T              : STD_LOGIC_VECTOR(15 downto 0);
 
-    procedure selectFrom(signal sel: in std_logic_vector(3 downto 0);
+    procedure selectFrom(signal sel: IN STD_LOGIC_VECTOR(3 downto 0);
                     signal R0, R1, R2, R3, R4, R5, R6, R7
-                , SP, T, IH, PC : in std_logic_vector(15 downto 0);
-                signal res: out std_logic_vector(15 downto 0)) is
+                , SP, T, IH, PC : IN STD_LOGIC_VECTOR(15 downto 0);
+                signal res: OUT STD_LOGIC_VECTOR(15 downto 0)) is
     begin
         case sel is
             when Dst_R0 => res <= R0;
@@ -46,7 +47,7 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     end selectFrom;
 
 BEGIN
-    process (rst, PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
+    p_write: process (clk, rst, PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
         , RegWE)
     begin
         if rst = '0' then
@@ -63,7 +64,7 @@ BEGIN
             T  <= (others => '0');
             Data1 <= (others => '0');
             Data2 <= (others => '0');
-        else
+        else--if clk'event and clk = '1' then
             if RegWE = REG_WRITE_ENABLE then 
                 case WriteRegister is
                     when Dst_R0 => R0 <= WriteData;
@@ -80,19 +81,30 @@ BEGIN
                     when others => null; -- do nothing
                 end case;
             end if;
-
-            if ASrc4 = WriteRegister then
-                Data1 <= WriteData;
-            else
-                selectFrom(ASrc4, R0, R1, R2, R3, R4, R5, R6
-                , R7, SP, T, IH, PCplus1, Data1);
-            end if;
-            if BSrc4 = WriteRegister then
-                Data2 <= WriteData;
-            else
-                selectFrom(BSrc4, R0, R1, R2, R3, R4, R5, R6
-                , R7, SP, T, IH, PCplus1, Data2);
-            end if;
         end if;
     end process;
+
+    p_read1: process(rst, ASrc4, RegWE, WriteRegister, WriteData)
+    BEGIN
+        if rst = '0' then
+            Data1 <= (others => '0');
+        elsif not (ASrc4 = DST_NONE) and ASrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
+            Data1 <= WriteData;
+        else
+            selectFrom(ASrc4, R0, R1, R2, R3, R4, R5, R6
+            , R7, SP, T, IH, PCplus1, Data1);
+        end if;
+    END process;
+
+    p_read2: process(rst, BSrc4, RegWE, WriteRegister, WriteData)
+    BEGIN
+        if rst = '0' then
+            Data2 <= (others => '0');
+        elsif not (ASrc4 = DST_NONE) and BSrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
+            Data2 <= WriteData;
+        else
+            selectFrom(BSrc4, R0, R1, R2, R3, R4, R5, R6
+            , R7, SP, T, IH, PCplus1, Data2);
+        end if;
+    END process;
 END Behaviour;
