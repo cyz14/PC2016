@@ -32,10 +32,21 @@ CONSTANT IN_SLOT_FALSE  : STD_LOGIC := '0';
 CONSTANT ONE16  : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000001";
 
 CONSTANT ZERO1  : STD_LOGIC                     := '0';
-CONSTANT ZERO2  : STD_LOGIC_VECTOR( 1 downto 0) := "00";
-CONSTANT ZERO3  : STD_LOGIC_VECTOR( 2 downto 0) := "000";
-CONSTANT ZERO4  : STD_LOGIC_VECTOR( 3 downto 0) := "0000";
-CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+CONSTANT ZERO2  : STD_LOGIC_VECTOR( 1 downto 0) := (others => '0');
+CONSTANT ZERO3  : STD_LOGIC_VECTOR( 2 downto 0) := (others => '0');
+CONSTANT ZERO4  : STD_LOGIC_VECTOR( 3 downto 0) := (others => '0');
+CONSTANT ZERO5  : STD_LOGIC_VECTOR( 4 downto 0) := (others => '0');
+CONSTANT ZERO6  : STD_LOGIC_VECTOR( 5 downto 0) := (others => '0');
+CONSTANT ZERO7  : STD_LOGIC_VECTOR( 6 downto 0) := (others => '0');
+CONSTANT ZERO8  : STD_LOGIC_VECTOR( 7 downto 0) := (others => '0');
+CONSTANT ZERO9  : STD_LOGIC_VECTOR( 8 downto 0) := (others => '0');
+CONSTANT ZERO10 : STD_LOGIC_VECTOR( 9 downto 0) := (others => '0');
+CONSTANT ZERO11 : STD_LOGIC_VECTOR(10 downto 0) := (others => '0');
+CONSTANT ZERO12 : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+CONSTANT ZERO13 : STD_LOGIC_VECTOR(12 downto 0) := (others => '0');
+CONSTANT ZERO14 : STD_LOGIC_VECTOR(13 downto 0) := (others => '0');
+CONSTANT ZERO15 : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
+CONSTANT ZERO16 : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 
 CONSTANT ZERO_EXTEND_ENABLE:  STD_LOGIC := '0';
 CONSTANT ZERO_EXTEND_DISABLE: STD_LOGIC := '1';

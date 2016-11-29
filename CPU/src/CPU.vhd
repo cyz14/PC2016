@@ -97,11 +97,12 @@ ARCHITECTURE Behaviour OF CPU IS
         Ram2_OE:       OUT   STD_LOGIC;
         Ram2_WE:       OUT   STD_LOGIC;
         Ram2_EN:       OUT   STD_LOGIC;
-        Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0);
+        Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0)
+        -- ;
 
-        LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
-        LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
-        NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
+        -- LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
+        -- LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
+        -- NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
         );
     End Component;
 
@@ -141,10 +142,11 @@ ARCHITECTURE Behaviour OF CPU IS
         ASrc4       :  out std_logic_vector (3 downto 0);
         BSrc4       :  out std_logic_vector (3 downto 0);
         NextInDelayslot : OUT STD_LOGIC;
-        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
+        PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
+        -- ;
 
-        NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
-        ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
+        -- NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
+        -- ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -345,11 +347,11 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component ForwardingUnit IS port(
 		EXE_REGWRITE: in std_logic ;  --exe阶段的写信号
-        EXE_DstReg:   in std_logic_vector (3 DOWNTO 0) ;  --exe阶段目的寄存器
+        EXE_DstReg:   in std_logic_vector (3 DOWNTO 0) ;  --exe阶段目的寄存��
         MEM_REGWRITE: in std_logic ;  --mem 阶段的写信号
         MEM_DstReg:   in std_logic_vector (3 downto 0);  --mem阶段的目的寄存器
-        ASrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存器
-        BSrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存器
+        ASrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存��
+        BSrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存��
         FORWARDA:     out std_logic_vector(1 downto 0);  --muxa信号选择
         FORWARDB:     out std_logic_vector(1 downto 0)   --muxb信号选择
 	);
@@ -387,6 +389,118 @@ ARCHITECTURE Behaviour OF CPU IS
     Component BCDto7Seg is port (
         bcd:    IN  STD_LOGIC_VECTOR(3 downto 0);
         seg:    OUT STD_LOGIC_VECTOR(6 downto 0)
+    );
+    END Component;
+
+    Component LedDebug IS PORT (
+        rst              : In  STD_LOGIC;
+        clk              : IN  STD_LOGIC;
+        SW               : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        DebugEnable      : IN  STD_LOGIC;
+        LedOut              : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        Number           : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0);
+
+        if_PCKeep        : IN  STD_LOGIC := '1';
+        if_NewPC         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        if_PCToIM        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        if_PCPlus1       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        if_PCRx          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        if_PCAddImm      : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        if_Inst          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+
+        id_Inst          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        id_PCPlus1       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        id_PCAddImm      : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        id_Imme          : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
+        ext_Imme         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+        ctrl_CurPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ctrl_ImmeSrc     : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+        ctrl_ZeroExt     : IN  STD_LOGIC;
+        ctrl_ALUOp       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        ctrl_ASrc        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        ctrl_BSrc        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        ctrl_MemRead     : IN  STD_LOGIC;
+        ctrl_MemWE       : IN  STD_LOGIC;
+        ctrl_DstReg      : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        ctrl_RegWE       : IN  STD_LOGIC;
+        ctrl_ASrc4       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        ctrl_BSrc4       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        ctrl_PCMuxSel    : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        ctrl_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ctrl_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ctrl_InDelayslot : IN  STD_LOGIC;
+
+        rf_Data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        rf_Data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        id_data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        id_data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+        exe_Data1        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        exe_Data2        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        exe_Imme         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        exe_DstReg       : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        exe_RegWE        : IN  STD_LOGIC;
+        exe_MemRead      : IN  STD_LOGIC;
+        exe_MemWE        : IN  STD_LOGIC;
+        exe_ALUOp        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        exe_ASrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        exe_BSrc         : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        exe_BOp          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        exe_ASrc4        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        exe_BSrc4        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        exe_MemWriteData : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        exe_InDelayslot  : IN  STD_LOGIC;
+        exe_PCSel        : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+        alu_F            : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        alu_T            : IN  STD_LOGIC;
+
+        mem_DstReg       : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+        mem_RegWE        : IN  STD_LOGIC;
+        mem_MemWE        : IN  STD_LOGIC;
+        mem_MemRead      : IN  STD_LOGIC;
+        mem_ALUOut       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_WriteData    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+        mem_vga_wrn      : IN  STD_LOGIC;
+        mem_vga_data     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_vgaR         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+        mem_vgaG         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+        mem_vgaB         : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
+
+        wb_DstReg        : IN  STD_LOGIC_VECTOR( 3 DOWNTO 0);
+        wb_RegWE         : IN  STD_LOGIC;
+        wb_DstVal        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);    
+
+        ram1_en          : IN  STD_LOGIC;
+        ram1_oe          : IN  STD_LOGIC;
+        ram1_we          : IN  STD_LOGIC;
+        ram2_en          : IN  STD_LOGIC;
+        ram2_oe          : IN  STD_LOGIC;
+        ram2_we          : IN  STD_LOGIC;
+        ram1_data        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+        ram1_addr        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ram2_data        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); 
+        ram2_addr        : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+        ram1_InstRead    : IN  STD_LOGIC;
+        ram1_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ram1_Except      : IN  STD_LOGIC;
+        ram1_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ram1_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ram1_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+        ram2_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        ram2_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+        
+
+        fwd_ForwardA     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+        fwd_ForwardB     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
+
+        hdu_IFID_Keep    : IN  STD_LOGIC;
+        hdu_IDEX_Stall   : IN  STD_LOGIC
     );
     END Component;
 
@@ -474,6 +588,16 @@ ARCHITECTURE Behaviour OF CPU IS
 
     SIGNAL ram1_InstRead    : STD_LOGIC;
 
+    SIGNAL ram1_en_o        : STD_LOGIC;
+    SIGNAL ram1_oe_o        : STD_LOGIC;
+    SIGNAL ram1_we_o        : STD_LOGIC;
+    SIGNAL ram2_en_o        : STD_LOGIC;
+    SIGNAL ram2_oe_o        : STD_LOGIC;
+    SIGNAL ram2_we_o        : STD_LOGIC;
+    SIGNAL ram1_data_o      : STD_LOGIC_VECTOR(15 DOWNTO 0); 
+    SIGNAL ram1_addr_o      : STD_LOGIC_VECTOR(17 DOWNTO 0);
+    SIGNAL ram2_data_o      : STD_LOGIC_VECTOR(15 DOWNTO 0); 
+    SIGNAL ram2_addr_o      : STD_LOGIC_VECTOR(17 DOWNTO 0);
     SIGNAL ram1_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ram1_Except      : STD_LOGIC;
     SIGNAL ram1_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
@@ -568,10 +692,11 @@ BEGIN
         Ram2_Inst    => if_Inst,
         Ram2_OE      => Ram2_OE,
         Ram2_WE      => Ram2_WE,
-        Ram2_EN      => Ram2_EN,
-        LedSel       => SW,
-        LedOut       => ram2_LED,
-        NumOut       => ram2_numout
+        Ram2_EN      => Ram2_EN
+        -- ,
+        -- LedSel       => SW,
+        -- LedOut       => ram2_LED,
+        -- NumOut       => ram2_numout
     );
     
     u_MUX_IF_ID: MUX_IF_ID PORT MAP (
@@ -605,9 +730,10 @@ BEGIN
         ASrc4       => ctrl_ASrc4,
         BSrc4       => ctrl_BSrc4,
         NextInDelayslot => ctrl_InDelayslot, 
-        PCMuxSel    => ctrl_PCMuxSel,
-        NowPC       => ctrl_NowPC,
-        ExceptPC    => ctrl_ExceptPC
+        PCMuxSel    => ctrl_PCMuxSel
+        -- ,
+        -- NowPC       => ctrl_NowPC,
+        -- ExceptPC    => ctrl_ExceptPC
     );
 
     u_AddImme: PCAddImm PORT MAP (
@@ -737,7 +863,7 @@ BEGIN
         
         DstVal        => mem_ReadData,
         
-        Ram1OE        => Ram1_oe,
+        Ram1OE        => Ram1_OE,
         Ram1WE        => Ram1_we,
         Ram1EN        => Ram1_en,
         Ram1Addr      => RAM1_Addr,
@@ -760,7 +886,7 @@ BEGIN
         LedSel        => SW,
         LedOut        => ram1_LED,
         NumOut        => ram1_numout
-    );
+    );  
 
     u_Mux_Write_Data: MUX_Write_Data PORT MAP (
         MemRead   => mem_MemRead,
@@ -822,5 +948,115 @@ BEGIN
         VGA_G <= background_g;
         VGA_B <= background_b;
     END PROCESS;
+
+    u_LedDebug: LedDebug PORT MAP (
+        rst              => rst,
+        clk              => clk_sel,
+        SW               => SW,
+        DebugEnable      => '1',
+        LedOut           => LED,
+        Number           => num_out, 
+
+        if_PCKeep        => if_PCKeep,
+        if_NewPC         => if_NewPC,
+        if_PCToIM        => if_PCToIM,
+        if_PCPlus1       => id_PCPlus1,
+        if_PCRx          => if_PCRx,
+        if_PCAddImm      => if_PCAddImm,
+        if_Inst          => if_Inst, --instruction from ram2
+
+        id_Inst          => id_Inst,
+        id_PCPlus1       => id_PCPlus1,
+        id_PCAddImm      => id_PCAddImm,
+        id_Imme          => id_Imme,
+        ext_Imme         => ext_Imme,
+
+        ctrl_CurPC       => ctrl_CurPC,
+        ctrl_ImmeSrc     => ctrl_ImmeSrc,
+        ctrl_ZeroExt     => ctrl_ZeroExt,
+        ctrl_ALUOp       => ctrl_ALUOp,
+        ctrl_ASrc        => ctrl_ASrc,
+        ctrl_BSrc        => ctrl_BSrc,
+        ctrl_MemRead     => ctrl_MemRead,
+        ctrl_MemWE       => ctrl_MemWE,
+        ctrl_DstReg      => ctrl_DstReg,
+        ctrl_RegWE       => ctrl_RegWE,
+        ctrl_ASrc4       => ctrl_ASrc4,
+        ctrl_BSrc4       => ctrl_BSrc4,
+        ctrl_PCMuxSel    => ctrl_PCMuxSel,
+        ctrl_ExceptPC    => ctrl_ExceptPC,
+        ctrl_NowPC       => ctrl_NowPC,
+        ctrl_InDelayslot => ctrl_InDelayslot,
+
+        rf_Data1         => rf_Data1,
+        rf_Data2         => rf_Data2,
+        id_data1         => id_data1,
+        id_data2         => id_data2,
+
+        exe_Data1        => exe_Data1,
+        exe_Data2        => exe_Data2,
+        exe_Imme         => exe_Imme,
+        exe_DstReg       => exe_DstReg,
+        exe_RegWE        => exe_RegWE,
+        exe_MemRead      => exe_MemRead,
+        exe_MemWE        => exe_MemWE,
+        exe_ALUOp        => exe_ALUOp,
+        exe_ASrc         => exe_ASrc,
+        exe_BSrc         => exe_BSrc,
+        exe_BOp          => exe_BOp, 
+        exe_ASrc4        => exe_ASrc4,
+        exe_BSrc4        => exe_BSrc4,
+        exe_MemWriteData => exe_MemWriteData,
+        exe_InDelayslot  => exe_InDelayslot,
+        exe_PCSel        => exe_PCSel,
+
+        alu_F            => alu_F,
+        alu_T            => alu_T,
+
+        mem_DstReg       => mem_DstReg,
+        mem_RegWE        => mem_RegWE,
+        mem_MemWE        => mem_MemWE,
+        mem_MemRead      => mem_MemRead,
+        mem_ALUOut       => mem_ALUOut,
+        mem_WriteData    => mem_WriteData,
+        mem_ReadData     => mem_ReadData,
+        mem_DstVal       => mem_DstVal,
+
+        mem_vga_wrn      => '1',
+        mem_vga_data     => (others => '0'),
+        mem_vgaR         => (others => '0'),
+        mem_vgaG         => (others => '0'),
+        mem_vgaB         => (others => '0'),
+
+        wb_DstReg        => (others => '0'),
+        wb_RegWE         => wb_RegWE,
+        wb_DstVal        => wb_DstVal,
+
+        ram1_en          => '0',
+        ram1_oe          => '0',
+        ram1_we          => '0',
+        ram2_en          => '0',
+        ram2_oe          => '0',
+        ram2_we          => '0',
+        ram1_data        => (others => '0'),
+        ram1_addr        => (others => '0'),
+        ram2_data        => (others => '0'),
+        ram2_addr        => (others => '0'),
+
+        ram1_InstRead    => ram1_InstRead,
+        ram1_NowPC       => ram1_NowPC,
+        ram1_Except      => ram1_Except,
+        ram1_ExceptPC    => ram1_ExceptPC,
+        ram1_LED         => ram1_LED,
+        ram1_numout      => ram1_numout,
+        ram2_LED         => ram2_LED,
+        ram2_numout      => ram2_numout,
+        
+        fwd_ForwardA     => fwd_ForwardA,
+        fwd_ForwardB     => fwd_ForwardB,
+
+        hdu_IFID_Keep    => hdu_IFID_Keep,
+        hdu_IDEX_Stall   => hdu_IDEX_Stall
+    );
 
 END Behaviour;

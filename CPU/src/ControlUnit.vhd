@@ -34,10 +34,10 @@ ENTITY ControlUnit IS PORT (
     BSrc4       :  OUT STD_LOGIC_VECTOR(3 downto 0);
     
     NextInDelayslot : OUT STD_LOGIC;
-    PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0);
-
-    NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
-    ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
+    PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
+    -- ;
+    -- NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
+    -- ExceptPC    :  OUT STD_LOGIC_VECTOR(15 downto 0)
 );
 END ENTITY;
 
@@ -80,8 +80,8 @@ BEGIN
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
             NextInDelayslot <= IN_SLOT_FALSE;
-            NowPC       <= CurPC;
-            ExceptPC    <= ZERO16;
+            -- NowPC       <= CurPC;
+            -- ExceptPC    <= ZERO16;
         else
             ImmeSrc     <= IMM_NONE;
             ZeroExt     <= ZERO_EXTEND_DISABLE;

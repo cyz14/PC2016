@@ -18,11 +18,12 @@ entity IM_RAM2 is port(
     Ram2_OE:       OUT   STD_LOGIC;
     Ram2_WE:       OUT   STD_LOGIC;
     Ram2_EN:       OUT   STD_LOGIC;
-    Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0);
+    Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0)
+    -- ;
 
-    LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
-    LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
-    NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
+    -- LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
+    -- LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
+    -- NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
 );
 end IM_RAM2;
 
