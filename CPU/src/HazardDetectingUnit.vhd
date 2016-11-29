@@ -29,14 +29,14 @@ begin
     begin
         if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))
         or (s1_DstReg = Dst_T and (ASrc4 = Dst_T or BSrc4 = Dst_T))
-        or (MemWE = RAM_WRITE_ENABLE and ALUOut(15) = '0') then
-            PC_Keep <= '0';
-            IFID_Keep <= '0';
-            IDEX_Stall <= '0';
+        or (ALUOut(15) = '0' and (MemWE = RAM_WRITE_ENABLE or MemRead = RAM_READ_ENABLE)) then
+            PC_Keep <= KEEP_ENABLE;
+            IFID_Keep <= KEEP_ENABLE;
+            IDEX_Stall <= KEEP_ENABLE;
         else
-            PC_Keep <= '1';
-            IFID_Keep <= '1';
-            IDEX_Stall <= '1';
+            PC_Keep <= KEEP_DISABLE;
+            IFID_Keep <= KEEP_DISABLE;
+            IDEX_Stall <= KEEP_DISABLE;
         end if;
     end process stall_gen;
 
@@ -44,7 +44,7 @@ begin
     begin
         if rst = '0' then
             s1_DstReg <= (others => '1');
-            s1_MemRead <= '1';
+            s1_MemRead <= RAM_READ_DISABLE;
         elsif clk'event and clk = '1' then
             s1_DstReg <= DstReg;
             s1_MemRead <= MemRead;

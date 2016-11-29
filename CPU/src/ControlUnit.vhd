@@ -159,12 +159,12 @@ BEGIN
                             CASE temp_Ry IS 
                                 WHEN FUNCT_MFPC => 
                                     ImmeSrc  <= IMM_NONE;
+                                    ASrc4    <= Dst_PC;
                                     ASrc     <= AS_DATA1;
                                     BSrc     <= AS_NONE;
                                     ALUop    <= OP_POS;
                                     RegWE    <= REG_WRITE_ENABLE;
                                     DstReg   <= "0" & temp_Rx;
-                                    ASrc4    <= Dst_PC;
                                     
                                 WHEN FUNCT_JR   => 
                                     ImmeSrc  <= IMM_EIGHT;

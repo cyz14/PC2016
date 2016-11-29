@@ -535,7 +535,7 @@ BEGIN
         clkOUT => clk_sel
     );
     
-    if_PCRx <= rf_Data1;
+    if_PCRx <= id_Data1;
     if_PCAddImm <= id_PCAddImm;
     u_PCMUX: PCMUX PORT MAP (
         clk           => CLK,
@@ -558,7 +558,7 @@ BEGIN
         PCOUT => if_PCPlus1
     );
     
-    u_Ram2: IM_RAM2 PORT MAP (
+    u_InstMemory: IM_RAM2 PORT MAP (
         clk          => clk_sel,
         rst          => RST,
         PC_i         => if_PCToIM,

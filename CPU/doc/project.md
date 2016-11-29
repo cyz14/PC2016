@@ -21,7 +21,7 @@
 |13    |LW         |
 |14    |LW_SP      |
 |15    |MFIH       |Yes
-|16    |MFPC       |
+|16    |MFPC       |Yes
 |17    |MTIH       |Yes
 |18    |MTSP       |Yes
 |19    |NOP        |
