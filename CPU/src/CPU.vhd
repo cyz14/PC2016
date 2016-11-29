@@ -246,16 +246,19 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component RegisterFile IS PORT (
-        rst:           IN  STD_LOGIC;
-        clk:           IN  STD_LOGIC;
-        PCplus1:       IN  STD_LOGIC_VECTOR(15 downto 0);
-        RegWE:         IN  STD_LOGIC;
-        WriteRegister: IN  STD_LOGIC_VECTOR( 3 downto 0);
-        WriteData:     IN  STD_LOGIC_VECTOR(15 downto 0);
-        ASrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
-        BSrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
-        Data1:         OUT STD_LOGIC_VECTOR(15 downto 0);
-        Data2:         OUT STD_LOGIC_VECTOR(15 downto 0)
+        rst:                    IN  STD_LOGIC;
+        clk:                    IN  STD_LOGIC;
+        PCplus1:                IN  STD_LOGIC_VECTOR(15 downto 0);
+        RegWE:                  IN  STD_LOGIC;
+        WriteRegister:          IN  STD_LOGIC_VECTOR( 3 downto 0);
+        WriteData:              IN  STD_LOGIC_VECTOR(15 downto 0);
+        ASrc4:                  IN  STD_LOGIC_VECTOR( 3 downto 0);
+        BSrc4:                  IN  STD_LOGIC_VECTOR( 3 downto 0);
+        Data1:                  OUT STD_LOGIC_VECTOR(15 downto 0);
+        Data2:                  OUT STD_LOGIC_VECTOR(15 downto 0);
+        R0_o, R1_o, R2_o, R3_o: OUT STD_LOGIC_VECTOR(15 downto 0);
+        R4_o, R5_o, R6_o, R7_o: OUT STD_LOGIC_VECTOR(15 downto 0);
+        SP_o, T_o, IH_o:        OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -500,7 +503,11 @@ ARCHITECTURE Behaviour OF CPU IS
         fwd_ForwardB     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
 
         hdu_IFID_Keep    : IN  STD_LOGIC;
-        hdu_IDEX_Stall   : IN  STD_LOGIC
+        hdu_IDEX_Stall   : IN  STD_LOGIC;
+
+        R0, R1, R2, R3   : IN  STD_LOGIC_VECTOR(15 downto 0);
+        R4, R5, R6, R7   : IN  STD_LOGIC_VECTOR(15 downto 0);
+        SP, T, IH        : IN  STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -612,6 +619,10 @@ ARCHITECTURE Behaviour OF CPU IS
 
     SIGNAL hdu_IFID_Keep    : STD_LOGIC;
     SIGNAL hdu_IDEX_Stall   : STD_LOGIC;
+
+    SIGNAL R0, R1, R2, R3   : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL R4, R5, R6, R7   : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL SP, T, IH        : STD_LOGIC_VECTOR(15 downto 0);
 
     signal keyboard_data_ready: STD_LOGIC;
     signal keyboard_key_value: STD_LOGIC_vector(15 downto 0);
@@ -752,7 +763,18 @@ BEGIN
         ASrc4           => ctrl_ASrc4,
         BSrc4           => ctrl_BSrc4,
         Data1           => rf_Data1,
-        Data2           => rf_Data2
+        Data2           => rf_Data2,
+        R0_o => R0, 
+        R1_o => R1,
+        R2_o => R2,
+        R3_o => R3,
+        R4_o => R4,
+        R5_o => R5,
+        R6_o => R6,
+        R7_o => R7,
+        SP_o => SP, 
+        T_o  => T,
+        IH_o => IH
     );
 
     u_ImmExtend: ImmExtend PORT MAP (
@@ -1056,7 +1078,19 @@ BEGIN
         fwd_ForwardB     => fwd_ForwardB,
 
         hdu_IFID_Keep    => hdu_IFID_Keep,
-        hdu_IDEX_Stall   => hdu_IDEX_Stall
+        hdu_IDEX_Stall   => hdu_IDEX_Stall,
+        
+        R0 => R0, 
+        R1 => R1,
+        R2 => R2,
+        R3 => R3,
+        R4 => R4,
+        R5 => R5,
+        R6 => R6,
+        R7 => R7,
+        SP => SP, 
+        T  => T,
+        IH => IH
     );
 
 END Behaviour;

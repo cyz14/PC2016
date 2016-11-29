@@ -18,7 +18,7 @@ package common is
 --    <type_name>        : std_logic;
 -- end record;
 --
-
+SUBTYPE MyRegister IS STD_LOGIC_VECTOR(15 downto 0);
 
 -- Declare constants
 --
@@ -59,6 +59,7 @@ CONSTANT INST_VALID        : STD_LOGIC := '0';
 CONSTANT INST_INVALID      : STD_LOGIC := '1';
 CONSTANT CHIP_ENABLE       : STD_LOGIC := '0';
 CONSTANT CHIP_DISABLE      : STD_LOGIC := '1';
+CONSTANT UART_ENABLE       : STD_LOGIC := '1';
 
 CONSTANT RAM_ENABLE        : STD_LOGIC := '0';
 CONSTANT RAM_DISABLE       : STD_LOGIC := '1';

@@ -98,7 +98,7 @@ begin
 
     SyncClk <= SyncClkA xor SyncClkB;
     
-    Ram1EN <= '0';
+    -- Ram1EN <= '0';
     Ram1Addr(17 downto 16) <= (others => '0');
     Ram1WE <= not IsWriteMode or SyncClk;
     wrn <= not IsUartWrite or SyncClk;
@@ -134,63 +134,80 @@ begin
             SyncClkWorking <= '0';
             SyncClkA <= '1';
             SyncClkB <= '0';
-        ELSIF CLK'event and CLK = '0' THEN
-            SyncClkWorking <= '1';
-            SyncClkA <= not SyncClkA;
-            Ram1OE <= not MemWE;
-            Ram1Addr(15 downto 0) <= ALUOut;
-            IsUartWrite <= '0';
-            IsVGAWrite  <= '0';
-            UartReadyLoad <= '0';
-            IsWriteMode <= not MemWE;
-            LastException <= '0';
-            if MemWE = RAM_WRITE_ENABLE then
-                Ram1Data <= WriteData;
+        ELSE
+            IF CLK'event and CLK = '0' THEN -- have to begin in falling edge to give data prepare time
+                SyncClkWorking <= '1';
+                SyncClkA <= not SyncClkA;
+                Ram1OE <= not MemWE;
                 Ram1Addr(15 downto 0) <= ALUOut;
-            else
-                Ram1Data <= (others => 'Z');
-            end if;
-            
-            KeyboardOutMask <= (others => '0');
-            if InstRead = '0' then -- read InstructionMemory
-                InstOutMask <= (others => '1');
-                MemOutMask <= (others => '0');
-                UartOutMask <= (others => '0');
-            elsif MemRead = RAM_READ_ENABLE then -- Read DataMemory
-                InstOutMask <= (others => '0');
-                MemOutMask <= (others => '1');
-                UartOutMask <= (others => '0');
-                if ALUOut = x"BF00" then -- read from Uart
-                    Ram1OE <= '1';
-                    UartReadyLoad <= '1';
-                    Ram1Data(15 downto 8) <= (others => '0');
-                    if not (data_ready = '1') then
-                        LastException <= '1';
-                        ExceptPC <= NowPC;
-                        UartReadyLoad <= '0';
-                    end if;
-                elsif ALUOut = x"BF01" then -- Read Uart Flag
-                    MemOutMask <= (others => '0');
-                    UartOutMask <= (others => '1');
-                elsif ALUOut = x"BF04" then -- Read Keyboard Input Key
-                    MemOutMask <= (others => '0');
-                    KeyboardOutMask <= (others => '1');
+                IsUartWrite <= '0';
+                IsVGAWrite  <= '0';
+                UartReadyLoad <= '0';
+                IsWriteMode <= not MemWE;
+                LastException <= '0';
+                if MemWE = RAM_WRITE_ENABLE then
+                    Ram1Data <= WriteData;
+                    Ram1Addr(15 downto 0) <= ALUOut;
+                else
+                    Ram1Data <= (others => 'Z');
                 end if;
-            else -- Write Mem or do nothing
-                InstOutMask <= (others => '0');
-                MemOutMask <= (others => '0');
-                UartOutMask <= (others => '0');
-                if MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF00" then -- write uart
-                    IsWriteMode <= '0';
-                    IsUartWrite <= '1';
-                    if not((tbre and tsre) = '1') then
-                        LastException <= '1';
-                        ExceptPC <= NowPC;
-                        IsUartWrite <= '0';
+                
+                KeyboardOutMask <= (others => '0');
+                if InstRead = '0' then -- read InstructionMemory
+                    InstOutMask <= (others => '1');
+                    MemOutMask <= (others => '0');
+                    UartOutMask <= (others => '0');
+                elsif MemRead = RAM_READ_ENABLE then -- Read DataMemory
+                    InstOutMask <= (others => '0');
+                    MemOutMask <= (others => '1');
+                    UartOutMask <= (others => '0');
+                    if ALUOut = x"BF00" then -- read from Uart
+                        Ram1OE <= '1';
+                        UartReadyLoad <= '1';
+                        Ram1Data(15 downto 8) <= (others => '0');
+                        if not (data_ready = '1') then
+                            LastException <= '1';
+                            ExceptPC <= NowPC;
+                            UartReadyLoad <= '0';
+                        end if;
+                    elsif ALUOut = x"BF01" then -- Read Uart Flag
+                        MemOutMask <= (others => '0');
+                        UartOutMask <= (others => '1');
+                    elsif ALUOut = x"BF04" then -- Read Keyboard Input Key
+                        MemOutMask <= (others => '0');
+                        KeyboardOutMask <= (others => '1');
                     end if;
-                elsif MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF06" then -- write VGA
-                    IsWriteMode <= '0';
-                    IsVGAWrite <= '1';
+                else -- Write Mem or do nothing
+                    InstOutMask <= (others => '0');
+                    MemOutMask <= (others => '1');
+                    UartOutMask <= (others => '0');
+                    if MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF00" then -- write uart
+                        Ram1EN <= CHIP_DISABLE;
+                        IsWriteMode <= '0';
+                        IsUartWrite <= '1';
+                        if not((tbre and tsre) = '1') then
+                            LastException <= '1';
+                            ExceptPC <= NowPC;
+                            IsUartWrite <= '0';
+                        end if;
+                    elsif MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF06" then -- write VGA
+                        IsWriteMode <= '0';
+                        IsVGAWrite <= '1';
+                    else
+                        Ram1EN <= CHIP_ENABLE;
+                    end if;
+                end if;
+
+            END IF;
+        
+            if clk'event and clk = '1' then
+                if SyncClkWorking = '1' then
+                    SyncClkB <= not SyncClkB;
+                end if;
+                if UartReadyLoad = '1' then
+                    UartUpRead <= '0';
+                else
+                    UartUpRead <= '1';
                 end if;
             end if;
         END IF;

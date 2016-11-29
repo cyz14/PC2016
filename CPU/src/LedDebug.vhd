@@ -115,9 +115,12 @@ ENTITY LedDebug IS PORT (
     fwd_ForwardB     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
 
     hdu_IFID_Keep    : IN  STD_LOGIC;
-    hdu_IDEX_Stall   : IN  STD_LOGIC
-);
+    hdu_IDEX_Stall   : IN  STD_LOGIC;
 
+    R0, R1, R2, R3   : IN  STD_LOGIC_VECTOR(15 downto 0);
+    R4, R5, R6, R7   : IN  STD_LOGIC_VECTOR(15 downto 0);
+    SP, T, IH        : IN  STD_LOGIC_VECTOR(15 downto 0)
+);
 END LedDebug;
 
 ARCHITECTURE Bhv OF LedDebug IS
@@ -186,17 +189,17 @@ BEGIN
     infos(50) <= ZERO16;
     infos(51) <= ZERO16;
     infos(52) <= ZERO16;
-    infos(53) <= ZERO16;
-    infos(54) <= ZERO16;
-    infos(55) <= ZERO16;
-    infos(56) <= ZERO16;
-    infos(57) <= ZERO16;
-    infos(58) <= ZERO16;
-    infos(59) <= ZERO16;
-    infos(60) <= ZERO16;
-    infos(61) <= ZERO16;
-    infos(62) <= ZERO16;
-    infos(63) <= ZERO16;
+    infos(53) <= SP;
+    infos(54) <= T;
+    infos(55) <= IH;
+    infos(56) <= R0;
+    infos(57) <= R1;
+    infos(58) <= R2;
+    infos(59) <= R3;
+    infos(60) <= R4;
+    infos(61) <= R5;
+    infos(62) <= R6;
+    infos(63) <= R7;
 
     PROCESS(clk, rst, SW, DebugEnable)
         Variable index : integer range 0 to 63;

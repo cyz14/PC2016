@@ -7,16 +7,19 @@ use WORK.COMMON.all;
 
 ENTITY RegisterFile IS
 PORT (
-    rst:           IN  STD_LOGIC;
-    clk:           IN  STD_LOGIC;
-    PCplus1:       IN  STD_LOGIC_VECTOR(15 downto 0);
-    RegWE:         IN  STD_LOGIC;
-    WriteRegister: IN  STD_LOGIC_VECTOR( 3 downto 0);
-    WriteData:     IN  STD_LOGIC_VECTOR(15 downto 0);
-    ASrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
-    BSrc4:         IN  STD_LOGIC_VECTOR( 3 downto 0);
-    Data1:         OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16;
-    Data2:         OUT STD_LOGIC_VECTOR(15 downto 0) := ZERO16
+    rst:                    IN  STD_LOGIC;
+    clk:                    IN  STD_LOGIC;
+    PCplus1:                IN  STD_LOGIC_VECTOR(15 downto 0);
+    RegWE:                  IN  STD_LOGIC;
+    WriteRegister:          IN  STD_LOGIC_VECTOR( 3 downto 0);
+    WriteData:              IN  STD_LOGIC_VECTOR(15 downto 0);
+    ASrc4:                  IN  STD_LOGIC_VECTOR( 3 downto 0);
+    BSrc4:                  IN  STD_LOGIC_VECTOR( 3 downto 0);
+    Data1:                  OUT STD_LOGIC_VECTOR(15 downto 0):= ZERO16;
+    Data2:                  OUT STD_LOGIC_VECTOR(15 downto 0):= ZERO16;
+    R0_o, R1_o, R2_o, R3_o: OUT STD_LOGIC_VECTOR(15 downto 0);
+    R4_o, R5_o, R6_o, R7_o: OUT STD_LOGIC_VECTOR(15 downto 0);
+    SP_o, T_o, IH_o:        OUT STD_LOGIC_VECTOR(15 downto 0)
 );
 END RegisterFile;
 
@@ -47,6 +50,18 @@ ARCHITECTURE Behaviour OF RegisterFile IS
     end selectFrom;
 
 BEGIN
+    R0_o <= R0;
+    R1_o <= R1;
+    R2_o <= R2;
+    R3_o <= R3;
+    R4_o <= R4;
+    R5_o <= R5;
+    R6_o <= R6;
+    R7_o <= R7;
+    SP_o <= SP;
+    T_o  <= T;
+    IH_o <= IH;
+
     p_write: process (clk, rst, PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
         , RegWE)
     begin
@@ -62,7 +77,7 @@ BEGIN
             SP <= (others => '0');
             IH <= (others => '0');
             T  <= (others => '0');
-        else--if clk'event and clk = '1' then
+        elsif clk'event and clk = '1' then
             if RegWE = REG_WRITE_ENABLE then 
                 case WriteRegister is
                     when Dst_R0 => R0 <= WriteData;
@@ -86,7 +101,7 @@ BEGIN
     BEGIN
         if rst = '0' then
             Data1 <= (others => '0');
-        elsif not (ASrc4 = DST_NONE) and ASrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
+        elsif (not (ASrc4 = DST_NONE)) and RegWE = REG_WRITE_ENABLE and ASrc4 = WriteRegister then
             Data1 <= WriteData;
         else
             selectFrom(ASrc4, R0, R1, R2, R3, R4, R5, R6
@@ -98,7 +113,7 @@ BEGIN
     BEGIN
         if rst = '0' then
             Data2 <= (others => '0');
-        elsif not (BSrc4 = DST_NONE) and BSrc4 = WriteRegister and RegWE = REG_WRITE_ENABLE then
+        elsif not (BSrc4 = DST_NONE) and RegWE = REG_WRITE_ENABLE and BSrc4 = WriteRegister then
             Data2 <= WriteData;
         else
             selectFrom(BSrc4, R0, R1, R2, R3, R4, R5, R6
