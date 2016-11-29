@@ -415,7 +415,6 @@ BEGIN
                     BSrc     <= AS_NONE;
                     RegWE    <= REG_WRITE_DISABLE;
                     DstReg   <= Dst_NONE;
-					ASrc4    <= '0' & temp_Rx;
                     if (condition = ZERO16) THEN
                         PCMuxSel <= PC_AddImm;
                         NextInDelayslot <= IN_SLOT_TRUE;
