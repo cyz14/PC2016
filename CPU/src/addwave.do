@@ -2,6 +2,7 @@ add wave -position end  sim:/testbench/u_cpu/if_PCToIM
 add wave -position end  sim:/testbench/u_cpu/if_Inst
 add wave -position end  sim:/testbench/u_cpu/ctrl_ImmeSrc
 add wave -position end  sim:/testbench/u_cpu/ext_Imme
+add wave -position end  sim:/testbench/u_cpu/u_CtrlUnit/Condition
 add wave -position end  sim:/testbench/u_cpu/ctrl_PCMuxSel
 add wave -position end  sim:/testbench/u_cpu/ctrl_ASrc4
 add wave -position end  sim:/testbench/u_cpu/ctrl_BSrc4

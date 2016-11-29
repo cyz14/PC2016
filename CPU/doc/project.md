@@ -12,9 +12,9 @@
 |4     |ADDU       |Yes
 |5     |AND        |Yes
 |6     |B          |Yes
-|7     |BEQZ       |
-|8     |BNEZ       |
-|9     |BTEQZ      |
+|7     |BEQZ       |Yes
+|8     |BNEZ       |Yes
+|9     |BTEQZ      |Yes
 |10    |CMP        |Yes
 |11    |JR         |Yes
 |12    |LI         |Yes
@@ -34,11 +34,12 @@
 
 ### 扩展指令
 |Number|Instruction|Checked
-|1|SLLV|
-|2|SRLV|
-|3|BTNEZ|
-|4|MOVE|
-|5|SLTI|
+|:-----|-----------|-------
+|1     |SLLV       |Yes
+|2     |SRLV       |Yes
+|3     |BTNEZ      |Yes
+|4     |MOVE       |Yes
+|5     |SLTI       |Yes
 
 ## 统一定义
 

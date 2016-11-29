@@ -249,8 +249,6 @@ BEGIN
                             
                         WHEN FUNCT_BTEQZ =>
                             ImmeSrc  <= IMM_EIGHT;
-                            ASrc     <= AS_NONE;
-                            BSrc     <= AS_NONE;
                             RegWE    <= REG_WRITE_DISABLE;
                             DstReg   <= Dst_NONE;
                             ASrc4    <= Dst_T;
@@ -264,8 +262,6 @@ BEGIN
                             
                         WHEN FUNCT_BTNEZ =>
                             ImmeSrc  <= IMM_EIGHT;
-                            ASrc     <= AS_NONE;
-                            BSrc     <= AS_NONE;
                             RegWE    <= REG_WRITE_DISABLE;
                             DstReg   <= Dst_NONE;
                             ASrc4    <= Dst_T;
