@@ -593,7 +593,7 @@ BEGIN
         rst         => RST,
         CurPC       => id_PCPlus1,
         Instruction => id_Inst,
-        Condition   => rf_Data1,
+        Condition   => id_Data1,
         InDelayslot => exe_InDelayslot,
         LastPCSel   => exe_PCSel,
         ImmeSrc     => ctrl_ImmeSrc,
