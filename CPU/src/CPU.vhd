@@ -71,12 +71,11 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     END Component; 
 
-    Component PCReg IS
-        Port (
-            PCSrc : IN STD_LOGIC_VECTOR(15 downto 0);
-            keep : IN STD_LOGIC;
-            PC : OUT STD_LOGIC_VECTOR(15 downto 0)
-        );
+    Component PCReg IS Port (
+        PCSrc : IN STD_LOGIC_VECTOR(15 downto 0);
+        keep : IN STD_LOGIC;
+        PC : OUT STD_LOGIC_VECTOR(15 downto 0)
+    );
     END Component;
 
     Component PCAdd1 IS Port (
@@ -431,27 +430,25 @@ ARCHITECTURE Behaviour OF CPU IS
 
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
-    
-    SIGNAL exe_Data1      : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_Data2      : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_Imme  : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_DstReg     : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_RegWE      : STD_LOGIC;
-    SIGNAL exe_MemRead    : STD_LOGIC;
-    SIGNAL exe_MemWE      : STD_LOGIC;
-    SIGNAL exe_ALUOp      : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_ASrc       : STD_LOGIC_VECTOR( 1 downto 0);
-    SIGNAL exe_BSrc       : STD_LOGIC_VECTOR( 1 downto 0);
-    SIGNAL exe_BOp        : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL exe_ASrc4      : STD_LOGIC_VECTOR( 3 downto 0);
-    SIGNAL exe_BSrc4      : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL id_data1         : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL id_data2         : STD_LOGIC_VECTOR(15 downto 0);
+
+    SIGNAL exe_Data1        : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_Data2        : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_Imme         : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_DstReg       : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_RegWE        : STD_LOGIC;
+    SIGNAL exe_MemRead      : STD_LOGIC;
+    SIGNAL exe_MemWE        : STD_LOGIC;
+    SIGNAL exe_ALUOp        : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_ASrc         : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_BSrc         : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_BOp          : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_ASrc4        : STD_LOGIC_VECTOR( 3 downto 0);
+    SIGNAL exe_BSrc4        : STD_LOGIC_VECTOR( 3 downto 0);
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL mux_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_InDelayslot  : STD_LOGIC;
     SIGNAL exe_PCSel        : STD_LOGIC_VECTOR( 1 downto 0);
-
-    SIGNAL id_data1          : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL id_data2          : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL alu_F            : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL alu_T            : STD_LOGIC;
@@ -531,7 +528,7 @@ BEGIN
         clk => CLK,
         clk11 => CLK_11,
         clk50 => CLK_50,
-        sel   => "00",
+        sel   => SW(15 downto 14),
         clkOUT => clk_sel
     );
     
