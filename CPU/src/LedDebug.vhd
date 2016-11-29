@@ -203,7 +203,7 @@ BEGIN
     BEGIN
         if rst = '0' then
             LedOut <= ZERO16;
-        elsif clk'event and clk = '1' then
+        else
             index := conv_integer(SW(5 DOWNTO 0));
             LedOut <= infos(index);
         end if;
