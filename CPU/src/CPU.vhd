@@ -714,7 +714,7 @@ BEGIN
         clk        => clk_sel,
         rst        => RST,
         if_Keep    => hdu_IFID_Keep,
-        if_PCPlus1 => if_PCPlus1,
+        if_PCPlus1 => if_PCToIM,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,
         id_Inst    => id_Inst,

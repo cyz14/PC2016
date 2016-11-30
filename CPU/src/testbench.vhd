@@ -129,7 +129,7 @@ begin
         file inp:        text open read_mode is "./test/ram1.txt";
         variable inline: line;
         variable in_int: integer range 0 to MAX_ADDR;
-        variable var:    integer range 0 to MAX_ADDR:  = 0;
+        variable var:    integer range 0 to MAX_ADDR:= 0;
         variable addr:   integer range 0 to MAX_ADDR;
     begin
         if hda1_init = '0' then
@@ -167,7 +167,7 @@ begin
         file inp:        text open read_mode is "./test/ram2.txt";
         variable inline: line;
         variable in_int: integer range 0 to MAX_ADDR;
-        variable var:    integer range 0 to MAX_ADDR:  = 0;
+        variable var:    integer range 0 to MAX_ADDR:= 0;
         variable addr:   integer range 0 to MAX_ADDR;
     begin
         if hda2_init = '0' then

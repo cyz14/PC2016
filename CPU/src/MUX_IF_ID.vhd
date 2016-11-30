@@ -18,24 +18,28 @@ ENTITY MUX_IF_ID IS PORT (
 END MUX_IF_ID;
 
 ARCHITECTURE Behaviour OF MUX_IF_ID IS
+    
+    SIGNAL LastPCPlus1 : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL LastInst    : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL LastImme    : STD_LOGIC_VECTOR(15 downto 0);
 
 BEGIN
 	process(clk, rst)
-		BEGIN
-            if(rst = '0') then
-                id_PCPlus1 <= (others => '0');
-                id_Inst <= (others => '0');
-                id_Imme <= (others => '0');
-            elsif clk'event and clk = '1' then
-                if if_Keep = KEEP_ENABLE then
-                    id_PCPlus1 <= ZERO16;
-                    id_Inst <= ZERO16;
-                else
-                    id_PCPlus1 <= if_PCPlus1;
-                    id_Inst <= if_Inst;
-                    id_Imme <= if_Inst(10 downto 0);
-                end if;
+	BEGIN
+        if(rst = '0') then
+            id_PCPlus1 <= (others => '0');
+            id_Inst <= (others => '0');
+            id_Imme <= (others => '0');
+        elsif clk'event and clk = '1' then
+            if if_Keep = KEEP_ENABLE then
+                -- id_PCPlus1 <= ZERO16;
+                -- id_Inst <= ZERO16;
+            else
+                id_PCPlus1 <= if_PCPlus1;
+                id_Inst <= if_Inst;
+                id_Imme <= if_Inst(10 downto 0);
             end if;
+        end if;
 	end process;
 
 END Behaviour;
