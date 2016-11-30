@@ -126,11 +126,11 @@ begin
     rst <= hda1_init and hda2_init;
 
     ram1 : process (Ram1_en, Ram1_oe, Ram1_we, RAM1_Addr, Ram1_Data, rst) is
-        file inp : text open read_mode is "./test/ram1.txt";
-        variable inline : line;
-        variable in_int : integer range 0 to MAX_ADDR;
-        variable var : integer range 0 to MAX_ADDR := 0;
-        variable addr : integer range 0 to MAX_ADDR;
+        file inp:        text open read_mode is "./test/ram1.txt";
+        variable inline: line;
+        variable in_int: integer range 0 to MAX_ADDR;
+        variable var:    integer range 0 to MAX_ADDR:  = 0;
+        variable addr:   integer range 0 to MAX_ADDR;
     begin
         if hda1_init = '0' then
             Ram1_Data <= (others => 'Z');
@@ -164,11 +164,11 @@ begin
     end process ram1;
 
     ram2 : process (Ram2_en, Ram2_oe, Ram2_we, RAM2_Addr, Ram2_Data, rst) is
-        file inp : text open read_mode is "./test/ram2.txt";
-        variable inline : line;
-        variable in_int : integer range 0 to MAX_ADDR;
-        variable var : integer range 0 to MAX_ADDR := 0;
-        variable addr : integer range 0 to MAX_ADDR;
+        file inp:        text open read_mode is "./test/ram2.txt";
+        variable inline: line;
+        variable in_int: integer range 0 to MAX_ADDR;
+        variable var:    integer range 0 to MAX_ADDR:  = 0;
+        variable addr:   integer range 0 to MAX_ADDR;
     begin
         if hda2_init = '0' then
             Ram2_Data <= (others => 'Z');
