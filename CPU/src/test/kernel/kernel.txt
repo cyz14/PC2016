@@ -1,7 +1,7 @@
 0 0 0 0 addsp3 r0 0x0000
 0 0 0 0 addsp3 r0 0x0000
 0 8 0 0 NOP
-1 0 4 4 B Start
+1 0 4 4 B Start, PC += 68
 0 8 0 0
 0 8 0 0         ; DELINT
 0 8 0 0         ;
