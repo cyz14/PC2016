@@ -34,6 +34,7 @@ ENTITY ControlUnit IS PORT (
     BSrc4       :  OUT STD_LOGIC_VECTOR(3 downto 0);
     
     NextInDelayslot : OUT STD_LOGIC;
+    BranchFlag  :  OUT STD_LOGIC;
     PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
     -- ;
     -- NowPC       :  OUT STD_LOGIC_VECTOR(15 downto 0);
@@ -80,6 +81,7 @@ BEGIN
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
             NextInDelayslot <= IN_SLOT_FALSE;
+            BranchFlag  <= BRANCH_FALSE;
             -- NowPC       <= CurPC;
             -- ExceptPC    <= ZERO16;
         else
@@ -96,6 +98,7 @@ BEGIN
             BSrc4       <= Dst_NONE;
             PCMuxSel    <= PC_Add1;
             NextInDelayslot <= IN_SLOT_FALSE;
+            BranchFlag  <= BRANCH_FALSE;
 
             Case tempInsType IS
                 WHEN TYPE_ADD_SUB =>
@@ -256,6 +259,7 @@ BEGIN
                             if(condition = ZERO16) THEN
                                 PCMuxSel <= PC_AddImm;
                                 NextInDelayslot <= IN_SLOT_TRUE;
+                                BranchFlag <= BRANCH_TRUE;
                             else
                                 PCMuxSel <= PC_Add1;
                             end if;
@@ -269,6 +273,7 @@ BEGIN
                             if(not (condition = ZERO16)) THEN
                                 PCMuxSel <= PC_AddImm;
                                 NextInDelayslot <= IN_SLOT_TRUE;
+                                BranchFlag <= BRANCH_TRUE;
                             else
                                 PCMuxSel <= PC_Add1;
                             end if;
@@ -404,6 +409,7 @@ BEGIN
                     BSrc4    <= Dst_NONE;
                     PCMuxSel <= PC_AddImm;
                     NextInDelayslot <= IN_SLOT_TRUE;
+                    BranchFlag  <= BRANCH_TRUE;
                 WHEN TYPE_BEQZ =>
                     ImmeSrc  <= IMM_EIGHT;
                     ASrc4    <= '0' & temp_Rx;
@@ -414,6 +420,7 @@ BEGIN
                     if (condition = ZERO16) THEN
                         PCMuxSel <= PC_AddImm;
                         NextInDelayslot <= IN_SLOT_TRUE;
+                        BranchFlag  <= BRANCH_TRUE;
                     else
                         PCMuxSel <= PC_Add1;
                     end if;
@@ -426,6 +433,7 @@ BEGIN
                     if (not (condition = ZERO16)) THEN
                         PCMuxSel <= PC_AddImm;
                         NextInDelayslot <= IN_SLOT_TRUE;
+                        BranchFlag  <= BRANCH_TRUE;
                     else
                         PCMuxSel <= PC_Add1;
                     end if;

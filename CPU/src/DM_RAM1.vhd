@@ -135,7 +135,7 @@ begin
             SyncClkA <= '1';
             SyncClkB <= '0';
         ELSE
-            IF CLK'event and CLK = '0' THEN -- have to begin in falling edge to give data prepare time
+            IF CLK'event and CLK = '1' THEN -- have to begin in falling edge to give data prepare time
                 SyncClkWorking <= '1';
                 SyncClkA <= not SyncClkA;
                 Ram1OE <= not MemWE;
@@ -162,7 +162,7 @@ begin
                     MemOutMask <= (others => '1');
                     UartOutMask <= (others => '0');
                     if ALUOut = x"BF00" then -- read from Uart
-                        Ram1OE <= '1';
+                        Ram1EN <= CHIP_DISABLE;
                         UartReadyLoad <= '1';
                         Ram1Data(15 downto 8) <= (others => '0');
                         if not (data_ready = '1') then
@@ -183,6 +183,7 @@ begin
                     UartOutMask <= (others => '0');
                     if MemWE = RAM_WRITE_ENABLE and ALUOut = x"BF00" then -- write uart
                         Ram1EN <= CHIP_DISABLE;
+                        Ram1OE <= RAM_READ_DISABLE;
                         IsWriteMode <= '0';
                         IsUartWrite <= '1';
                         if not((tbre and tsre) = '1') then
@@ -211,6 +212,11 @@ begin
                 end if;
             end if;
         END IF;
+
+        CASE LedSel(5 downto 0) IS 
+            WHEN "100110" => LedOut <= UartOut;
+            WHEN others => LedOut <= ZERO16;
+        END CASE;
     END Process;
 
 end Behavioral;

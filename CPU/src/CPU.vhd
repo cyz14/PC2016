@@ -62,19 +62,21 @@ END CPU;
 ARCHITECTURE Behaviour OF CPU IS
 
     Component PCMUX IS PORT (
-        clk, rst:      IN STD_LOGIC;
-        PCAdd1_data:   IN STD_LOGIC_VECTOR(15 downto 0);
-        PCRx_data:     IN STD_LOGIC_VECTOR(15 downto 0);
-        PCAddImm_data: IN STD_LOGIC_VECTOR(15 downto 0);
-        PC_choose:     IN STD_LOGIC_VECTOR(1 downto 0);
+        rst:           IN  STD_LOGIC;
+        PCAdd1_data:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        PCRx_data:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        PCAddImm_data: IN  STD_LOGIC_VECTOR(15 downto 0);
+        PC_choose:     IN  STD_LOGIC_VECTOR( 1 downto 0);
         PCout:         out STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component; 
 
     Component PCReg IS Port (
-        PCSrc : IN STD_LOGIC_VECTOR(15 downto 0);
-        keep : IN STD_LOGIC;
-        PC : OUT STD_LOGIC_VECTOR(15 downto 0)
+        clk:   in  std_logic;
+        rst:   in  std_logic;
+        keep:  in  std_logic;
+        PCSrc: in  std_logic_vector(15 downto 0);
+        PC:    out std_logic_vector(15 downto 0)
     );
     END Component;
 
@@ -142,6 +144,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ASrc4       :  out std_logic_vector (3 downto 0);
         BSrc4       :  out std_logic_vector (3 downto 0);
         NextInDelayslot : OUT STD_LOGIC;
+        BranchFlag  :  OUT STD_LOGIC;
         PCMuxSel    :  OUT STD_LOGIC_VECTOR( 1 downto 0)
         -- ;
 
@@ -433,6 +436,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ctrl_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         ctrl_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         ctrl_InDelayslot : IN  STD_LOGIC;
+        ctrl_BranchFlag  : IN  STD_LOGIC;
 
         rf_Data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         rf_Data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -497,7 +501,7 @@ ARCHITECTURE Behaviour OF CPU IS
         ram1_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
         ram2_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         ram2_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
-        
+        UartOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
 
         fwd_ForwardA     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
         fwd_ForwardB     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
@@ -548,6 +552,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ctrl_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ctrl_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ctrl_InDelayslot : STD_LOGIC;
+    SIGNAL ctrl_BranchFlag  : STD_LOGIC;
+    SIGNAL ctrl_BranchAddr  : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL rf_Data1         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL rf_Data2         : STD_LOGIC_VECTOR(15 downto 0);
@@ -612,7 +618,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ram1_numout      : STD_LOGIC_VECTOR( 7 downto 0);
     SIGNAL ram2_LED         : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ram2_numout      : STD_LOGIC_VECTOR( 7 downto 0);
-    
+    SIGNAL uart_led         : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL fwd_ForwardA     : STD_LOGIC_VECTOR( 1 downto 0);
     SIGNAL fwd_ForwardB     : STD_LOGIC_VECTOR( 1 downto 0);
@@ -659,28 +665,29 @@ BEGIN
     Vs <= t_vsync;
     
     u_clock: Clock PORT MAP (
-        rst => RST,
-        clk => CLK,
-        clk11 => CLK_11,
-        clk50 => CLK_50,
-        sel   => SW(15 downto 14),
+        rst    => RST,
+        clk    => CLK,
+        clk11  => CLK_11,
+        clk50  => CLK_50,
+        sel    => SW(15 downto 14),
         clkOUT => clk_sel
     );
     
     if_PCRx <= id_Data1;
-    if_PCAddImm <= id_PCAddImm;
+    -- if_PCAddImm <= id_PCAddImm;
     u_PCMUX: PCMUX PORT MAP (
-        clk           => CLK,
         rst           => RST,
         PCAdd1_data   => if_PCPlus1,
-        PCRx_data     => if_PCRx,
+        PCRx_data     => id_data1,
         PCAddImm_data => id_PCAddImm,
         PC_choose     => ctrl_PCMuxSel,
-        PCOUT         => if_NewPC
+        PCOUT         => ctrl_BranchAddr
     );
     
     u_PC: PCReg PORT MAP (
-        PCSrc => if_NewPC,
+        clk   => clk_sel,
+        rst   => RST,
+        PCSrc => ctrl_BranchAddr,
         keep  => if_PCKeep,
         PC    => if_PCToIM
     );
@@ -691,19 +698,19 @@ BEGIN
     );
     
     u_InstMemory: IM_RAM2 PORT MAP (
-        clk          => clk_sel,
-        rst          => RST,
-        PC_i         => if_PCToIM,
-        Ram2_Data    => Ram2_Data,
-        mem_MemRead  => mem_MemRead,
-        mem_MemWE    => mem_MemWE,
-        mem_ALUOut   => mem_ALUOut,
-        mem_WriteData=> mem_WriteData,
-        Ram2_Addr    => Ram2_Addr,
-        Ram2_Inst    => if_Inst,
-        Ram2_OE      => Ram2_OE,
-        Ram2_WE      => Ram2_WE,
-        Ram2_EN      => Ram2_EN
+        clk           => clk_sel,
+        rst           => RST,
+        PC_i          => if_PCToIM,
+        Ram2_Data     => Ram2_Data,
+        mem_MemRead   => mem_MemRead,
+        mem_MemWE     => mem_MemWE,
+        mem_ALUOut    => mem_ALUOut,
+        mem_WriteData => mem_WriteData,
+        Ram2_Addr     => Ram2_Addr,
+        Ram2_Inst     => if_Inst,
+        Ram2_OE       => Ram2_OE,
+        Ram2_WE       => Ram2_WE,
+        Ram2_EN       => Ram2_EN
         -- ,
         -- LedSel       => SW,
         -- LedOut       => ram2_LED,
@@ -714,7 +721,7 @@ BEGIN
         clk        => clk_sel,
         rst        => RST,
         if_Keep    => hdu_IFID_Keep,
-        if_PCPlus1 => if_PCToIM,
+        if_PCPlus1 => if_PCPlus1,
         if_Inst    => if_Inst,
         id_PCPlus1 => id_PCPlus1,
         id_Inst    => id_Inst,
@@ -740,7 +747,8 @@ BEGIN
         RegWE       => ctrl_RegWE,
         ASrc4       => ctrl_ASrc4,
         BSrc4       => ctrl_BSrc4,
-        NextInDelayslot => ctrl_InDelayslot, 
+        NextInDelayslot => ctrl_InDelayslot,
+        BranchFlag  => ctrl_BranchFlag, 
         PCMuxSel    => ctrl_PCMuxSel
         -- ,
         -- NowPC       => ctrl_NowPC,
@@ -906,7 +914,7 @@ BEGIN
         ExceptPC      => ram1_ExceptPC,
         
         LedSel        => SW,
-        LedOut        => ram1_LED,
+        LedOut        => uart_led,
         NumOut        => ram1_numout
     );  
 
@@ -1009,6 +1017,7 @@ BEGIN
         ctrl_ExceptPC    => ctrl_ExceptPC,
         ctrl_NowPC       => ctrl_NowPC,
         ctrl_InDelayslot => ctrl_InDelayslot,
+        ctrl_BranchFlag  => ctrl_BranchFlag,
 
         rf_Data1         => rf_Data1,
         rf_Data2         => rf_Data2,
@@ -1073,6 +1082,7 @@ BEGIN
         ram1_numout      => ram1_numout,
         ram2_LED         => ram2_LED,
         ram2_numout      => ram2_numout,
+        UartOut          => uart_led,
         
         fwd_ForwardA     => fwd_ForwardA,
         fwd_ForwardB     => fwd_ForwardB,

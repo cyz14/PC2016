@@ -45,6 +45,7 @@ ENTITY LedDebug IS PORT (
     ctrl_ExceptPC    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     ctrl_NowPC       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     ctrl_InDelayslot : IN  STD_LOGIC;
+    ctrl_BranchFlag  : IN  STD_LOGIC;
 
     rf_Data1         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     rf_Data2         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -109,6 +110,7 @@ ENTITY LedDebug IS PORT (
     ram1_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
     ram2_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     ram2_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
+    UartOut         : IN  STD_LOGIC_VECTOR(15 downto 0);
     
 
     fwd_ForwardA     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);
@@ -154,7 +156,7 @@ BEGIN
     infos(19) <= rf_Data2;
     infos(20) <= id_data1;
     infos(21) <= id_data2;
-    infos(22) <= ZERO16;
+    infos(22) <= ZERO15 & ctrl_BranchFlag;
     infos(23) <= ZERO16;
 
     infos(24) <= exe_Data1;
@@ -172,7 +174,7 @@ BEGIN
     infos(35) <= ram1_addr;
     infos(36) <= ram2_data;
     infos(37) <= ram2_addr;
-    infos(38) <= ZERO16;
+    infos(38) <= UartOut;
     infos(39) <= ZERO16;
 
     infos(40) <= mem_MemRead & mem_MemWE & ZERO9 & mem_DstReg & mem_RegWE;
