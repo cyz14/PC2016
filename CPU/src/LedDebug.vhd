@@ -135,7 +135,7 @@ BEGIN
     infos( 2) <= if_PCRx;
     infos( 3) <= if_PCAddImm;
     infos( 4) <= if_Inst; 
-    infos( 5) <= ZERO16;
+    infos( 5) <= if_PCPlus1;
     infos( 6) <= ZERO16;
     infos( 7) <= ZERO16;
 
@@ -148,7 +148,7 @@ BEGIN
     infos(14) <= ZERO15 & hdu_IFID_Keep;
     infos(15) <= ZERO16;
 
-    infos(16) <= ZERO8 & ctrl_ImmeSrc & ctrl_ZeroExt & ctrl_PCMuxSel & ctrl_InDelayslot & hdu_IDEX_Stall;
+    infos(16) <= ctrl_ImmeSrc & ctrl_ZeroExt & ZERO8 & ctrl_PCMuxSel & ctrl_InDelayslot & hdu_IDEX_Stall;
     infos(17) <= ctrl_ASrc4 & ctrl_ASrc & ctrl_BSrc4 & ctrl_BSrc & ctrl_ALUOp;
     infos(18) <= rf_Data1;
     infos(19) <= rf_Data2;
@@ -160,7 +160,7 @@ BEGIN
     infos(24) <= exe_Data1;
     infos(25) <= exe_Data2;
     infos(26) <= exe_Imme;
-    infos(27) <= ZERO9 & exe_MemRead & exe_MemWE & exe_DstReg & exe_RegWE;
+    infos(27) <= exe_MemRead & exe_MemWE & ZERO9 & exe_DstReg & exe_RegWE;
     infos(28) <= exe_ASrc4 & exe_ASrc & exe_BSrc4 & exe_BSrc & exe_ALUOp;
     infos(29) <= exe_BOp; -- ALU_B
     infos(30) <= exe_MemWriteData;
@@ -175,7 +175,7 @@ BEGIN
     infos(38) <= ZERO16;
     infos(39) <= ZERO16;
 
-    infos(40) <= ZERO9 & mem_MemRead & mem_MemWE & mem_DstReg & mem_RegWE;
+    infos(40) <= mem_MemRead & mem_MemWE & ZERO9 & mem_DstReg & mem_RegWE;
     infos(41) <= mem_ALUOut;
     infos(42) <= mem_WriteData;
     infos(43) <= mem_ReadData;

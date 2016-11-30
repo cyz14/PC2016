@@ -86,6 +86,8 @@ BEGIN
                 PCSel_o  <= PCSel;
                 IF MemWE = RAM_WRITE_ENABLE THEN
                     MemWriteData <= Data2;
+                ELSE
+                    MemWriteData <= ZERO16;
                 END IF;
             END IF;
         END IF;

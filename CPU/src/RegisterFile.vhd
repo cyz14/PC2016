@@ -62,8 +62,7 @@ BEGIN
     T_o  <= T;
     IH_o <= IH;
 
-    p_write: process (clk, rst, PCplus1, WriteRegister, WriteData, ASrc4, BSrc4
-        , RegWE)
+    p_write: process (clk, rst, WriteRegister, WriteData, RegWE)
     begin
         if rst = '0' then
             R0 <= (others => '0');
@@ -77,7 +76,7 @@ BEGIN
             SP <= (others => '0');
             IH <= (others => '0');
             T  <= (others => '0');
-        elsif clk'event and clk = '1' then
+        elsif clk'event and clk = '0' then
             if RegWE = REG_WRITE_ENABLE then 
                 case WriteRegister is
                     when Dst_R0 => R0 <= WriteData;
@@ -97,7 +96,7 @@ BEGIN
         end if;
     end process;
 
-    p_read1: process(rst, ASrc4, RegWE, WriteRegister, WriteData)
+    p_read1: process(rst, ASrc4, RegWE, PCplus1, WriteRegister, WriteData)
     BEGIN
         if rst = '0' then
             Data1 <= (others => '0');
@@ -109,7 +108,7 @@ BEGIN
         end if;
     END process;
 
-    p_read2: process(rst, BSrc4, RegWE, WriteRegister, WriteData)
+    p_read2: process(rst, BSrc4, RegWE, PCplus1, WriteRegister, WriteData)
     BEGIN
         if rst = '0' then
             Data2 <= (others => '0');
