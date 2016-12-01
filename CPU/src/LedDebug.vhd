@@ -77,7 +77,7 @@ ENTITY LedDebug IS PORT (
     mem_MemWE        : IN  STD_LOGIC;
     mem_MemRead      : IN  STD_LOGIC;
     mem_ALUOut       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
-    mem_WriteData    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+    mem_MemWriteData : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     mem_MemSignal    : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
@@ -180,7 +180,7 @@ BEGIN
 
     infos(40) <= mem_MemRead & mem_MemWE & ZERO9 & mem_DstReg & mem_RegWE;
     infos(41) <= mem_ALUOut;
-    infos(42) <= mem_WriteData;
+    infos(42) <= mem_MemWriteData;
     infos(43) <= mem_ReadData;
     infos(44) <= mem_DstVal;
     infos(45) <= ZERO13 & mem_MemSignal;

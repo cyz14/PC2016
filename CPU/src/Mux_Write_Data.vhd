@@ -24,7 +24,9 @@ BEGIN
         Case MemSignal IS
             WHEN ALU_RESULT => WriteData <= mem_ALUOut;
             WHEN IM_READ => WriteData <= IMData;
-            WHEN DM_READ | SerialStateRead | SerialDataRead => WriteData <= DMData; 
+            WHEN DM_READ =>  WriteData <= DMData;
+            WHEN SerialStateRead => WriteData <= DMData;
+            WHEN SerialDataRead => WriteData <= DMData; 
             WHEN others => WriteData <= ZERO16;
         END Case;
     END Process;

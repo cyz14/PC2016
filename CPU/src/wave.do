@@ -16,14 +16,25 @@ add wave -noupdate -label mem_DstReg /testbench/u_cpu/mem_DstReg
 add wave -noupdate -label alu_A -radix hexadecimal /testbench/u_cpu/u_ALU/A
 add wave -noupdate -label alu_B -radix hexadecimal /testbench/u_cpu/u_ALU/B
 add wave -noupdate -label alu_F -radix hexadecimal /testbench/u_cpu/alu_F
+add wave -noupdate -label mem_ALUOut -radix hexadecimal /testbench/u_cpu/mem_ALUOut
+add wave -noupdate -label mem_WriteData -radix hexadecimal /testbench/u_cpu/mem_WriteData
 add wave -noupdate -label ctrl_PCMuxSel -radix hexadecimal /testbench/u_cpu/ctrl_PCMuxSel
 add wave -noupdate -radix hexadecimal /testbench/clk
 add wave -noupdate -label mem_MemWE /testbench/u_cpu/mem_MemWE
+add wave -noupdate -label mem_MemSignal -radix hexadecimal /testbench/u_cpu/mem_MemSignal
+add wave -noupdate /testbench/u_cpu/u_DataMemory/MemSignal
+add wave -noupdate -label Ram1Addr -radix hexadecimal /testbench/u_cpu/u_DataMemory/Ram1Addr
+add wave -noupdate -label Ram1Data -radix hexadecimal /testbench/u_cpu/u_DataMemory/Ram1Data
+add wave -noupdate -label DM_Ram1OE /testbench/u_cpu/u_DataMemory/Ram1OE
+add wave -noupdate -label DM_Ram1WE /testbench/u_cpu/u_DataMemory/Ram1WE
+add wave -noupdate -label DM_Ram1EN /testbench/u_cpu/u_DataMemory/Ram1EN
+add wave -noupdate -label Ram1EN -radix hexadecimal /testbench/u_cpu/Ram1_en
+add wave -noupdate -label Ram1OE -radix hexadecimal /testbench/u_cpu/Ram1_oe
+add wave -noupdate -label Ram1WE -radix hexadecimal /testbench/u_cpu/Ram1_we
+add wave -noupdate -label Ram1Addr -radix hexadecimal /testbench/u_cpu/RAM1_Addr
+add wave -noupdate -label Ram1Data -radix hexadecimal /testbench/u_cpu/Ram1_Data
 add wave -noupdate -label ctrl_ASrc4 -radix hexadecimal /testbench/u_cpu/ctrl_ASrc4
 add wave -noupdate -label ctrl_BSrc4 -radix hexadecimal /testbench/u_cpu/ctrl_BSrc4
-add wave -noupdate -label ram1en /testbench/Ram1_en
-add wave -noupdate -label ram1oe /testbench/Ram1_oe
-add wave -noupdate -label ram1we /testbench/Ram1_we
 add wave -noupdate -label rdn /testbench/u_cpu/u_DataMemory/rdn
 add wave -noupdate -label wrn /testbench/u_cpu/u_DataMemory/wrn
 add wave -noupdate -label PCplus1 -radix hexadecimal /testbench/u_cpu/u_PCMUX/PCAdd1_data
@@ -34,6 +45,11 @@ add wave -noupdate -label regFileData2 -radix hexadecimal /testbench/u_cpu/rf_Da
 add wave -noupdate -label memWriteData -radix hexadecimal /testbench/u_cpu/u_Mux_Write_Data/WriteData
 add wave -noupdate -radix hexadecimal /testbench/rst
 add wave -noupdate -label ForwardA -radix hexadecimal /testbench/u_cpu/u_ForwardUnit/FORWARDA
+add wave -noupdate /testbench/u_cpu/u_Mux_Write_Data/MemSignal
+add wave -noupdate -label mem_ALUOut -radix hexadecimal /testbench/u_cpu/u_Mux_Write_Data/mem_ALUOut
+add wave -noupdate -label DM_Data -radix hexadecimal /testbench/u_cpu/u_Mux_Write_Data/DMData
+add wave -noupdate -label IM_Data -radix hexadecimal /testbench/u_cpu/u_Mux_Write_Data/IMData
+add wave -noupdate -label WriteData -radix hexadecimal /testbench/u_cpu/u_Mux_Write_Data/WriteData
 add wave -noupdate -label mem_DstVal -radix hexadecimal /testbench/u_cpu/mem_DstVal
 add wave -noupdate -label exe_ALUop -radix hexadecimal /testbench/u_cpu/exe_ALUOp
 add wave -noupdate -label exe_ASrc -radix hexadecimal /testbench/u_cpu/exe_ASrc
@@ -53,6 +69,8 @@ add wave -noupdate -label SP -radix hexadecimal /testbench/u_cpu/u_RegFile/SP
 add wave -noupdate -label T -radix hexadecimal /testbench/u_cpu/u_RegFile/T
 add wave -noupdate -label IH -radix hexadecimal /testbench/u_cpu/u_RegFile/IH
 TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 12} {8605 ps} 0} {{Cursor 13} {9000 ps} 0} {{Cursor 14} {8800 ps} 0} {{Cursor 15} {8406 ps} 0}
+quietly wave cursor active 3
 configure wave -namecolwidth 126
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -67,4 +85,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {2116 ps}
+WaveRestoreZoom {7544 ps} {9660 ps}

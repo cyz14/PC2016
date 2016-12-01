@@ -463,7 +463,7 @@ ARCHITECTURE Behaviour OF CPU IS
         mem_MemWE        : IN  STD_LOGIC;
         mem_MemRead      : IN  STD_LOGIC;
         mem_ALUOut       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
-        mem_WriteData    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_MemWriteData : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         mem_MemSignal    : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
@@ -586,7 +586,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL mem_MemWE        : STD_LOGIC;
     SIGNAL mem_MemRead      : STD_LOGIC;
     SIGNAL mem_ALUOut       : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL mem_WriteData    : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_ReadData     : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_DstVal       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_NowPC        : STD_LOGIC_VECTOR(15 downto 0);
@@ -710,7 +710,7 @@ BEGIN
     u_InstMemory: IM_RAM2 PORT MAP (
         MemSignal     => mem_MemSignal,
         ReadWriteAddr => if_IMAddr,
-        WriteData     => mem_WriteData,
+        WriteData     => mem_MemWriteData,
         Ram2_Addr     => Ram2_Addr,
         Ram2_Data     => Ram2_Data,
         Ram2_OE       => Ram2_OE,
@@ -877,13 +877,13 @@ BEGIN
         o_RegWE        => mem_RegWE,
         o_DstReg       => mem_DstReg,
         o_MemSignal    => mem_MemSignal,
-        o_MemWriteData => mem_WriteData,
+        o_MemWriteData => mem_MemWriteData,
         o_ALUOut       => mem_ALUOut
     );
 
     u_DataMemory: DM_RAM1 PORT MAP (
         MemSignal     => mem_MemSignal,
-        WriteData     => exe_MemWriteData,
+        WriteData     => mem_MemWriteData,
         ReadWriteAddr => mem_ALUOut,
         
         DstVal        => mem_ReadData,
@@ -910,7 +910,7 @@ BEGIN
     );  
 
     u_Mux_Write_Data: MUX_Write_Data PORT MAP (
-        MemSignal => alu_ResType,
+        MemSignal => mem_MemSignal,
         mem_ALUOut => mem_ALUOut,
         DMData => mem_ReadData,
         IMData => if_Inst,
@@ -1043,7 +1043,7 @@ BEGIN
         mem_MemWE        => mem_MemWE,
         mem_MemRead      => mem_MemRead,
         mem_ALUOut       => mem_ALUOut,
-        mem_WriteData    => mem_WriteData,
+        mem_MemWriteData => mem_MemWriteData,
         mem_ReadData     => mem_ReadData,
         mem_DstVal       => mem_DstVal,
         mem_MemSignal    => mem_MemSignal,
