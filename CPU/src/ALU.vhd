@@ -30,8 +30,8 @@ BEGIN
     BEGIN
         CASE OP IS
             WHEN OP_NONE => res := ZERO16;
-            WHEN OP_ADD  => res := STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) + ieee.numeric_std.unsigned(B));
-            WHEN OP_SUB  => res := STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) - ieee.numeric_std.unsigned(B));
+            WHEN OP_ADD  => res := A + B;
+            WHEN OP_SUB  => res := A - B;
             WHEN OP_AND  => res := A AND B;
             WHEN OP_OR   => res := A OR  B;
             WHEN OP_XOR  => res := A XOR B;
@@ -68,9 +68,9 @@ BEGIN
 			else
 				ResType <= ALU_RESULT;
             end if;
-            if res >= x"8000" then
-                res := res - x"8000";
-            end if;
+            -- if res >= x"8000" then
+            --     res := res - x"8000";
+            -- end if;
         elsif MemWE = RAM_WRITE_ENABLE then
             if (res >= x"8000" and res <= x"BEFF") or (res >= x"BF10") then
                 ResType <= DM_WRITE;
@@ -80,9 +80,9 @@ BEGIN
 			elsif(res = x"BF00")then
 				ResType <= SerialDataWrite;
             end if;
-            if res(15) = '1' then -- >= x"8000" then
-                res(15) := '0'; -- res := res - x"8000";
-            end if;
+            -- if res(15) = '1' then -- >= x"8000" then
+            --     res(15) := '0'; -- res := res - x"8000";
+            -- end if;
         else
             ResType <= ALU_RESULT;
         end if;

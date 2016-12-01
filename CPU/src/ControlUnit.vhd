@@ -324,6 +324,7 @@ BEGIN
                     BSrc     <= AS_IMME;
                     ALUop    <= OP_ADD;
                     RegWE    <= REG_WRITE_ENABLE;
+                    MemRead  <= RAM_READ_DISABLE;
                     DstReg   <= "0" & temp_Rx;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= Dst_NONE;
@@ -384,8 +385,8 @@ BEGIN
                     BSrc     <= AS_IMME;
                     ALUop    <= OP_ADD;
                     MemWE    <= RAM_WRITE_ENABLE;
-                    -- RegWE    <= REG_WRITE_DISABLE;
-                    -- DstReg   <= Dst_NONE;
+                    RegWE    <= REG_WRITE_DISABLE;
+                    DstReg   <= Dst_NONE;
                     ASrc4    <= "0" & temp_Rx;
                     BSrc4    <= "0" & temp_Ry;
                     
