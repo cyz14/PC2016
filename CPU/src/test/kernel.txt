@@ -93,7 +93,7 @@
 005c: 1 0 4 A ; B TESTW
 005d: 6 E B F ; LI R6 0xBF
 005e: 3 6 C 0 ; SLL R6 R6 0x0000
-005f: 6 8 4 F ; LI R0 0x4F 
+005f: 6 8 4 F ; LI R0 0x4F ; Output 'O' to uart
 0060: D E 0 0 ; SW R6 R0 0x00 ; o 
 0061: 0 8 0 0 ; NOP
 0062: E F 4 0 ; MFPC R7
@@ -101,10 +101,10 @@
 0064: 0 8 0 0 ; NOP
 0065: 1 0 4 1 ; B TESTW
 0066: 6 E B F ; LI R6 0xBF
-0067: 3 6 C 0 ; 
-0068: 6 8 4 B
-0069: D E 0 0
-006a: 0 8 0 0
+0067: 3 6 C 0 ; SLL R6 R6 0x00
+0068: 6 8 4 B ; LI R0 0x0A
+0069: D E 0 0 ; SW R6 R0 0x00 ; Output 'K' to uart
+006a: 0 8 0 0 ; 
 006b: E F 4 0
 006c: 4 F 0 3
 006d: 0 8 0 0

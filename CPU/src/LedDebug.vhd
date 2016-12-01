@@ -183,7 +183,7 @@ BEGIN
     infos(42) <= mem_WriteData;
     infos(43) <= mem_ReadData;
     infos(44) <= mem_DstVal;
-    infos(45) <= ZERO16;
+    infos(45) <= ZERO13 & mem_MemSignal;
     infos(46) <= wb_RegWE & ZERO11 & wb_DstReg;
     infos(47) <= wb_DstVal;
     

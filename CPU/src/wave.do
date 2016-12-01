@@ -53,8 +53,6 @@ add wave -noupdate -label SP -radix hexadecimal /testbench/u_cpu/u_RegFile/SP
 add wave -noupdate -label T -radix hexadecimal /testbench/u_cpu/u_RegFile/T
 add wave -noupdate -label IH -radix hexadecimal /testbench/u_cpu/u_RegFile/IH
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 7} {67771 ps} 0}
-quietly wave cursor active 1
 configure wave -namecolwidth 126
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -69,4 +67,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {4922 ps} {8204 ps}
+WaveRestoreZoom {0 ps} {2116 ps}
