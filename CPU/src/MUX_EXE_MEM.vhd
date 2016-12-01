@@ -16,6 +16,8 @@ ENTITY MUX_EXE_MEM IS PORT (
     ALUOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
     T               : IN  STD_LOGIC;
     Stall           : IN  STD_LOGIC;
+    NowPC           : in  STD_LOGIC_VECTOR(15 downto 0);
+    o_NowPC         : out STD_LOGIC_VECTOR(15 downto 0);
     o_DstReg        : OUT STD_LOGIC_VECTOR(3 downto 0);
     o_RegWE         : OUT STD_LOGIC;
     o_MemRead       : OUT STD_LOGIC;
@@ -45,6 +47,7 @@ BEGIN
             o_MemWE <= MemWE;
             o_MemWriteData <= MemWriteData;
             o_ALUOut <= ALUOut;
+            o_NowPC <= NowPC;
         end if;
     end process;
 END Behaviour;

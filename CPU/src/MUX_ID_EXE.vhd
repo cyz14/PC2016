@@ -23,7 +23,10 @@ ENTITY MUX_ID_EXE IS PORT (
     ASrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
     BSrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
     InDelayslot:  IN     STD_LOGIC;
-    PCSel:        IN     STD_LOGIC_VECTOR( 1 downto 0);  
+    PCSel:        IN     STD_LOGIC_VECTOR( 1 downto 0);
+    NowPC:        in     STD_LOGIC_VECTOR(15 downto 0);  
+
+    NowPC_o:      out    STD_LOGIC_VECTOR(15 downto 0);
     InDelayslot_o:OUT    STD_LOGIC;
     PCSel_o:      OUT    STD_LOGIC_VECTOR( 1 downto 0);  
     Stall:        IN     STD_LOGIC; -- whether stop for a stage from HazardDetectingUnit
@@ -84,6 +87,7 @@ BEGIN
                 BSrc4_o  <= BSrc4;
                 InDelayslot_o <= InDelayslot;
                 PCSel_o  <= PCSel;
+                NowPC_o <= NowPC;
                 IF MemWE = RAM_WRITE_ENABLE THEN
                     MemWriteData <= Data2;
                 ELSE

@@ -110,7 +110,7 @@ ENTITY LedDebug IS PORT (
     ram1_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
     ram2_LED         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     ram2_numout      : IN  STD_LOGIC_VECTOR( 7 DOWNTO 0);
-    UartOut         : IN  STD_LOGIC_VECTOR(15 downto 0);
+    UartOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
     
 
     fwd_ForwardA     : IN  STD_LOGIC_VECTOR( 1 DOWNTO 0);

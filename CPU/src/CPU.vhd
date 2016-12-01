@@ -184,6 +184,9 @@ ARCHITECTURE Behaviour OF CPU IS
         BSrc4:        IN     STD_LOGIC_VECTOR( 3 downto 0);
         InDelayslot:  IN     STD_LOGIC;
         PCSel:        IN     STD_LOGIC_VECTOR( 1 downto 0);  
+        NowPC:        in     STD_LOGIC_VECTOR(15 downto 0);  
+
+        NowPC_o:      out    STD_LOGIC_VECTOR(15 downto 0);
         InDelayslot_o:OUT    STD_LOGIC;
         PCSel_o:      OUT    STD_LOGIC_VECTOR( 1 downto 0);
         Stall:        IN     STD_LOGIC; -- whether stop for a stage from HazardDetectingUnit
@@ -276,6 +279,8 @@ ARCHITECTURE Behaviour OF CPU IS
         ALUOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
         T               : IN  STD_LOGIC;
         Stall           : IN  STD_LOGIC;
+        NowPC           : in  STD_LOGIC_VECTOR(15 downto 0);
+        o_NowPC         : out STD_LOGIC_VECTOR(15 downto 0);
         o_DstReg        : OUT STD_LOGIC_VECTOR(3 downto 0);
         o_RegWE         : OUT STD_LOGIC;
         o_MemRead       : OUT STD_LOGIC;
@@ -576,6 +581,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_InDelayslot  : STD_LOGIC;
     SIGNAL exe_PCSel        : STD_LOGIC_VECTOR( 1 downto 0);
+    SIGNAL exe_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL alu_F            : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL alu_T            : STD_LOGIC;
@@ -588,6 +594,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL mem_WriteData    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_ReadData     : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_DstVal       : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL mem_vga_wrn      : STD_LOGIC;
     SIGNAL mem_vga_data     : STD_LOGIC_VECTOR(15 downto 0);
@@ -611,7 +618,6 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL ram1_addr_o      : STD_LOGIC_VECTOR(17 DOWNTO 0);
     SIGNAL ram2_data_o      : STD_LOGIC_VECTOR(15 DOWNTO 0); 
     SIGNAL ram2_addr_o      : STD_LOGIC_VECTOR(17 DOWNTO 0);
-    SIGNAL ram1_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ram1_Except      : STD_LOGIC;
     SIGNAL ram1_ExceptPC    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL ram1_LED         : STD_LOGIC_VECTOR(15 downto 0);
@@ -827,6 +833,8 @@ BEGIN
         BSrc4         => ctrl_BSrc4,
         InDelayslot   => ctrl_InDelayslot,
         PCSel         => ctrl_PCMuxSel,
+        NowPC         => id_PCPlus1,
+        NowPC_o       => exe_NowPC,
         InDelayslot_o => exe_InDelayslot,
         PCSel_o       => exe_PCSel,
         Stall         => hdu_IDEX_Stall, -- whether stop for a stage from HazardDetectingUnit
@@ -871,6 +879,8 @@ BEGIN
         ALUOut         => alu_F,
         T              => alu_T,
         Stall          => '1', -- not stop
+        NowPC          => exe_NowPC,
+        o_NowPC        => mem_NowPC,
         o_DstReg       => mem_DstReg,
         o_RegWE        => mem_RegWE,
         o_MemRead      => mem_MemRead,
@@ -909,7 +919,7 @@ BEGIN
         vga_wrn       => mem_vga_wrn,
         vga_data      => mem_vga_data,
         
-        NowPC         => ram1_NowPC,
+        NowPC         => mem_NowPC,
         Exception     => ram1_Except,
         ExceptPC      => ram1_ExceptPC,
         
@@ -954,7 +964,7 @@ BEGIN
         DstReg  => exe_DstReg,
         ASrc4   => ctrl_ASrc4,
         BSrc4   => ctrl_BSrc4,
-        ALUOut  => alu_F,
+        ALUOut  => mem_ALUOut,
         MemWE   => mem_MemWE,
         PC_Keep => if_PCKeep,
         IFID_Keep => hdu_IFID_Keep,
@@ -1075,7 +1085,7 @@ BEGIN
         ram2_addr        => (others => '0'),
 
         ram1_InstRead    => ram1_InstRead,
-        ram1_NowPC       => ram1_NowPC,
+        ram1_NowPC       => mem_NowPC,
         ram1_Except      => ram1_Except,
         ram1_ExceptPC    => ram1_ExceptPC,
         ram1_LED         => ram1_LED,

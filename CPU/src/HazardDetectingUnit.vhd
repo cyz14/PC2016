@@ -24,7 +24,7 @@ architecture bha of HazardDetectingUnit is
     signal s1_DstReg: std_logic_vector(3 downto 0);
     signal s1_MemRead: std_logic;
 begin
-    stall_gen: process (s1_MemRead, s1_DstReg, ASrc4, BSrc4)
+    stall_gen: process (s1_MemRead, s1_DstReg, ASrc4, BSrc4, ALUOut, MemWE, MemRead)
         variable stall: std_logic;
     begin
         if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))

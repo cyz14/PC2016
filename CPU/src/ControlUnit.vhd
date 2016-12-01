@@ -173,6 +173,7 @@ BEGIN
                                     ImmeSrc  <= IMM_EIGHT;
                                     RegWE    <= REG_WRITE_DISABLE;
                                     ASrc4    <= "0" & temp_Rx;
+                                    ASrc     <= AS_DATA1;
                                     DstReg   <= Dst_NONE;
                                     NextInDelayslot <= IN_SLOT_TRUE;
                                     PCMuxSel <= PC_Rx;
@@ -445,7 +446,10 @@ BEGIN
                     DstReg   <= Dst_NONE;
                     ASrc4    <= Dst_NONE;
                     BSrc4    <= Dst_NONE;
-                    
+                    MemWE    <= RAM_WRITE_DISABLE;
+                    MemRead  <= RAM_READ_DISABLE;
+                    NextInDelayslot <= IN_SLOT_FALSE;
+                    PCMuxSel <= PC_Add1;
                 WHEN others =>
                     null;
             END CASE;

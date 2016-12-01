@@ -117,6 +117,10 @@ architecture RTL of testbench is
 
 
 begin
+    data_ready <= '0'; -- ready 4 write!
+    tbre <= '1';
+    tsre <= '1';
+
     clk_gen : process is
     begin
         wait for PERIOD / 2;

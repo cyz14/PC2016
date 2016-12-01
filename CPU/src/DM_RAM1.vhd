@@ -100,7 +100,7 @@ begin
     
     -- Ram1EN <= '0';
     Ram1Addr(17 downto 16) <= (others => '0');
-    Ram1WE <= not IsWriteMode or SyncClk;
+    Ram1WE <= not IsWriteMode or not SyncClk;
     wrn <= not IsUartWrite or SyncClk;
     vga_wrn <= not IsVGAWrite or SyncClk;
     vga_data <= WriteData;
@@ -135,7 +135,7 @@ begin
             SyncClkA <= '1';
             SyncClkB <= '0';
         ELSE
-            IF CLK'event and CLK = '1' THEN -- have to begin in falling edge to give data prepare time
+            IF CLK'event and CLK = '0' THEN -- have to begin in falling edge to give data prepare time
                 SyncClkWorking <= '1';
                 SyncClkA <= not SyncClkA;
                 Ram1OE <= not MemWE;
@@ -215,6 +215,7 @@ begin
 
         CASE LedSel(5 downto 0) IS 
             WHEN "100110" => LedOut <= UartOut;
+            WHEN "100111" => LedOut <= UartOutMask;
             WHEN others => LedOut <= ZERO16;
         END CASE;
     END Process;
