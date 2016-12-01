@@ -80,6 +80,7 @@ ENTITY LedDebug IS PORT (
     mem_WriteData    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+    mem_MemSignal    : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
 
     mem_vga_wrn      : IN  STD_LOGIC;
     mem_vga_data     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);

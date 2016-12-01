@@ -170,6 +170,16 @@ CONSTANT IMM_FIVE   : std_logic_vector (2 downto 0) := "011";
 CONSTANT IMM_EIGHT  : std_logic_vector (2 downto 0) := "100";
 CONSTANT IMM_ELEVEN : std_logic_vector (2 downto 0) := "101";
 
+
+CONSTANT DM_READ:         STD_LOGIC_VECTOR(2 downto 0):= "000";
+CONSTANT DM_WRITE:        STD_LOGIC_VECTOR(2 downto 0):= "001"; 
+CONSTANT IM_READ:         STD_LOGIC_VECTOR(2 downto 0):= "010";
+CONSTANT IM_WRITE:        STD_LOGIC_VECTOR(2 downto 0):= "011";
+CONSTANT SerialDataRead:  STD_LOGIC_VECTOR(2 downto 0):= "100";
+CONSTANT SerialDataWrite: STD_LOGIC_VECTOR(2 downto 0):= "101";
+CONSTANT SerialStateRead: STD_LOGIC_VECTOR(2 downto 0):= "110";
+CONSTANT ALU_RESULT:      STD_LOGIC_VECTOR(2 downto 0):= "111";
+
 -- PCMux Signal
 CONSTANT PC_None   : std_logic_vector(1 downto 0) := "00";
 CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "01";

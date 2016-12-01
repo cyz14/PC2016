@@ -8,24 +8,25 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use WORK.COMMON.ALL;
 
 ENTITY MUX_Write_Data IS PORT (
-    MemRead:   IN  STD_LOGIC;
-    MemALUOut: IN  STD_LOGIC_VECTOR(15 downto 0);
-    MemData:   IN  STD_LOGIC_VECTOR(15 downto 0);
-    WriteData: OUT STD_LOGIC_VECTOR(15 downto 0)
+    MemSignal:  IN  STD_LOGIC_VECTOR( 2 downto 0);
+    mem_ALUOut: IN  STD_LOGIC_VECTOR(15 downto 0);
+    DMData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+    IMData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+    WriteData:  OUT STD_LOGIC_VECTOR(15 downto 0)
 );
 END MUX_Write_Data;
 
 ARCHITECTURE Behaviour OF MUX_Write_Data IS
 
 BEGIN
-
-    Process(MemRead, MemALUOut, MemData)
+    Process(MemSignal, mem_ALUOut, DMData, IMData)
     BEGIN
-        IF MemRead = RAM_READ_ENABLE THEN
-            WriteData <= MemData;
-        ELSE
-            WriteData <= MemALUOut;
-        END IF;
+        Case MemSignal IS
+            WHEN ALU_RESULT => WriteData <= mem_ALUOut;
+            WHEN IM_READ => WriteData <= IMData;
+            WHEN DM_READ | SerialStateRead | SerialDataRead => WriteData <= DMData; 
+            WHEN others => WriteData <= ZERO16;
+        END Case;
     END Process;
 
 END Behaviour;

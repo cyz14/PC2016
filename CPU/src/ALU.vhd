@@ -10,80 +10,84 @@ use work.common.ALL;
 
 ENTITY ALU IS
 PORT (
-    A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-    B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-    OP :  IN  STD_LOGIC_VECTOR( 3 downto 0);
-    F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
-    T  :  OUT STD_LOGIC
+    MemRead:  In  STD_LOGIC;
+    MemWE:    IN  STD_LOGIC;
+    A:        IN  STD_LOGIC_VECTOR(15 downto 0);
+    B:        IN  STD_LOGIC_VECTOR(15 downto 0);
+    OP:       IN  STD_LOGIC_VECTOR( 3 downto 0);
+    F:        OUT STD_LOGIC_VECTOR(15 downto 0);
+    ResType:  OUT STD_LOGIC_VECTOR( 2 downto 0);
+    ALUPause: OUT STD_LOGIC
 );
 END ALU;
 
-ARCHITECTURE Behaviour OF ALU IS
-
-    SIGNAL tempADD: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);
-    SIGNAL tempSUB: STD_LOGIC_VECTOR(16 downto 0)   := CONV_STD_LOGIC_VECTOR(0, 17);    
+ARCHITECTURE Behaviour OF ALU IS    
 
 BEGIN
     
     PROCESS (A, B, OP)
+        VARIABLE res: STD_LOGIC_VECTOR(15 downto 0) := ZERO16;
     BEGIN
         CASE OP IS
-            WHEN OP_NONE => 
-                F <= ZERO16;
-                T <= '0'; -- 
-            WHEN OP_ADD  => 
-                F <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) + ieee.numeric_std.unsigned(B));
-                tempAdd <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) + ieee.numeric_std.unsigned('0' & B));
-            WHEN OP_SUB  => 
-                F <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) - ieee.numeric_std.unsigned(B));
-                tempSUB <= STD_LOGIC_VECTOR(ieee.numeric_std.unsigned('0' & A) - ieee.numeric_std.unsigned('0' & B));
-            WHEN OP_AND  => 
-                F <= A AND B;
-                T <= '0'; -- F <= A  &  B
-            WHEN OP_OR   =>
-                F <= A OR  B;
-                T <= '0'; -- F <= A  |  B
-            WHEN OP_XOR  => 
-                F <= A XOR B;
-                T <= '0'; -- F <= A xor B
+            WHEN OP_NONE => res := ZERO16;
+            WHEN OP_ADD  => res := STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) + ieee.numeric_std.unsigned(B));
+            WHEN OP_SUB  => res := STD_LOGIC_VECTOR(ieee.numeric_std.unsigned(A) - ieee.numeric_std.unsigned(B));
+            WHEN OP_AND  => res := A AND B;
+            WHEN OP_OR   => res := A OR  B;
+            WHEN OP_XOR  => res := A XOR B;
             WHEN OP_CMP  => 
-                IF A = B THEN
-                    F <= ZERO16; 
+                IF A = B THEN  
+                    res := ZERO16;
                 ELSE 
-                    F <= ONE16;
+                    res := ONE16;
                 END IF;
-                IF A = B THEN
-                    T <= '0';
-                ELSE
-                    T <= '1'; -- F <= A !=  B, not equal
-                END IF;
-            WHEN OP_LT   =>
+            WHEN OP_LT   => 
                 IF A < B THEN
-                    F <= ONE16;
+                    res := ONE16; 
                 ELSE 
-                    F <= ZERO16;
+                    res := ZERO16;
                 END IF;
-                IF A < B THEN
-                    T <= '1'; 
-                ELSE
-                    T <= '0'; -- F <= A  <  B
-                END IF;
-            WHEN OP_POS  => 
-                F <= A;
-                T <= '0';        -- F <= A
-            WHEN OP_SLL  => 
-                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SLL CONV_INTEGER(B));
-                T <= '0';        -- F <= A <<  B
-            WHEN OP_SRL  => 
-                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRL CONV_INTEGER(B));
-                T <= '0';        -- F <= A >>  B(logical)
-            WHEN OP_SRA  => 
-                F <= TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRA CONV_INTEGER(B));
-                T <= '0';        -- F <= A >>  B(arith)
-            WHEN others =>
-                F <= ZERO16;
-                T <= '0';
+            WHEN OP_POS  => res := A;
+            WHEN OP_SLL  => res := TO_STDLOGICVECTOR(TO_BITVECTOR(A) SLL CONV_INTEGER(B));
+            WHEN OP_SRL  => res := TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRL CONV_INTEGER(B));
+            WHEN OP_SRA  => res := TO_STDLOGICVECTOR(TO_BITVECTOR(A) SRA CONV_INTEGER(B));
+            WHEN others  => res := ZERO16; ResType <= ALU_RESULT;
         END CASE;
+
+        ALUPause <= '0';
+        if MemRead = RAM_READ_ENABLE then
+            if (res >= x"8000" and res <= x"BEFF") or (res >= x"BF10") then
+                ResType <= DM_READ;
+            elsif(res >= x"0000" and res <= x"7FFF")then
+                ResType <= IM_READ;
+                ALUPause <= KEEP_ENABLE;
+            elsif(res = x"BF01")then
+				ResType <= SerialStateRead;
+			elsif(res = x"BF00")then
+				ResType <= SerialDataRead;
+			else
+				ResType <= ALU_RESULT;
+            end if;
+            if res >= x"8000" then
+                res := res - x"8000";
+            end if;
+        elsif MemWE = RAM_WRITE_ENABLE then
+            if (res >= x"8000" and res <= x"BEFF") or (res >= x"BF10") then
+                ResType <= DM_WRITE;
+            elsif(res >= x"0000" and res <= x"7FFF")then
+                ResType <= IM_WRITE;
+                ALUPause <= KEEP_ENABLE;
+			elsif(res = x"BF00")then
+				ResType <= SerialDataWrite;
+            end if;
+            if res(15) = '1' then -- >= x"8000" then
+                res(15) := '0'; -- res := res - x"8000";
+            end if;
+        else
+            ResType <= ALU_RESULT;
+        end if;
+
+        F <= res;
     END PROCESS;
 
 END Behaviour;

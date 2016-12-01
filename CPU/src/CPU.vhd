@@ -86,25 +86,24 @@ ARCHITECTURE Behaviour OF CPU IS
     );
     End Component;
 
+    Component IMAddrChooser is port(
+        chooser:  in  std_logic_vector(2 downto 0);
+        PCInput:  in  std_logic_vector(15 downto 0);
+        AluInput: in  std_logic_vector(15 downto 0);
+        outData:  out std_logic_vector(15 downto 0)
+    );
+    END Component;
+
     Component IM_RAM2 IS PORT (
-        clk:           IN    STD_LOGIC;
-        rst:           IN    STD_LOGIC;
-        PC_i:          IN    STD_LOGIC_VECTOR(15 downto 0);
-        mem_MemRead:   IN    STD_LOGIC;
-        mem_MemWE:     IN    STD_LOGIC;
-        mem_ALUOut:    IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Address
-        mem_WriteData: IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Data
+        MemSignal:     IN    STD_LOGIC_VECTOR( 2 downto 0);
+        ReadWriteAddr: In    STD_LOGIC_VECTOR(15 downto 0);
+        WriteData:     IN    STD_LOGIC_VECTOR(15 downto 0); -- Mem Write Data
         Ram2_Addr:     OUT   STD_LOGIC_VECTOR(17 downto 0);
-        Ram2_Data:     inout STD_LOGIC_VECTOR(15 downto 0);
+        Ram2_Data:     INOUT STD_LOGIC_VECTOR(15 downto 0);
         Ram2_OE:       OUT   STD_LOGIC;
         Ram2_WE:       OUT   STD_LOGIC;
         Ram2_EN:       OUT   STD_LOGIC;
-        Ram2_Inst:     OUT   STD_LOGIC_VECTOR(15 downto 0)
-        -- ;
-
-        -- LedSel:        IN    STD_LOGIC_VECTOR(15 downto 0);
-        -- LedOut:        OUT   STD_LOGIC_VECTOR(15 downto 0);
-        -- NumOut:        OUT   STD_LOGIC_VECTOR( 7 downto 0)
+        ReadData:      OUT   STD_LOGIC_VECTOR(15 downto 0)
         );
     End Component;
 
@@ -207,10 +206,11 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component MUX_Write_Data IS PORT (
-        MemRead:   IN  STD_LOGIC;
-        MemALUOut: IN  STD_LOGIC_VECTOR(15 downto 0);
-        MemData:   IN  STD_LOGIC_VECTOR(15 downto 0);
-        WriteData: OUT STD_LOGIC_VECTOR(15 downto 0)
+        MemSignal:  IN  STD_LOGIC_VECTOR( 2 downto 0);
+        mem_ALUOut: IN  STD_LOGIC_VECTOR(15 downto 0);
+        DMData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        IMData:     IN  STD_LOGIC_VECTOR(15 downto 0);
+        WriteData:  OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
@@ -243,11 +243,14 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component ALU IS PORT (
-        A  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        B  :  IN  STD_LOGIC_VECTOR(15 downto 0);
-        OP :  IN  STD_LOGIC_VECTOR( 3 downto 0);
-        F  :  OUT STD_LOGIC_VECTOR(15 downto 0);
-        T  :  OUT STD_LOGIC
+        MemRead:  In  STD_LOGIC;
+        MemWE:    IN  STD_LOGIC;
+        A:        IN  STD_LOGIC_VECTOR(15 downto 0);
+        B:        IN  STD_LOGIC_VECTOR(15 downto 0);
+        OP:       IN  STD_LOGIC_VECTOR( 3 downto 0);
+        F:        OUT STD_LOGIC_VECTOR(15 downto 0);
+        ResType:  OUT STD_LOGIC_VECTOR( 2 downto 0);
+        ALUPause: OUT STD_LOGIC
     );
     END Component;
 
@@ -269,64 +272,49 @@ ARCHITECTURE Behaviour OF CPU IS
     END Component;
 
     Component MUX_EXE_MEM IS PORT (
-        rst             : IN  STD_LOGIC;
-        clk             : IN  STD_LOGIC;
-        DstReg          : IN  STD_LOGIC_VECTOR(3 downto 0);
-        RegWE           : IN  STD_LOGIC;
-        MemRead         : IN  STD_LOGIC;
-        MemWE           : IN  STD_LOGIC;
-        MemWriteData    : IN  STD_LOGIC_VECTOR(15 downto 0);
-        ALUOut          : IN  STD_LOGIC_VECTOR(15 downto 0);
-        T               : IN  STD_LOGIC;
-        Stall           : IN  STD_LOGIC;
-        NowPC           : in  STD_LOGIC_VECTOR(15 downto 0);
-        o_NowPC         : out STD_LOGIC_VECTOR(15 downto 0);
-        o_DstReg        : OUT STD_LOGIC_VECTOR(3 downto 0);
-        o_RegWE         : OUT STD_LOGIC;
-        o_MemRead       : OUT STD_LOGIC;
-        o_MemWE         : OUT STD_LOGIC;
-        o_MemWriteData  : OUT STD_LOGIC_VECTOR(15 downto 0);
-        o_ALUOut        : OUT STD_LOGIC_VECTOR(15 downto 0)
+        rst:            IN  STD_LOGIC;
+        clk:            IN  STD_LOGIC;
+        RegWE:          IN  STD_LOGIC;
+        DstReg:         IN  STD_LOGIC_VECTOR( 3 downto 0);
+        MemSignal:      IN  STD_LOGIC_VECTOR( 2 downto 0);
+        MemWriteData:   IN  STD_LOGIC_VECTOR(15 downto 0);
+        ALUOut:         IN  STD_LOGIC_VECTOR(15 downto 0);
+        NowPC:          IN  STD_LOGIC_VECTOR(15 downto 0);
+        o_NowPC:        out STD_LOGIC_VECTOR(15 downto 0);
+        o_RegWE:        OUT STD_LOGIC;
+        o_DstReg:       OUT STD_LOGIC_VECTOR( 3 downto 0);
+        o_MemSignal:    OUT STD_LOGIC_VECTOR( 2 downto 0);
+        o_MemWriteData: OUT STD_LOGIC_VECTOR(15 downto 0);
+        o_ALUOut:       OUT STD_LOGIC_VECTOR(15 downto 0)
     );
     END Component;
 
     Component DM_RAM1 IS port (
-        CLK           : IN   STD_LOGIC;
-        RST           : IN   STD_LOGIC;
+        MemSignal:     in  std_logic_vector( 2 downto 0);
+        WriteData:     in  std_logic_vector(15 downto 0);
+        ReadWriteAddr: in  std_logic_vector(15 downto 0);
+
+        DstVal:        out std_logic_vector(15 downto 0);
+
+        Ram1OE:        out std_logic;
+        Ram1WE:        out std_logic;
+        Ram1EN:        out std_logic;
+        Ram1Addr:      out std_logic_vector(17 downto 0);
+        Ram1Data:      inout std_logic_vector(15 downto 0);
+
+        rdn:           out std_logic;
+        wrn:           out std_logic;
+        data_ready:    in  std_logic;
+        tbre:          in  std_logic;
+        tsre:          in  std_logic;
+
+        KeyboardVal:   in  std_logic_vector(15 downto 0);
+        vga_wrn:       out std_logic;
+        vga_data:      out std_logic_vector(15 downto 0);
         
-        MemWE         : IN   STD_LOGIC;
-        WriteData     : IN   STD_LOGIC_VECTOR(15 downto 0);
-        MemRead       : IN   STD_LOGIC;
-        ALUOut        : IN   STD_LOGIC_VECTOR(15 downto 0); -- if MemWE, this is Address
-        
-        InstRead      : IN   STD_LOGIC;
-        InstVal       : IN   STD_LOGIC_VECTOR(15 downto 0);
-        
-        DstVal        : OUT  STD_LOGIC_VECTOR(15 downto 0);
-        
-        Ram1OE        : OUT   STD_LOGIC;
-        Ram1WE        : OUT   STD_LOGIC;
-        Ram1EN        : OUT   STD_LOGIC;
-        Ram1Addr      : OUT   STD_LOGIC_VECTOR(17 downto 0);
-        Ram1Data      : INOUT STD_LOGIC_VECTOR(15 downto 0);
-        
-        rdn           : OUT  STD_LOGIC;
-        wrn           : OUT  STD_LOGIC;
-        data_ready    : IN   STD_LOGIC;
-        tbre          : IN   STD_LOGIC;
-        tsre          : IN   STD_LOGIC;
-        
-        keyboard_val  : IN   STD_LOGIC_VECTOR(15 downto 0);
-        vga_wrn       : OUT  STD_LOGIC;
-        vga_data      : OUT  STD_LOGIC_VECTOR(15 downto 0);
-        
-        NowPC         : IN   STD_LOGIC_VECTOR(15 downto 0);
-        Exception     : OUT  STD_LOGIC;
-        ExceptPC      : OUT  STD_LOGIC_VECTOR(15 downto 0);
-        
-        LedSel        : IN   STD_LOGIC_VECTOR(15 downto 0);
-        LedOut        : OUT  STD_LOGIC_VECTOR(15 downto 0);
-        NumOut        : OUT  STD_LOGIC_VECTOR(7 downto 0)
+        LedSel:        in  std_logic_vector(15 downto 0);
+        LedOut:        out std_logic_vector(15 downto 0);
+        NumOut:        out std_logic_vector( 7 downto 0)
     );
     END Component;
 
@@ -358,11 +346,11 @@ ARCHITECTURE Behaviour OF CPU IS
 
     Component ForwardingUnit IS port(
 		EXE_REGWRITE: in std_logic ;  --exe阶段的写信号
-        EXE_DstReg:   in std_logic_vector (3 DOWNTO 0) ;  --exe阶段目的寄存��
+        EXE_DstReg:   in std_logic_vector (3 DOWNTO 0) ;  --exe阶段目的寄存
         MEM_REGWRITE: in std_logic ;  --mem 阶段的写信号
         MEM_DstReg:   in std_logic_vector (3 downto 0);  --mem阶段的目的寄存器
-        ASrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存��
-        BSrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存��
+        ASrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数A的源寄存
+        BSrc4:        in std_logic_vector (3 downto 0);  -- ALU 操作数B的源寄存
         FORWARDA:     out std_logic_vector(1 downto 0);  --muxa信号选择
         FORWARDB:     out std_logic_vector(1 downto 0)   --muxb信号选择
 	);
@@ -476,6 +464,7 @@ ARCHITECTURE Behaviour OF CPU IS
         mem_WriteData    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         mem_ReadData     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         mem_DstVal       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+        mem_MemSignal    : IN  STD_LOGIC_VECTOR( 2 DOWNTO 0);
 
         mem_vga_wrn      : IN  STD_LOGIC;
         mem_vga_data     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -530,10 +519,12 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL if_PCKeep        : STD_LOGIC := '1';
     SIGNAL if_NewPC         : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCToIM        : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL if_IMAddr        : STD_LOGIC_VECTOR(15 DOWNTO 0 );
     SIGNAL if_PCPlus1       : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCRx          : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_PCAddImm      : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL if_Inst          : STD_LOGIC_VECTOR(15 DOWNTO 0); --instruction from ram2
+    SIGNAL if_MemRead       : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL id_Inst          : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL id_PCPlus1       : STD_LOGIC_VECTOR(15 downto 0);
@@ -581,10 +572,12 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL exe_MemWriteData : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL exe_InDelayslot  : STD_LOGIC;
     SIGNAL exe_PCSel        : STD_LOGIC_VECTOR( 1 downto 0);
-    SIGNAL exe_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL exe_NowPC        : STD_LOGIC_VECTOR(15 downto 0);
 
     SIGNAL alu_F            : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL alu_T            : STD_LOGIC;
+    SIGNAL alu_ResType      : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL alu_pause        : STD_LOGIC;
 
     SIGNAL mem_DstReg       : STD_LOGIC_VECTOR(3 downto 0);
     SIGNAL mem_RegWE        : STD_LOGIC;
@@ -594,7 +587,8 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL mem_WriteData    : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_ReadData     : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_DstVal       : STD_LOGIC_VECTOR(15 downto 0);
-    SIGNAL mem_NowPC       : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_NowPC        : STD_LOGIC_VECTOR(15 downto 0);
+    SIGNAL mem_MemSignal    : STD_LOGIC_VECTOR( 2 downto 0);
 
     SIGNAL mem_vga_wrn      : STD_LOGIC;
     SIGNAL mem_vga_data     : STD_LOGIC_VECTOR(15 downto 0);
@@ -703,26 +697,26 @@ BEGIN
         PCOUT => if_PCPlus1
     );
     
+    
+    u_IMAddrChooser: IMAddrChooser PORT MAP (
+        chooser  => mem_MemSignal, 
+        PCInput  => if_PCToIM,
+        AluInput => mem_ALUOut,
+        outData  => if_IMAddr
+    ); 
+
     u_InstMemory: IM_RAM2 PORT MAP (
-        clk           => clk_sel,
-        rst           => RST,
-        PC_i          => if_PCToIM,
-        Ram2_Data     => Ram2_Data,
-        mem_MemRead   => mem_MemRead,
-        mem_MemWE     => mem_MemWE,
-        mem_ALUOut    => mem_ALUOut,
-        mem_WriteData => mem_WriteData,
+        MemSignal     => mem_MemSignal,
+        ReadWriteAddr => if_IMAddr,
+        WriteData     => mem_WriteData,
         Ram2_Addr     => Ram2_Addr,
-        Ram2_Inst     => if_Inst,
+        Ram2_Data     => Ram2_Data,
         Ram2_OE       => Ram2_OE,
         Ram2_WE       => Ram2_WE,
-        Ram2_EN       => Ram2_EN
-        -- ,
-        -- LedSel       => SW,
-        -- LedOut       => ram2_LED,
-        -- NumOut       => ram2_numout
+        Ram2_EN       => Ram2_EN,
+        ReadData      => if_Inst
     );
-    
+
     u_MUX_IF_ID: MUX_IF_ID PORT MAP (
         clk        => clk_sel,
         rst        => RST,
@@ -756,9 +750,6 @@ BEGIN
         NextInDelayslot => ctrl_InDelayslot,
         BranchFlag  => ctrl_BranchFlag, 
         PCMuxSel    => ctrl_PCMuxSel
-        -- ,
-        -- NowPC       => ctrl_NowPC,
-        -- ExceptPC    => ctrl_ExceptPC
     );
 
     u_AddImme: PCAddImm PORT MAP (
@@ -861,45 +852,37 @@ BEGIN
     );
 
     u_ALU: ALU PORT MAP (
-        A  => exe_Data1,
-        B  => exe_BOp,
-        OP => exe_ALUOp,
-        F  => alu_F,
-        T  => alu_T
+        MemRead  => exe_MemRead,
+        MemWE    => exe_MemWE,
+        A        => exe_Data1,
+        B        => exe_BOp,
+        OP       => exe_ALUOp,
+        F        => alu_F,
+        ResType  => alu_ResType,
+        ALUPause => alu_pause
     );
 
     u_MUX_EXE_MEM: MUX_EXE_MEM PORT MAP (
         rst            => RST,
         clk            => clk_sel,
-        DstReg         => exe_DstReg,
         RegWE          => exe_RegWE,
-        MemRead        => exe_MemRead,
-        MemWE          => exe_MemWE,
+        DstReg         => exe_DstReg,    
+        MemSignal      => alu_ResType,
         MemWriteData   => exe_MemWriteData,
         ALUOut         => alu_F,
-        T              => alu_T,
-        Stall          => '1', -- not stop
         NowPC          => exe_NowPC,
         o_NowPC        => mem_NowPC,
-        o_DstReg       => mem_DstReg,
         o_RegWE        => mem_RegWE,
-        o_MemRead      => mem_MemRead,
-        o_MemWE        => mem_MemWE,
+        o_DstReg       => mem_DstReg,
+        o_MemSignal    => mem_MemSignal,
         o_MemWriteData => mem_WriteData,
         o_ALUOut       => mem_ALUOut
     );
 
     u_DataMemory: DM_RAM1 PORT MAP (
-        CLK           => clk_sel,
-        RST           => RST,
-        
-        MemWE         => mem_MemWE,
-        WriteData     => mem_WriteData,
-        MemRead       => mem_MemRead,
-        ALUOut        => mem_ALUOut,
-        
-        InstRead      => ram1_InstRead,
-        InstVal       => mem_WriteData,
+        MemSignal     => mem_MemSignal,
+        WriteData     => exe_MemWriteData,
+        ReadWriteAddr => mem_ALUOut,
         
         DstVal        => mem_ReadData,
         
@@ -915,13 +898,9 @@ BEGIN
         tbre          => tbre,
         tsre          => tsre,
         
-        keyboard_val  => keyboard_key_value,
+        keyboardVal   => keyboard_key_value,
         vga_wrn       => mem_vga_wrn,
         vga_data      => mem_vga_data,
-        
-        NowPC         => mem_NowPC,
-        Exception     => ram1_Except,
-        ExceptPC      => ram1_ExceptPC,
         
         LedSel        => SW,
         LedOut        => uart_led,
@@ -929,9 +908,10 @@ BEGIN
     );  
 
     u_Mux_Write_Data: MUX_Write_Data PORT MAP (
-        MemRead   => mem_MemRead,
-        MemALUOut => mem_ALUOut,
-        MemData   => mem_ReadData,
+        MemSignal => alu_ResType,
+        mem_ALUOut => mem_ALUOut,
+        DMData => mem_ReadData,
+        IMData => if_Inst,
         WriteData => mem_DstVal
     );
 
@@ -1062,6 +1042,7 @@ BEGIN
         mem_WriteData    => mem_WriteData,
         mem_ReadData     => mem_ReadData,
         mem_DstVal       => mem_DstVal,
+        mem_MemSignal    => mem_MemSignal,
 
         mem_vga_wrn      => '1',
         mem_vga_data     => (others => '0'),
