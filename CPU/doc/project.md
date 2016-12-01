@@ -418,9 +418,9 @@ WriteData:      OUT STD_LOGIC_VECTOR(15 downto 0)
 - BSrc4:  `STD_LOGIC_VECTOR(2 downto 0);`   ALU opB 的确切来源，R0, R1, R2, R3, R4, R5, R6, R7, SP, T, IH, PC
 
 
-> 检测条件 2
-> 1. 上一条指令的目的寄存器是T
-> 2. 当前指令的源寄存器是T（BTEQZ, BTNEZ指令）
+// > 检测条件 2
+// > 1. 上一条指令的目的寄存器是T
+// > 2. 当前指令的源寄存器是T（BTEQZ, BTNEZ指令）
 
 > 检测条件 (EXE/MEM)
 > - ALUOut: -- 写入指令的地址

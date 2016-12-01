@@ -99,7 +99,7 @@ begin
 
     process(Ram1Data, MemSignal, tbre, tsre, data_ready)
     begin
-        if MemSignal = DM_READ or MemSignal = SerialDataRead then
+        if (MemSignal = DM_READ) or (MemSignal = SerialDataRead) then
             DstVal <= Ram1Data;
         elsif MemSignal = SerialStateRead then
             DstVal <= "00000000000000" & data_ready & (tbre and tsre);

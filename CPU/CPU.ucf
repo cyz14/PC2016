@@ -114,7 +114,7 @@ NET "Number0[6]" LOC = F8;
 NET "Number0[5]" LOC = E8;
 NET "Number0[4]" LOC = A8;
 NET "Number0[3]" LOC = F7;
-NET "Number0[2]" LOC = E8;
+NET "Number0[2]" LOC = E7;
 NET "Number0[1]" LOC = D7;
 NET "Number0[0]" LOC = C7;
 NET "Number1[6]" LOC = B10;
@@ -158,7 +158,3 @@ NET "LED[3]" LOC = B11;
 NET "LED[2]" LOC = A11;
 NET "LED[1]" LOC = E10;
 NET "LED[0]" LOC = D10;
-
-# PlanAhead Generated physical constraints 
-
-NET "Number0[2]" LOC = E7;

@@ -28,7 +28,7 @@ begin
         variable stall: std_logic;
     begin
         if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))
-        or (s1_DstReg = Dst_T and (ASrc4 = Dst_T or BSrc4 = Dst_T))
+        -- or (s1_DstReg = Dst_T and (ASrc4 = Dst_T or BSrc4 = Dst_T))
         or (ALUOut(15) = '0' and (MemWE = RAM_WRITE_ENABLE or MemRead = RAM_READ_ENABLE)) then
             PC_Keep <= KEEP_ENABLE;
             IFID_Keep <= KEEP_ENABLE;

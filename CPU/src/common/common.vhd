@@ -181,10 +181,10 @@ CONSTANT SerialStateRead: STD_LOGIC_VECTOR(2 downto 0):= "110";
 CONSTANT ALU_RESULT:      STD_LOGIC_VECTOR(2 downto 0):= "111";
 
 -- PCMux Signal
-CONSTANT PC_None   : std_logic_vector(1 downto 0) := "00";
-CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "01";
-CONSTANT PC_Rx     : std_logic_vector(1 downto 0) := "10";
-CONSTANT PC_AddImm : std_logic_vector(1 downto 0) := "11";
+CONSTANT PC_Add1   : std_logic_vector(1 downto 0) := "00";
+CONSTANT PC_Rx     : std_logic_vector(1 downto 0) := "01";
+CONSTANT PC_AddImm : std_logic_vector(1 downto 0) := "10";
+CONSTANT PC_None   : std_logic_vector(1 downto 0) := "11";
 
 -- Forward Options
 CONSTANT FWD_NONE  : STD_LOGIC_VECTOR(1 downto 0) := "00";

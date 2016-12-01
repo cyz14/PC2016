@@ -10,6 +10,8 @@ ENTITY MUX_MEM_WB IS PORT (
     RegWE:    in std_logic;
     DstReg:   in std_logic_vector( 3 downto 0);
     DstVal:   in std_logic_vector(15 downto 0);
+    exe_MemWE: in std_logic;
+    mem_MemWE: out std_logic;
     RegWE_o:  out std_logic;
     DstReg_o: out std_logic_vector( 3 downto 0);
     DstVal_o: out std_logic_vector(15 downto 0)
@@ -25,7 +27,9 @@ BEGIN
             RegWE_o <= REG_WRITE_DISABLE;
             DstReg_o <= DST_NONE;
             DstVal_o <= ZERO16;
+            mem_MemWE <= RAM_WRITE_DISABLE;
         elsif clk'event and clk = '1' then
+            mem_MemWE <= exe_MemWE;
             RegWE_o  <= RegWE;
             DstReg_o <= DstReg;
             DstVal_o <= DstVal;

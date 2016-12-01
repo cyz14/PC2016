@@ -28,7 +28,7 @@ begin
     begin
         case (MemSignal) is
             WHEN IM_WRITE => 
-                Ram2_Data <= (others => 'Z');
+                Ram2_Data <= WriteData;
                 Ram2_Addr <= "00" & ReadWriteAddr;
 				Ram2_OE <= '1';
 				Ram2_WE <= '0';

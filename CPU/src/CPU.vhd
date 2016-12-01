@@ -323,6 +323,8 @@ ARCHITECTURE Behaviour OF CPU IS
         RegWE:    in std_logic;
         DstReg:   in std_logic_vector( 3 downto 0);
         DstVal:   in std_logic_vector(15 downto 0);
+        exe_MemWE: in std_logic;
+        mem_MemWE: out std_logic;
         RegWE_o:  out std_logic;
         DstReg_o: out std_logic_vector( 3 downto 0);
         DstVal_o: out std_logic_vector(15 downto 0)
@@ -396,7 +398,7 @@ ARCHITECTURE Behaviour OF CPU IS
         clk              : IN  STD_LOGIC;
         SW               : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
         DebugEnable      : IN  STD_LOGIC;
-        LedOut              : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        LedOut           : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
         Number           : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0);
 
         if_PCKeep        : IN  STD_LOGIC := '1';
@@ -921,6 +923,8 @@ BEGIN
         RegWE    => mem_RegWE,
         DstReg   => mem_DstReg,
         DstVal   => mem_DstVal,
+        exe_MemWE=> exe_MemWE,
+        mem_MemWE=> mem_MemWE,
         RegWE_o  => wb_RegWE,
         DstReg_o => wb_DstReg,
         DstVal_o => wb_DstVal
