@@ -277,6 +277,7 @@ ARCHITECTURE Behaviour OF CPU IS
         RegWE:          IN  STD_LOGIC;
         DstReg:         IN  STD_LOGIC_VECTOR( 3 downto 0);
         MemSignal:      IN  STD_LOGIC_VECTOR( 2 downto 0);
+        ALUPause:       IN  STD_LOGIC;
         MemWriteData:   IN  STD_LOGIC_VECTOR(15 downto 0);
         ALUOut:         IN  STD_LOGIC_VECTOR(15 downto 0);
         NowPC:          IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -284,6 +285,7 @@ ARCHITECTURE Behaviour OF CPU IS
         o_RegWE:        OUT STD_LOGIC;
         o_DstReg:       OUT STD_LOGIC_VECTOR( 3 downto 0);
         o_MemSignal:    OUT STD_LOGIC_VECTOR( 2 downto 0);
+        o_ALUPause:     OUT STD_LOGIC;
         o_MemWriteData: OUT STD_LOGIC_VECTOR(15 downto 0);
         o_ALUOut:       OUT STD_LOGIC_VECTOR(15 downto 0)
     );
@@ -333,12 +335,12 @@ ARCHITECTURE Behaviour OF CPU IS
     component HazardDetectingUnit IS PORT (
         rst,clk:    in std_logic;
         MemRead:    in std_logic;
+        MemWE:      in std_logic;
+        ALUPause:   in std_logic;
         DstReg:     in std_logic_vector(3 downto 0);
         ASrc4:      in std_logic_vector(3 downto 0);
         BSrc4:      in std_logic_vector(3 downto 0);
         ALUOut:     in std_logic_vector(15 downto 0);
-        MemWE:      in std_logic;
-
         PC_Keep:    out std_logic;
         IFID_Keep:  out std_logic;
         IDEX_Stall: out std_logic
@@ -593,6 +595,7 @@ ARCHITECTURE Behaviour OF CPU IS
     SIGNAL mem_DstVal       : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_NowPC        : STD_LOGIC_VECTOR(15 downto 0);
     SIGNAL mem_MemSignal    : STD_LOGIC_VECTOR( 2 downto 0);
+    SIGNAL mem_ALUPause     : STD_LOGIC;
 
     SIGNAL mem_vga_wrn      : STD_LOGIC;
     SIGNAL mem_vga_data     : STD_LOGIC_VECTOR(15 downto 0);
@@ -872,6 +875,7 @@ BEGIN
         RegWE          => exe_RegWE,
         DstReg         => exe_DstReg,    
         MemSignal      => alu_ResType,
+        ALUPause       => alu_pause,
         MemWriteData   => exe_MemWriteData,
         ALUOut         => alu_F,
         NowPC          => exe_NowPC,
@@ -879,6 +883,7 @@ BEGIN
         o_RegWE        => mem_RegWE,
         o_DstReg       => mem_DstReg,
         o_MemSignal    => mem_MemSignal,
+        o_ALUPause     => mem_ALUPause,
         o_MemWriteData => mem_MemWriteData,
         o_ALUOut       => mem_ALUOut
     );
@@ -952,6 +957,7 @@ BEGIN
         BSrc4   => ctrl_BSrc4,
         ALUOut  => mem_ALUOut,
         MemWE   => mem_MemWE,
+        ALUPause=> mem_ALUPause,
         PC_Keep => if_PCKeep,
         IFID_Keep => hdu_IFID_Keep,
         IDEX_Stall => hdu_IDEX_Stall

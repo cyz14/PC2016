@@ -11,6 +11,7 @@ ENTITY MUX_EXE_MEM IS PORT (
     RegWE:          IN  STD_LOGIC;
     DstReg:         IN  STD_LOGIC_VECTOR( 3 downto 0);
     MemSignal:      IN  STD_LOGIC_VECTOR( 2 downto 0);
+    ALUPause:       IN  STD_LOGIC;
     MemWriteData:   IN  STD_LOGIC_VECTOR(15 downto 0);
     ALUOut:         IN  STD_LOGIC_VECTOR(15 downto 0);
     NowPC:          IN  STD_LOGIC_VECTOR(15 downto 0);
@@ -18,6 +19,7 @@ ENTITY MUX_EXE_MEM IS PORT (
     o_RegWE:        OUT STD_LOGIC;
     o_DstReg:       OUT STD_LOGIC_VECTOR( 3 downto 0);
     o_MemSignal:    OUT STD_LOGIC_VECTOR( 2 downto 0);
+    o_ALUPause:     OUT STD_LOGIC;
     o_MemWriteData: OUT STD_LOGIC_VECTOR(15 downto 0);
     o_ALUOut:       OUT STD_LOGIC_VECTOR(15 downto 0)
 );
@@ -31,6 +33,7 @@ BEGIN
             o_RegWE <= REG_WRITE_DISABLE;
             o_DstReg <= Dst_None;
             o_MemSignal <= ALU_RESULT;
+            o_ALUPause <= KEEP_DISABLE;
             o_MemWriteData <= ZERO16;
             o_ALUOut <= ZERO16;
             o_NowPC <= ZERO16;
@@ -39,6 +42,7 @@ BEGIN
             o_RegWE <= RegWE;
             o_DstReg <= DstReg;
             o_MemSignal <= MemSignal;
+            o_ALUPause <= ALUPause;
             o_MemWriteData <= MemWriteData;
             o_ALUOut <= ALUOut;
         end if;

@@ -71,7 +71,18 @@ BEGIN
         ELSIF clk'event and clk = '1' THEN
             IF Stall = '0' THEN
                  -- do nothing, wait for a period until Stall is 0
-                 null;
+                 RegWE_o <= REG_WRITE_DISABLE;
+                 DstReg_o <= DST_NONE;
+                 ALUOp_o <= OP_NONE;
+                 MemWE_o <= RAM_WRITE_DISABLE;
+                 MemRead_o <= RAM_READ_DISABLE;
+                 Data1_o <= ZERO16;
+                 Data2_o <= ZERO16;
+                 Immediate_o <= ZERO16;
+                 MemWriteData <= ZERO16;
+                 ASrc4_o <= DST_NONE;
+                 BSrc4_o <= DST_NONE;
+                 BSrc_o <= AS_NONE; 
             ELSE
                 Data1_o  <= Data1;
                 Data2_o  <= Data2;

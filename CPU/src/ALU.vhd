@@ -54,7 +54,7 @@ BEGIN
             WHEN others  => res := ZERO16; ResType <= ALU_RESULT;
         END CASE;
 
-        ALUPause <= '0';
+        ALUPause <= KEEP_DISABLE;
         if MemRead = RAM_READ_ENABLE then
             if (res >= x"8000" and res <= x"BEFF") or (res >= x"BF10") then
                 ResType <= DM_READ;

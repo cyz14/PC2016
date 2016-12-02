@@ -8,12 +8,12 @@ entity HazardDetectingUnit is
     port (
     rst,clk:    in std_logic;
     MemRead:    in std_logic;
+    MemWE:      in std_logic;
+    ALUPause:   in std_logic;
     DstReg:     in std_logic_vector(3 downto 0);
     ASrc4:      in std_logic_vector(3 downto 0);
     BSrc4:      in std_logic_vector(3 downto 0);
     ALUOut:     in std_logic_vector(15 downto 0);
-    MemWE:      in std_logic;
-
     PC_Keep:    out std_logic;
     IFID_Keep:  out std_logic;
     IDEX_Stall: out std_logic
@@ -29,7 +29,8 @@ begin
     begin
         if (s1_MemRead = '0' and (s1_DstReg = ASrc4 or s1_DstReg = BSrc4))
         -- or (s1_DstReg = Dst_T and (ASrc4 = Dst_T or BSrc4 = Dst_T))
-        or (ALUOut(15) = '0' and (MemWE = RAM_WRITE_ENABLE or MemRead = RAM_READ_ENABLE)) then
+        -- ALUOut(15) = '0' and (MemWE = RAM_WRITE_ENABLE or MemRead = RAM_READ_ENABLE)
+        or (ALUPause = KEEP_ENABLE) then
             PC_Keep <= KEEP_ENABLE;
             IFID_Keep <= KEEP_ENABLE;
             IDEX_Stall <= KEEP_ENABLE;
