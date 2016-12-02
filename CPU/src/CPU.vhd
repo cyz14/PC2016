@@ -308,7 +308,6 @@ ARCHITECTURE Behaviour OF CPU IS
         tbre:          in  std_logic;
         tsre:          in  std_logic;
 
-        KeyboardVal:   in  std_logic_vector(15 downto 0);
         vga_wrn:       out std_logic;
         vga_data:      out std_logic_vector(15 downto 0);
         
@@ -505,6 +504,9 @@ ARCHITECTURE Behaviour OF CPU IS
         hdu_IFID_Keep    : IN  STD_LOGIC;
         hdu_IDEX_Stall   : IN  STD_LOGIC;
 
+        data_ready       : in STD_LOGIC;
+        keyboard_key_value: in STD_LOGIC_VECTOR(15 downto 0);
+
         R0, R1, R2, R3   : IN  STD_LOGIC_VECTOR(15 downto 0);
         R4, R5, R6, R7   : IN  STD_LOGIC_VECTOR(15 downto 0);
         SP, T, IH        : IN  STD_LOGIC_VECTOR(15 downto 0)
@@ -646,12 +648,12 @@ BEGIN
     END PROCESS;
 
     u_Number1: BCDto7Seg PORT MAP (
-        bcd => num_out(7 downto 4),
+        bcd => num_out(3 downto 0),
         seg => Number1
     );
 
     u_Number0: BCDto7Seg PORT MAP (
-        bcd => num_out(3 downto 0),
+        bcd => num_out(7 downto 4),
         seg => Number0
     );
 
@@ -900,7 +902,7 @@ BEGIN
         tbre          => tbre,
         tsre          => tsre,
         
-        keyboardVal   => keyboard_key_value,
+
         vga_wrn       => mem_vga_wrn,
         vga_data      => mem_vga_data,
         
@@ -1084,6 +1086,9 @@ BEGIN
 
         hdu_IFID_Keep    => hdu_IFID_Keep,
         hdu_IDEX_Stall   => hdu_IDEX_Stall,
+
+        data_ready       => keyboard_data_ready,
+        keyboard_key_value=> keyboard_key_value,
         
         R0 => R0, 
         R1 => R1,

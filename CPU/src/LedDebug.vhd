@@ -12,7 +12,7 @@ ENTITY LedDebug IS PORT (
     clk              : IN  STD_LOGIC;
     SW               : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
     DebugEnable      : IN  STD_LOGIC;
-    LedOut              : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    LedOut           : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
     Number           : OUT STD_LOGIC_VECTOR( 7 DOWNTO 0);
 
     if_PCKeep        : IN  STD_LOGIC := '1';
@@ -120,6 +120,9 @@ ENTITY LedDebug IS PORT (
     hdu_IFID_Keep    : IN  STD_LOGIC;
     hdu_IDEX_Stall   : IN  STD_LOGIC;
 
+    data_ready       : in STD_LOGIC;
+    keyboard_key_value: in STD_LOGIC_VECTOR(15 downto 0);
+
     R0, R1, R2, R3   : IN  STD_LOGIC_VECTOR(15 downto 0);
     R4, R5, R6, R7   : IN  STD_LOGIC_VECTOR(15 downto 0);
     SP, T, IH        : IN  STD_LOGIC_VECTOR(15 downto 0)
@@ -139,8 +142,8 @@ BEGIN
     infos( 3) <= if_PCAddImm;
     infos( 4) <= if_Inst; 
     infos( 5) <= if_PCPlus1;
-    infos( 6) <= ZERO16;
-    infos( 7) <= ZERO16;
+    infos( 6) <= keyboard_key_value;
+    infos( 7) <= ZERO15 & data_ready;
 
     infos( 8) <= id_Inst;
     infos( 9) <= id_PCPlus1;
@@ -204,6 +207,7 @@ BEGIN
     infos(62) <= R6;
     infos(63) <= R7;
 
+    Number <= keyboard_key_value(7 downto 0);
     PROCESS(clk, rst, SW, DebugEnable)
         Variable index : integer range 0 to 63;
     BEGIN

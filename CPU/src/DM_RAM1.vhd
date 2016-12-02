@@ -51,7 +51,7 @@ entity DM_RAM1 is port (
     tbre:          in  std_logic;
     tsre:          in  std_logic;
 
-    KeyboardVal:   in  std_logic_vector(15 downto 0);
+
     vga_wrn:       out std_logic;
     vga_data:      out std_logic_vector(15 downto 0);
     
