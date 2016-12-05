@@ -1,0 +1,1220 @@
+[
+  {
+    "type": "shape_designer.figure.ExtPolygon",
+    "id": "1273b218-8ebb-0642-c77a-6bf78404a29b",
+    "x": 3950,
+    "y": 3912,
+    "width": 100,
+    "height": 173,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "baseClass": "draw2d.SetFigure",
+      "code": "/**\n * by 'Draw2D Shape Designer'\n *\n * Custom JS code to tweak the standard behaviour of the generated\n * shape. add your custome code and event handler here.\n *\n *\n */\ntestShape = testShape.extend({\n\n    init: function(attr, setter, getter){\n         this._super(attr, setter, getter);\n\n         // your special code here\n    },\n\n    /**\n     *  Called by the simulator for every calculation\n     *  loop\n     *  @required\n     **/\n    calculate:function()\n    {\n    },\n\n\n    /**\n     *  Called if the simulation mode is starting\n     *  @required\n     **/\n    onStart:function()\n    {\n    },\n\n    /**\n     *  Called if the simulation mode is stopping\n     *  @required\n     **/\n    onStop:function()\n    {\n    }\n});",
+      "name": "Rectangle",
+      "markdown": "# 74LS86\n## Port Number and Name  \n `Y = A xor B `\n| Number| Name | Number | Name   | Number | Name   |\n|:-----:|:----:|:------:|:------:|:------:|:------:|\n| 1     | 1A   | 2      | 1B     | 3      | 1Y     |\n| 4     | 2A   | 5      | 2B     | 6      | 2Y     |    \n| 10    | 3A   | 9      | 3B     | 8      | 3Y     |   \n| 13    | 4A   | 12     | 4B     | 11     | 4Y     | \n| 7     | GND  | 14     | Vcc    |"
+    },
+    "cssClass": "shape_designer_figure_PolyRect",
+    "ports": [],
+    "bgColor": "#FFFFFF",
+    "color": "#303030",
+    "stroke": 1,
+    "radius": 0,
+    "dasharray": null,
+    "vertices": [
+      {
+        "x": 3980.087488663526,
+        "y": 3912
+      },
+      {
+        "x": 3950,
+        "y": 3912
+      },
+      {
+        "x": 3950,
+        "y": 4085
+      },
+      {
+        "x": 4050,
+        "y": 4085
+      },
+      {
+        "x": 4050,
+        "y": 3912
+      },
+      {
+        "x": 4019.912511336474,
+        "y": 3912
+      },
+      {
+        "x": 4020,
+        "y": 3913
+      },
+      {
+        "x": 4019.696155060244,
+        "y": 3916.4729635533386
+      },
+      {
+        "x": 4018.793852415718,
+        "y": 3919.8404028665136
+      },
+      {
+        "x": 4017.320508075689,
+        "y": 3923
+      },
+      {
+        "x": 4015.3208888623794,
+        "y": 3925.855752193731
+      },
+      {
+        "x": 4012.855752193731,
+        "y": 3928.3208888623794
+      },
+      {
+        "x": 4010,
+        "y": 3930.320508075689
+      },
+      {
+        "x": 4006.8404028665136,
+        "y": 3931.793852415718
+      },
+      {
+        "x": 4003.4729635533386,
+        "y": 3932.696155060244
+      },
+      {
+        "x": 4000,
+        "y": 3933
+      },
+      {
+        "x": 3996.5270364466614,
+        "y": 3932.696155060244
+      },
+      {
+        "x": 3993.1595971334864,
+        "y": 3931.793852415718
+      },
+      {
+        "x": 3990,
+        "y": 3930.320508075689
+      },
+      {
+        "x": 3987.144247806269,
+        "y": 3928.3208888623794
+      },
+      {
+        "x": 3984.6791111376206,
+        "y": 3925.855752193731
+      },
+      {
+        "x": 3982.679491924311,
+        "y": 3923
+      },
+      {
+        "x": 3981.206147584282,
+        "y": 3919.8404028665136
+      },
+      {
+        "x": 3980.303844939756,
+        "y": 3916.4729635533386
+      },
+      {
+        "x": 3980,
+        "y": 3913
+      },
+      {
+        "x": 3980.087488663526,
+        "y": 3912
+      }
+    ],
+    "blur": 0,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.SizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.StrokeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FillColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "ce225b90-8dca-6cd1-aa74-fb7d96e6e2dd",
+    "x": 3967.421875,
+    "y": 4063,
+    "width": 49.359375,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_Name"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "74LS86",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 16,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "92078507-5b2c-0957-f52d-0f7d10fd5c5e",
+    "x": 3954,
+    "y": 3920.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_1A"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "1A",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "598af6cf-0ea0-1c4c-124e-bf7785264d0f",
+    "x": 3953.78125,
+    "y": 3940.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_1B"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "1B",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "5213e302-4636-935b-67cb-9250c30745d5",
+    "x": 3953.7734375,
+    "y": 3960,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_1Y"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "1Y",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "a8be8307-71fb-283e-2c75-5c290e2fe2ed",
+    "x": 3953.78125,
+    "y": 3980.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_2A"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "2A",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "148f5fce-8dcd-2c20-3e95-24b0f24f0c48",
+    "x": 3954,
+    "y": 4000.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_2B"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "2B",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "c79202d2-6f14-9cdd-ac31-b17dce0bceef",
+    "x": 3954,
+    "y": 4019.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_2Y"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "2Y",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "43324453-b1be-5c38-dec2-b873e8c281c6",
+    "x": 3953.78125,
+    "y": 4044.5,
+    "width": 34.65625,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_GND"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "GND",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "6d6f85f6-2e64-66d9-2866-127739481e6f",
+    "x": 4019.3125,
+    "y": 4019.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_3B"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "3B",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "26a490bc-32e3-a180-1cfa-d1bda287bbfe",
+    "x": 4019.3125,
+    "y": 4042,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_3Y"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "3Y",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "90b39727-cf96-52bd-0b3c-5e926283793b",
+    "x": 4019.3125,
+    "y": 3980.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_4Y"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "4Y",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "7f614914-9e4b-bd48-844a-5bd6e98a50a5",
+    "x": 4019.3125,
+    "y": 4000.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_3A"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "3A",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "88dbaa8a-8d23-45a3-5c28-66e860ad24e8",
+    "x": 4019.3125,
+    "y": 3940.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_4A"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "4A",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "77bb1578-b87b-da73-abeb-458657ec4eee",
+    "x": 4019.3125,
+    "y": 3962.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_4B"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "4B",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtLabel",
+    "id": "ad79ccf4-8384-9f4e-c301-6283268c5bdf",
+    "x": 4014,
+    "y": 3920.5,
+    "width": 32,
+    "height": 24,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Label_Vcc"
+    },
+    "cssClass": "shape_designer_figure_ExtLabel",
+    "ports": [],
+    "bgColor": "none",
+    "color": "#1B1B1B",
+    "stroke": 0,
+    "radius": 0,
+    "dasharray": null,
+    "text": "Vcc",
+    "outlineStroke": 0,
+    "outlineColor": "none",
+    "fontSize": 8,
+    "fontColor": "#080808",
+    "fontFamily": null,
+    "editor": "draw2d.ui.LabelInplaceEditor",
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontSizeFilter"
+      },
+      {
+        "name": "shape_designer.filter.FontColorFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "205ea863-e482-3cb7-5475-0f4a2b5782d7",
+    "x": 4045,
+    "y": 3927.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_Vcc",
+      "type": "Input",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "ae52d09d-a2c9-3417-733b-2cf5649ee36f",
+    "x": 4045,
+    "y": 3947.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_4A",
+      "type": "Input",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "2665c702-5272-70c7-5be0-51805279dd83",
+    "x": 4045,
+    "y": 3969.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_4B",
+      "type": "Input",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "839a5c7f-6409-2841-22a9-12a53527cf38",
+    "x": 4045,
+    "y": 3988.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_4Y",
+      "type": "Output",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "d5814d24-7ea7-b8f0-550f-e8fefb19fd60",
+    "x": 4045,
+    "y": 4007.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_3A",
+      "type": "Input",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "59fe45de-de29-ac19-ce9f-1727c98006ec",
+    "x": 4045,
+    "y": 4028,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_3B",
+      "type": "Input",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "837bcdd9-dccb-b9cb-6d59-d78ed1fa839f",
+    "x": 4045,
+    "y": 4049,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_3Y",
+      "type": "Output",
+      "direction": 1,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "22ef0d85-343d-4484-cbed-ca7d3940672d",
+    "x": 3942.78125,
+    "y": 3927.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_1A",
+      "type": "Input",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "c48b4d83-113a-5002-45ea-6dbe75c145d1",
+    "x": 3942.78125,
+    "y": 3947.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_1B",
+      "type": "Input",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "c62afea5-c671-1e82-9138-ec327161e9db",
+    "x": 3943,
+    "y": 3969.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_1Y",
+      "type": "Output",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "cc5e0e02-c512-cf4c-0435-64abbf37393f",
+    "x": 3943,
+    "y": 3987.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_2A",
+      "type": "Input",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "4a23deda-ef0c-c5f1-2961-673a333f3528",
+    "x": 3942.78125,
+    "y": 4007.5,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_2B",
+      "type": "Input",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "6134867b-700c-f4c5-96d7-3465c2e7f862",
+    "x": 3943,
+    "y": 4028,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_2Y",
+      "type": "Output",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  },
+  {
+    "type": "shape_designer.figure.ExtPort",
+    "id": "eb91a6f1-e19c-34a8-bbe8-3e539dc8a6dd",
+    "x": 3943,
+    "y": 4049,
+    "width": 10,
+    "height": 10,
+    "alpha": 1,
+    "angle": 0,
+    "userData": {
+      "name": "Port_GND",
+      "type": "Input",
+      "direction": 3,
+      "fanout": 20
+    },
+    "cssClass": "shape_designer_figure_ExtPort",
+    "ports": [],
+    "bgColor": "#37B1DE",
+    "color": "#1B1B1B",
+    "stroke": 1,
+    "dasharray": null,
+    "filters": [
+      {
+        "name": "shape_designer.filter.PositionFilter"
+      },
+      {
+        "name": "shape_designer.filter.FanoutFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortDirectionFilter"
+      },
+      {
+        "name": "shape_designer.filter.PortTypeFilter"
+      }
+    ]
+  }
+]
