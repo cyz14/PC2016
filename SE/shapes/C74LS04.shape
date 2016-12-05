@@ -153,7 +153,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_Name"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -191,7 +191,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_1A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -229,7 +229,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_1Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -267,7 +267,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_2A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -305,7 +305,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_2Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -343,7 +343,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_3A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -381,7 +381,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_3Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -419,7 +419,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_GND"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -457,7 +457,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_4A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -495,7 +495,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_4Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -533,7 +533,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_5A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -571,7 +571,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_5Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -609,7 +609,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_6A"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -647,7 +647,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_6Y"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -685,7 +685,7 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Label"
+      "name": "Label_Vcc"
     },
     "cssClass": "shape_designer_figure_ExtLabel",
     "ports": [],
@@ -723,9 +723,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_Vcc",
+      "type": "Input",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -759,9 +759,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_6A",
+      "type": "Input",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -795,9 +795,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_6Y",
+      "type": "Output",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -831,9 +831,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_5A",
+      "type": "Input",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -861,15 +861,15 @@
     "type": "shape_designer.figure.ExtPort",
     "id": "d5814d24-7ea7-b8f0-550f-e8fefb19fd60",
     "x": 355,
-    "y": 235.5,
+    "y": 236,
     "width": 10,
     "height": 10,
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_5Y",
+      "type": "Output",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -903,9 +903,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_4A",
+      "type": "Input",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -939,9 +939,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_4Y",
+      "type": "Output",
+      "direction": 1,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -975,9 +975,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_1A",
+      "type": "Input",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1011,9 +1011,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_1Y",
+      "type": "Output",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1047,9 +1047,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_2A",
+      "type": "Input",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1083,9 +1083,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_2Y",
+      "type": "Output",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1119,9 +1119,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_3A",
+      "type": "Input",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1155,9 +1155,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_3Y",
+      "type": "Output",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
@@ -1191,9 +1191,9 @@
     "alpha": 1,
     "angle": 0,
     "userData": {
-      "name": "Port",
-      "type": "Hybrid",
-      "direction": null,
+      "name": "Port_GND",
+      "type": "Input",
+      "direction": 3,
       "fanout": 20
     },
     "cssClass": "shape_designer_figure_ExtPort",
