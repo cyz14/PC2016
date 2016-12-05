@@ -12,7 +12,7 @@
       "baseClass": "draw2d.SetFigure",
       "code": "/**\n * by 'Draw2D Shape Designer'\n *\n * Custom JS code to tweak the standard behaviour of the generated\n * shape. add your custome code and event handler here.\n *\n *\n */\ntestShape = testShape.extend({\n\n    init: function(attr, setter, getter){\n         this._super(attr, setter, getter);\n\n         // your special code here\n    },\n\n    /**\n     *  Called by the simulator for every calculation\n     *  loop\n     *  @required\n     **/\n    calculate:function()\n    {\n    },\n\n\n    /**\n     *  Called if the simulation mode is starting\n     *  @required\n     **/\n    onStart:function()\n    {\n    },\n\n    /**\n     *  Called if the simulation mode is stopping\n     *  @required\n     **/\n    onStop:function()\n    {\n    }\n});",
       "name": "Rectangle",
-      "markdown": "# 74LS00\n## Port Number and Name  \n \n| Input |      | Output |        |\n|:-----:|:----:|:------:|:------:|\n| Number| Name | Number | Name   |\n| 1     | 1A   | 2      | 1Y     |\n| 3     | 2A   | 4      | 2Y     |\n| 5     | 3A   | 6      | 3Y     |\n| 7     | GND  | 14     | Vcc    |\n| 8     | 4Y   | 9      | 4A     |\n| 10    | 5Y   | 11     | 5A     |\n| 12    | 6Y   | 13     | aA     |\n"
+      "markdown": "# 74LS00\n## Port Number and Name  \n \n| Number| Name | Number | Name   | Number | Name   |\n|:-----:|:----:|:------:|:------:|:------:|:------:|\n| 1     | 1A   | 2      | 1B     | 3      | 1Y     |\n| 4     | 2A   | 5      | 2B     | 6      | 2Y     |    \n| 10    | 3A   | 9      | 3B     | 8      | 3Y     |   \n| 13    | 4A   | 12     | 4B     | 11     | 4Y     | \n| 7     | GND  | 14     | Vcc    |"
     },
     "cssClass": "shape_designer_figure_PolyRect",
     "ports": [],
